@@ -1,10 +1,7 @@
 #include <stdio.h>
-
-enum { UP, LEFT, FRONT, RIGHT, BACK, DOWN };
+#include "rubiks.h"
 
 int cube[6][3][3];
-
-void initcube(void), printcube(void), turncube(int, int), rotateface(int, int);
 
 void initcube(void)
 {
@@ -19,9 +16,9 @@ char *color(int x)
 {
     switch (x) {
       case 0: return "0;31m";
-      case 1: return "0;32m";
+      case 1: return "0;34m";
       case 2: return "0;35m";
-      case 3: return "0;34m";
+      case 3: return "0;32m";
       case 4: return "0;36m";
       case 5: return "0;33m";
     }
@@ -62,11 +59,11 @@ void swap(int *a, int *b)
 
 void turncube(int face, int turns)
 {
-    int mod[4], i;
+    int mod[4], i, j;
     if (face == UP || face == DOWN) {
-        mod[0] = LEFT;
+        mod[0] = (face == UP) ? LEFT : RIGHT;
         mod[1] = FRONT;
-        mod[2] = RIGHT;
+        mod[2] = (face == UP) ? RIGHT : LEFT;
         mod[3] = BACK;
 
         int d = (face == UP ? 0 : 2);
@@ -79,95 +76,48 @@ void turncube(int face, int turns)
             rotateface(face,1);
         }
     }
-    else if (face == LEFT) {
-        mod[0] = UP;
-        mod[1] = FRONT;
-        mod[2] = DOWN;
-        mod[3] = BACK;
-
+    else if (face == FRONT || face == BACK) {
+        int d1 = (face == FRONT) ? 0 : 2;
+        int d2 = d1 ? 0 : 2;
         while (turns--) {
-            for (i = 0; i < 3; i++) {
-                int c = (mod[i+1] == BACK) ? 2 : 0;
-                swap(&cube[mod[i]][0][0],&cube[mod[i+1]][0][c]);
-                swap(&cube[mod[i]][1][0],&cube[mod[i+1]][1][c]);
-                swap(&cube[mod[i]][2][0],&cube[mod[i+1]][2][c]);
+            int tmp = 1;
+            if (face == BACK)
+                tmp = 3;
+            while (tmp--) {
+                for (i = 0, j = 2; i < 3; i++, j--)
+                    swap(&cube[DOWN][d1][i],&cube[RIGHT][j][d1]);
+                for (i = 0; i < 3; i++)
+                    swap(&cube[RIGHT][i][d1],&cube[UP][d2][i]);
+                for (i = 0, j = 2; i < 3; i++, j--)
+                    swap(&cube[UP][d2][i],&cube[LEFT][j][d2]);
+                rotateface(face,1);
             }
-            rotateface(face,1);
         }
     }
-    else if (face == FRONT) {
-        while (turns--) {
-            for (i = 0; i < 3; i++)
-                swap(&cube[DOWN][0][i],&cube[RIGHT][i][0]);
-            for (i = 0; i < 3; i++)
-                swap(&cube[RIGHT][i][0],&cube[UP][2][i]);
-            for (i = 0; i < 3; i++)
-                swap(&cube[UP][2][i],&cube[LEFT][i][2]);
-
-            rotateface(face,1);
-        }
-    }
-    else if (face == BACK) {
-        while (turns--) {
-            for (i = 0; i < 3; i++)
-                swap(&cube[UP][0][i],&cube[RIGHT][i][2]);
-            for (i = 0; i < 3; i++)
-                swap(&cube[RIGHT][i][2],&cube[DOWN][2][i]);
-            for (i = 0; i < 3; i++)
-                swap(&cube[DOWN][2][i],&cube[LEFT][i][0]);
-
-            rotateface(face,1);
-        }
-    }
-    else if (face == RIGHT) {
+    else if (face == RIGHT || face == LEFT) {
         mod[0] = BACK;
-        mod[1] = UP;
+        mod[1] = (face == RIGHT) ? UP : DOWN;
         mod[2] = FRONT;
-        mod[3] = DOWN;
+        mod[3] = (face == RIGHT) ? DOWN : UP;
+
+        int d = (face == RIGHT) ? 2 : 0;
+        int dd = d ? 0 : 2;
 
         while (turns--) {
-            for (i = 0; i < 3; i++) {
-                int c = (mod[i] == BACK) ? 0 : 2;
-                swap(&cube[mod[i]][0][c],&cube[mod[i+1]][0][2]);
-                swap(&cube[mod[i]][1][c],&cube[mod[i+1]][1][2]);
-                swap(&cube[mod[i]][2][c],&cube[mod[i+1]][2][2]);
-            }
+            for (i = 0, j = 2; i < 3; i++, j--)
+                swap(&cube[mod[0]][j][dd],&cube[mod[1]][i][d]);
+            for (i = 0; i < 3; i++)
+                swap(&cube[mod[1]][i][d],&cube[mod[2]][i][d]);
+            for (i = 0; i < 3; i++)
+                swap(&cube[mod[2]][i][d],&cube[mod[3]][i][d]);
             rotateface(face,1);
         }
     }
-}
-
-#define rubiksnotation(x) (x == 'U' ? 0 : x == 'L' ? 1 : x == 'F' ? 2 : x == 'R' ? 3 : x == 'B' ? 4 : x == 'D' ? 5 : -1)
-
-int main(void)
-{
-    initcube();
-
-    while (1) {
-        printf("\e[H\e[2J");
-        printcube();
-        printf("\e[0m\n\nMoves: ");
-        int move = getchar();
-        move = rubiksnotation(move);
-        turncube(move,1);
-    }
-
-/* this will be used in the language
-    FILE *in = fopen("code.txt","r");
-
-    while (!feof(in)) {
-        int face  = getc(in);
-        int turns = getc(in);
-        face  = face["ULFRBD"];
-        turns = (turns == '\'') ? 3 : turns - '0';
-        turncube(face,turns);
-    }
-*/
 }
 
 void rotateface(int face, int clockwise)
 {
-    if (clockwise == 1) {
+    if (clockwise == 1 /* && face != BACK */) {
         swap(&cube[face][0][0], &cube[face][2][0]);
         swap(&cube[face][0][1], &cube[face][1][0]);
         swap(&cube[face][0][2], &cube[face][2][0]);
@@ -175,4 +125,13 @@ void rotateface(int face, int clockwise)
         swap(&cube[face][1][2], &cube[face][2][1]);
         swap(&cube[face][2][2], &cube[face][2][0]);
     }
+/*    else if (clockwise == 1 && face == BACK) {
+        swap(&cube[face][0][0], &cube[face][0][2]);
+        swap(&cube[face][1][0], &cube[face][0][1]);
+        swap(&cube[face][2][0], &cube[face][0][2]);
+        swap(&cube[face][0][1], &cube[face][1][2]);
+        swap(&cube[face][2][1], &cube[face][1][2]);
+        swap(&cube[face][2][2], &cube[face][0][2]);
+    }
+*/
 }

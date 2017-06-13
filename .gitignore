@@ -1,3 +1,4 @@
 *.o
-rubiks
+rubiks-lang
+visualizer
 *.exe
