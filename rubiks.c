@@ -15,21 +15,41 @@ void initcube(void)
                 cube[face][line][cubelet] = face;
 }
 
+char *color(int x)
+{
+    switch (x) {
+      case 0: return "0;31m";
+      case 1: return "0;32m";
+      case 2: return "0;35m";
+      case 3: return "0;34m";
+      case 4: return "0;36m";
+      case 5: return "0;33m";
+    }
+}
+
 void printcube(void)
 {
     int face, line, cubelet;
-    for (line = 0; line < 3; line++)
-        printf("   \e[3%dm%d\e[3%dm%d\e[3%dm%d\n",cube[0][line][0]+1,cube[0][line][0],cube[0][line][1]+1,cube[0][line][1],cube[0][line][2]+1,cube[0][line][2]);
+    for (line = 0; line < 3; line++) {
+        int o0 = cube[0][line][0];
+        int o1 = cube[0][line][1];
+        int o2 = cube[0][line][2];
+        printf("   \e[%s%d\e[%s%d\e[%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
+    }
 
     for (line = 0; line < 3; line++) {
         for (face = 1; face < 5; face++)
             for (cubelet = 0; cubelet < 3; cubelet++)
-                printf("\e[3%dm%d",cube[face][line][cubelet]+1,cube[face][line][cubelet]);
+                printf("\e[%s%d",color(cube[face][line][cubelet]),cube[face][line][cubelet]);
         putchar('\n');
     }
 
-    for (line = 0; line < 3; line++)
-        printf("   \e[3%dm%d\e[3%dm%d\e[3%dm%d\n",cube[5][line][0]+1,cube[5][line][0],cube[5][line][1]+1,cube[5][line][1],cube[5][line][2]+1,cube[5][line][2]);
+    for (line = 0; line < 3; line++) {
+        int o0 = cube[5][line][0];
+        int o1 = cube[5][line][1];
+        int o2 = cube[5][line][2];
+        printf("   \e[%s%d\e[%s%d\e[%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
+    }
     putchar('\n');
 }
 
@@ -117,19 +137,22 @@ void turncube(int face, int turns)
     }
 }
 
+#define rubiksnotation(x) (x == 'U' ? 0 : x == 'L' ? 1 : x == 'F' ? 2 : x == 'R' ? 3 : x == 'B' ? 4 : x == 'D' ? 5 : -1)
+
 int main(void)
 {
     initcube();
-    printcube();
 
-    turncube(LEFT,2);
-    turncube(RIGHT,2);
-    turncube(UP,2);
-    turncube(DOWN,2);
-    turncube(FRONT,2);
-    turncube(BACK,2);
-    printcube();
-/*
+    while (1) {
+        printf("\e[H\e[2J");
+        printcube();
+        printf("\e[0m\n\nMoves: ");
+        int move = getchar();
+        move = rubiksnotation(move);
+        turncube(move,1);
+    }
+
+/* this will be used in the language
     FILE *in = fopen("code.txt","r");
 
     while (!feof(in)) {

@@ -1,4 +1,4 @@
-# rubiks cube
+# Rubik's Cube
 This repository contains a useful tool for visualizing a 3x3 Rubik's Cube.
 
 It will soon be extended to:
