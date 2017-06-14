@@ -58,6 +58,14 @@ Memory commands:
 |F|turn front cube face clockwise 90°|face|
 |B|turn back cube face clockwise 90°|
 
+Control flow:
+
+|command|description|arguments
+|-|-|-|
+|(|set a point to be jumped to by ] and )|anything|
+|)|unconditionally jump to the most recently accumulated (|anything|
+|]|jump to the most recently accumulated ( if notepad value is >0|anything|
+
 General commands:
 
 |command|description|arguments|
