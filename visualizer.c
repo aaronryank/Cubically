@@ -10,16 +10,19 @@ extern void stdin_set(), stdin_reset();
 
 int main(void)
 {
+    int move;
+
     initcube();
     stdin_set();
 
     while (1) {
         printf("\e[H\e[2J");
         printcube();
-        printf("\e[0m\n\nMoves: ");
-        int move = getchar();
+        move = getchar();
+
         if (move == 'E')
             stdin_reset(), exit(EXIT_SUCCESS);
+
         move = rubiksnotation(move);
         turncube(move,1);
     }
