@@ -7,25 +7,21 @@
 
 int main(int argc, char **argv)
 {
-    int turns, face;
     initcube();
 
-    FILE *in = fopen(argv[1],"r");
+    FILE *in = argc > 2 ? fopen(argv[1],"r") : stdin;
 
-    while (1) {
-        if (fscanf(in," %c",&face) == EOF)
-            break;
-        if (fscanf(in," %d",&turns) == EOF)
-            break;
-
-        printf("{%c,%d}",face,turns);
+    int loop = 1;
+    while (loop) {
+        int face  = getc(in);
+        int turns = getc(in);
 
         if (rubiksnotation(face)+1) {
-            face = rubiksnotation(toupper(face));
+            face = rubiksnotation(face);
             turns = (turns == '\'') ? 3 : turns - '0';
             turncube(face,turns);
-        } else if (toupper(face) == 'E') {
-            printf("End\n");
+        } else if (face == 'E' || face == -1) {
+            loop = 0;
         }
     }
 
