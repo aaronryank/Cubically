@@ -29,48 +29,44 @@ int main(int argc, char **argv)
     printcube();
 }
 
-#define faceval (cube[face][0][0] + cube[face][0][1] + cube[face][0][2] + cube[face][1][0] + cube[face][1][1] + cube[face][1][2] + cube[face][2][0] + cube[face][2][1] + cube[face][2][2])
+#define faceval (cube[arg][0][0] + cube[arg][0][1] + cube[arg][0][2] + cube[arg][1][0] + cube[arg][1][1] + cube[arg][1][2] + cube[arg][2][0] + cube[arg][2][1] + cube[arg][2][2])
 
-int execute(int command, int argument)
+int execute(int command, int arg)
 {
-     if (rubiksnotation(command)+1) {
+    if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
-        int turns = argument;
+        int turns = arg;
         turncube(face,turns);
     }
     else if (command == '+') {
-        int face = argument;
         mem += faceval;
     }
     else if (command == '-') {
-        int face = argument;
         mem -= faceval;
     }
     else if (command == '/') {
-        int face = argument;
         mem /= faceval;
     }
     else if (command == '*') {
-        int face = argument;
         mem *= faceval;
     }
     else if (command == '=') {
-        int face = argument;
         mem = (mem == faceval);
     }
     else if (command == '%') {
-        int face = argument;
-        if (face == 6)
+        if (arg == 6)
             printf("%d",mem);
         else
             printf("%d",faceval);
     }
     else if (command == '@') {
-        int face = argument;
-        if (face == 6)
+        if (arg == 6)
             putchar(mem);
         else
             putchar(faceval);
+    }
+    else if (command == ':') {
+        mem = faceval;
     }
     else if (command == 'E') {
         return 0;
