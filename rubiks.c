@@ -117,7 +117,7 @@ void turncube(int face, int turns)
 
 void rotateface(int face, int clockwise)
 {
-    if (clockwise == 1 /* && face != BACK */) {
+    if (clockwise == 1 && face != BACK) {
         swap(&cube[face][0][0], &cube[face][2][0]);
         swap(&cube[face][0][1], &cube[face][1][0]);
         swap(&cube[face][0][2], &cube[face][2][0]);
@@ -125,7 +125,7 @@ void rotateface(int face, int clockwise)
         swap(&cube[face][1][2], &cube[face][2][1]);
         swap(&cube[face][2][2], &cube[face][2][0]);
     }
-/*    else if (clockwise == 1 && face == BACK) {
+    else if (clockwise == 1 && face == BACK) {
         swap(&cube[face][0][0], &cube[face][0][2]);
         swap(&cube[face][1][0], &cube[face][0][1]);
         swap(&cube[face][2][0], &cube[face][0][2]);
@@ -133,5 +133,4 @@ void rotateface(int face, int clockwise)
         swap(&cube[face][2][1], &cube[face][1][2]);
         swap(&cube[face][2][2], &cube[face][0][2]);
     }
-*/
 }
