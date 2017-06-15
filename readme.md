@@ -1,6 +1,6 @@
 # Rubik's Cube
 
-Cubelang, also called the Pain Cube or just plain Rubik's Cube, is an extremely complex esoteric programming language.
+Cubelang, also called the Pain Cube or just plain Rubik's Cube, is a work-in-progress complex esoteric programming language.
 
 This repository contains:
 
@@ -13,7 +13,7 @@ To build everything type `make`. This will generate two executables, `rubiks-lan
 
 Cubelang has an odd memory structure. The memory is a Rubik's cube. Various commands perform operations on this cube, such as turning the right face clockwise by 90 degrees. Other commands perform operations on certain faces of the cube, like adding all values on the top face together and storing them on the notepad (see below).
 
-The cube is initialized with the numbers 0 through 5 on its faces, like this:
+The six faces of the cube are initialized with the numbers 0 through 5, like this:
 
        000
        000
@@ -37,7 +37,7 @@ After performing a clockwise 90° turn on the right face, the memory cube would 
        554
        554
 
-There is one other piece of memory in Cubelang, the "notepad" (also called the scratchpad). This can store one value at a time. Performing various commands on the nonexistent sixth face will perform the command on memory.
+To make Cubelang an (almost) usable language, there is one other piece of memory: the "notepad" (also called the scratchpad). This can store one value at a time. Performing a command on the nonexistent sixth face index will perform the command on memory.
 
 # Syntax
 
@@ -49,7 +49,7 @@ For example, `Y0` executes the command `Y` with argument `0`. `Y015` executes `Y
 
 Memory commands:
 
-|command|description|arguments|
+|Command|Description|Arguments|
 |-|-|-|
 |R|turn right cube face clockwise 90°|face (value 0-5)|
 |L|turn left cube face clockwise 90°|face|
@@ -60,7 +60,7 @@ Memory commands:
 
 Control flow:
 
-|command|description|arguments
+|Command|Description|Arguments
 |-|-|-|
 |(|set a point to be jumped to by ] and )|anything|
 |)|unconditionally jump to the most recently accumulated (|anything|
@@ -68,7 +68,7 @@ Control flow:
 
 General commands:
 
-|command|description|arguments|
+|Command|Description|Arguments|
 |-|-|-|
 |E|exit|anything|
 |@|add all values of specified face together, print as ASCII|face value (0-6), 6 = notepad|
@@ -82,7 +82,7 @@ General commands:
 
 # Faces
 
-|number|face|color|
+|Number|Face|Visualizer color|
 |-|-|-|
 |0|top|red|
 |1|left|blue|
