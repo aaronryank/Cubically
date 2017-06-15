@@ -64,9 +64,9 @@ int execute(int command, int arg)
     }
     else if (command == '@') {
         if (arg == 6)
-            putchar(mem);
+            putchar(mem % 128);
         else
-            putchar(faceval);
+            putchar(faceval % 128);
     }
     else if (command == ':') {
         mem = faceval;
@@ -80,7 +80,7 @@ int execute(int command, int arg)
         }
     }
     else if (command == ']') {
-        if (jnum && mem > 0)
+        if (jnum && !issolved())
             fseek(in,jumps[jnum-1],SEEK_SET);
     }
     else if (command == 'E') {

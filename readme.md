@@ -11,7 +11,7 @@ This repository contains:
 To build everything type `make`. This will generate two executables, `rubiks-lang` and `visualizer`. `rubiks-lang` either takes a file as a command-line argument or reads from standard input.
 # Memory
 
-Cubelang has an odd memory structure. The memory is a Rubik's cube. Various commands perform operations on this cube, such as turning the right face clockwise by 90 degrees. Other commands perform operations on certain faces of the cube, like adding all values on the top face together and storing them on the notepad (see below).
+Cubically has an odd memory structure. The memory is a Rubik's cube. Various commands perform operations on this cube, such as turning the right face clockwise by 90 degrees. Other commands perform operations on certain faces of the cube, like adding all values on the top face together and storing them on the notepad (see below).
 
 The six faces of the cube are initialized with the numbers 0 through 5, like this:
 
@@ -37,7 +37,7 @@ After performing a clockwise 90° turn on the right face, the memory cube would 
        554
        554
 
-To make Cubelang an (almost) usable language, there is one other piece of memory: the "notepad" (also called the scratchpad). This can store one value at a time. Performing a command on the nonexistent sixth face index will perform the command on memory.
+To make Cubically an (almost) usable language, there is one other piece of memory: the "notepad" (also called the scratchpad). This can store one value at a time. Performing a command on the nonexistent sixth face index will perform the command on memory.
 
 # Syntax
 
@@ -51,20 +51,20 @@ Memory commands:
 
 |Command|Description|Arguments|
 |-|-|-|
-|R|turn right cube face clockwise 90°|face (value 0-5)|
-|L|turn left cube face clockwise 90°|face|
-|U|turn top cube face clockwise 90°|face|
-|D|turn bottom cube face clockwise 90°|face|
-|F|turn front cube face clockwise 90°|face|
-|B|turn back cube face clockwise 90°|
+|R|turn right cube face clockwise 90°|number of turns|
+|L|turn left cube face clockwise 90°|number of turns|
+|U|turn top cube face clockwise 90°|number of turns|
+|D|turn bottom cube face clockwise 90°|number of turns|
+|F|turn front cube face clockwise 90°|number of turns|
+|B|turn back cube face clockwise 90°|number of turns|
 
 Control flow:
 
 |Command|Description|Arguments
 |-|-|-|
-|(|set a point to be jumped to by ] and )|anything|
-|)|unconditionally jump to the most recently accumulated (|anything|
-|]|jump to the most recently accumulated ( if notepad value is >0|anything|
+|(|set a point to be jumped to by `]` and `)`|anything|
+|)|unconditionally jump to the most recently accumulated `(`|anything|
+|]|jump to the most recently accumulated `(` if cube is solved|anything|
 
 General commands:
 

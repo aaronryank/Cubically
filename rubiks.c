@@ -134,3 +134,14 @@ void rotateface(int face, int clockwise)
         swap(&cube[face][2][2], &cube[face][0][2]);
     }
 }
+
+int issolved(void)
+{
+    int face, line, cubelet;
+    for (face = 0; face < 6; face++)
+        for (line = 0; line < 3; line++)
+            for (cubelet = 0; cubelet < 3; cubelet++)
+                if (cube[face][line][cubelet] != face)
+                    return 0;
+    return 1;
+}
