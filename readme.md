@@ -1,6 +1,6 @@
 # Rubik's Cube
 
-Cubelang, also called the Pain Cube or just plain Rubik's Cube, is a work-in-progress complex esoteric programming language.
+The Rubik's Cube Programming Language, A.K.A. Cubically ([credit @Destructible-Watermelon](https://chat.stackexchange.com/transcript/message/38123813#38123813)), the Pain Cube or just plain Rubik's Cube, is a work-in-progress complex esoteric programming language. 
 
 This repository contains:
 
