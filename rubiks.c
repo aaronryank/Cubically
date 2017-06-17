@@ -14,14 +14,18 @@ void initcube(void)
 
 char *color(int x)
 {
+#ifndef TIO
     switch (x) {
-      case 0: return "0;31m";
-      case 1: return "0;34m";
-      case 2: return "0;35m";
-      case 3: return "0;32m";
-      case 4: return "0;36m";
-      case 5: return "0;33m";
+      case 0: return "\e[0;31m";
+      case 1: return "\e[0;34m";
+      case 2: return "\e[0;35m";
+      case 3: return "\e[0;32m";
+      case 4: return "\e[0;36m";
+      case 5: return "\e[0;33m";
     }
+#else
+    return "";
+#endif
 }
 
 void printcube(void)
@@ -31,13 +35,13 @@ void printcube(void)
         int o0 = cube[0][line][0];
         int o1 = cube[0][line][1];
         int o2 = cube[0][line][2];
-        dprintf(2,"   \e[%s%d\e[%s%d\e[%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
+        dprintf(2,"   %s%d%s%d%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
     }
 
     for (line = 0; line < 3; line++) {
         for (face = 1; face < 5; face++)
             for (cubelet = 0; cubelet < 3; cubelet++)
-                dprintf(2,"\e[%s%d",color(cube[face][line][cubelet]),cube[face][line][cubelet]);
+                dprintf(2,"%s%d",color(cube[face][line][cubelet]),cube[face][line][cubelet]);
         dprintf(2,"\n");
     }
 
@@ -45,7 +49,7 @@ void printcube(void)
         int o0 = cube[5][line][0];
         int o1 = cube[5][line][1];
         int o2 = cube[5][line][2];
-        dprintf(2,"   \e[%s%d\e[%s%d\e[%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
+        dprintf(2,"   %s%d%s%d%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
     }
     dprintf(2,"\n");
 }
