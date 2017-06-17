@@ -1,4 +1,4 @@
-/* stdin.c - Copyright (C) 2015 Aaron Ryan Klingler
+/* stdin.c - Copyright (C) 2015 MD XF
 
    Turn off echoing and line-buffering
    Useful for C game programming, and Java if you do it right (currently implemented in all versions of rogue112)

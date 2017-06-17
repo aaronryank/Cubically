@@ -28,7 +28,7 @@ int main(int argc, char **argv)
             command = c;
     }
 
-    dprintf(2,"\nNotepad: %d\n\n",mem);
+    fprintf(dbg,"\nNotepad: %d\n\n",mem);
     printcube();
 }
 
@@ -61,12 +61,14 @@ int execute(int command, int arg)
             printf("%d",mem);
         else
             printf("%d",faceval);
+        fflush(stdout);
     }
     else if (command == '@') {
         if (arg == 6)
             putchar(mem % 128);
         else
             putchar(faceval % 128);
+        fflush(stdout);
     }
     else if (command == ':') {
         mem = faceval;
