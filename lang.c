@@ -28,7 +28,7 @@ int main(int argc, char **argv)
             command = c;
     }
 
-    printf("\nNotepad: %d\n\n",mem);
+    dprintf(2,"\nNotepad: %d\n\n",mem);
     printcube();
 }
 
