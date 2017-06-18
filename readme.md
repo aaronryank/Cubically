@@ -1,6 +1,6 @@
-# Rubik's Cube
+# Cubically
 
-The Rubik's Cube Programming Language, A.K.A. Cubically ([credit @Destructible-Watermelon](https://chat.stackexchange.com/transcript/message/38123813#38123813)), the Pain Cube or just plain Rubik's Cube, is a work-in-progress complex esoteric programming language. 
+Cubically is a work-in-progress, painfully complex, very esoteric programming language. 
 
 This repository contains:
 
@@ -38,6 +38,12 @@ After performing a clockwise 90° turn on the right face, the memory cube would 
        554
 
 To make Cubically an (almost) usable language, there is one other piece of memory: the "notepad" (also called the scratchpad). This can store one value at a time. Performing a command on the nonexistent sixth face index will perform the command on memory.
+
+# Limitations
+
+ - There is no input yet.
+ - Cubically is not remotely Turing-Complete.
+ - A 3x3 is the only cube size right now; this may extend later.
 
 # Syntax
 
