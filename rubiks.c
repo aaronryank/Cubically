@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include "rubiks.h"
 
+#ifdef VISUALIZER
+# define dbg stdout
+#else
+# define dbg stderr
+#endif
+
 int cube[6][3][3];
 
 void initcube(void)
@@ -35,23 +41,24 @@ void printcube(void)
         int o0 = cube[0][line][0];
         int o1 = cube[0][line][1];
         int o2 = cube[0][line][2];
-        dprintf(2,"   %s%d%s%d%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
+        fprintf(dbg,"   %s%d%s%d%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
     }
 
     for (line = 0; line < 3; line++) {
         for (face = 1; face < 5; face++)
             for (cubelet = 0; cubelet < 3; cubelet++)
-                dprintf(2,"%s%d",color(cube[face][line][cubelet]),cube[face][line][cubelet]);
-        dprintf(2,"\n");
+                fprintf(dbg,"%s%d",color(cube[face][line][cubelet]),cube[face][line][cubelet]);
+        fprintf(dbg,"\n");
     }
 
     for (line = 0; line < 3; line++) {
         int o0 = cube[5][line][0];
         int o1 = cube[5][line][1];
         int o2 = cube[5][line][2];
-        dprintf(2,"   %s%d%s%d%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
+        fprintf(dbg,"   %s%d%s%d%s%d\n",color(o0),o0,color(o1),o1,color(o2),o2);
     }
-    dprintf(2,"\n");
+    fprintf(dbg,"\n");
+    fflush(dbg);
 }
 
 void swap(int *a, int *b)
