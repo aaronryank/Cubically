@@ -57,34 +57,34 @@ Memory commands:
 
 |Command|Description|Arguments|
 |-|-|-|
-|R|turn right cube face clockwise 90°|number of turns|
-|L|turn left cube face clockwise 90°|number of turns|
-|U|turn top cube face clockwise 90°|number of turns|
-|D|turn bottom cube face clockwise 90°|number of turns|
-|F|turn front cube face clockwise 90°|number of turns|
-|B|turn back cube face clockwise 90°|number of turns|
+|`R`|turn right cube face clockwise 90°|number of turns|
+|`L`|turn left cube face clockwise 90°|number of turns|
+|`U`|turn top cube face clockwise 90°|number of turns|
+|`D`|turn bottom cube face clockwise 90°|number of turns|
+|`F`|turn front cube face clockwise 90°|number of turns|
+|`B`|turn back cube face clockwise 90°|number of turns|
 
 Control flow:
 
 |Command|Description|Arguments
 |-|-|-|
-|(|set a point to be jumped to by `]` and `)`|anything|
-|)|unconditionally jump to the most recently accumulated `(`|anything|
-|]|jump to the most recently accumulated `(` if cube is solved|anything|
+|`(`|set a point to be jumped to by `]` and `)`|anything|
+|`)`|unconditionally jump to the most recently accumulated `(`|anything|
+|`]`|jump to the most recently accumulated `(` if cube is solved|anything|
 
 General commands:
 
 |Command|Description|Arguments|
 |-|-|-|
-|E|exit|anything|
-|@|add all values of specified face together, print as ASCII|face value (0-6), 6 = notepad|
-|%|add all values of specified face together, print as decimal|^|
-|+|add all values of specified face together, add to notepad, write result on notepad|^|
-|-|add all values of specified face together, subtract from notepad, write result on notepad|^|
-|*|add all values of specified face together, multiply by notepad, write result on notepad|^|
-|/|add all values of specified face together, divide notepad by, write result on notepad|^|
-|=|compare notepad and specified face for equality, write result on notepad|face value (0-5)|
-|:|set notepad to specified face|^|
+|`E`|exit|anything|
+|`@`|add all values of specified face together, print as ASCII|face value (0-6), 6 = notepad|
+|`%`|add all values of specified face together, print as decimal|^|
+|`+`|add all values of specified face together, add to notepad, write result on notepad|^|
+|`-`|add all values of specified face together, subtract from notepad, write result on notepad|^|
+|`*`|add all values of specified face together, multiply by notepad, write result on notepad|^|
+|`/`|add all values of specified face together, divide notepad by, write result on notepad|^|
+|`=`|compare notepad and specified face for equality, write result on notepad|face value (0-5)|
+|`:`|set notepad to specified face|^|
 
 # Faces
 
