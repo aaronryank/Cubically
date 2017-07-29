@@ -70,7 +70,7 @@ Control flow:
 |-|-|-|
 |`(`|set a point to be jumped to by `]` and `)`|anything|
 |`)`|unconditionally jump to the most recently accumulated `(`|anything|
-|`]`|jump to the most recently accumulated `(` if cube is solved|anything|
+|`]`|jump to the most recently accumulated `(` if cube isn't solved|anything|
 
 General commands:
 
