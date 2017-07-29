@@ -42,6 +42,7 @@ To make Cubically an (almost) usable language, there is one other piece of memor
 # Limitations
 
  - There is no input yet.
+ - There are no loops yet.
  - Cubically is not remotely Turing-Complete.
  - A 3x3 is the only cube size right now; this may extend later.
 
@@ -63,14 +64,6 @@ Memory commands:
 |`D`|turn bottom cube face clockwise 90°|number of turns|
 |`F`|turn front cube face clockwise 90°|number of turns|
 |`B`|turn back cube face clockwise 90°|number of turns|
-
-Control flow:
-
-|Command|Description|Arguments
-|-|-|-|
-|`(`|set a point to be jumped to by `]` and `)`|anything|
-|`)`|unconditionally jump to the most recently accumulated `(`|anything|
-|`]`|jump to the most recently accumulated `(` if cube isn't solved|anything|
 
 General commands:
 

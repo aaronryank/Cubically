@@ -26,6 +26,10 @@ int main(int argc, char **argv)
             loop = execute(command,c - '0');
         else
             command = c;
+
+#ifdef DEBUG
+        printf("Command %c argument %c\n",command,isdigit(c)?c:command);
+#endif
     }
 
     fprintf(dbg,"\nNotepad: %d\n\n",mem);
@@ -73,6 +77,7 @@ int execute(int command, int arg)
     else if (command == ':') {
         mem = faceval;
     }
+/*
     else if (command == '(') {
         jumps[jnum++] = ftell(in);
     }
@@ -85,6 +90,7 @@ int execute(int command, int arg)
         if (jnum && !issolved())
             fseek(in,jumps[jnum-1],SEEK_SET);
     }
+*/
     else if (command == 'E') {
         return 0;
     }
