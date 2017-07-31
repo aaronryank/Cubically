@@ -75,7 +75,7 @@ General commands:
 |`-`|add all values of specified face together, subtract from notepad value, write result on notepad|^|
 |`*`|add all values of specified face together, multiply by notepad value, write result on notepad|^|
 |`/`|add all values of specified face together, divide notepad value by, write result on notepad|^|
-|`^`|set the notepad value to notepad ^ specified face index|^|
+|`^`|set the notepad value to notepad to the power of the specified face index|^|
 |`=`|compare notepad and specified face for equality, write result on notepad|actual face index (0-5)|
 |`:`|set notepad to specified face|face index (0-7)|
 
