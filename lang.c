@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "rubiks.h"
 
 int mem;
@@ -60,6 +61,12 @@ int execute(int command, int arg)
     else if (command == '=') {
         mem = (mem == faceval);
     }
+    else if (command == '$') {
+        scanf("%d",&input);
+    }
+    else if (command == '~') {
+        input = getchar();
+    }
     else if (command == '%') {
         if (arg == 6)
             printf("%d",mem);
@@ -77,6 +84,9 @@ int execute(int command, int arg)
     else if (command == ':') {
         mem = faceval;
     }
+    else if (command == '^') {
+        mem = pow(mem,faceval);
+    }
 /*
     else if (command == '(') {
         jumps[jnum++] = ftell(in);
@@ -91,7 +101,7 @@ int execute(int command, int arg)
             fseek(in,jumps[jnum-1],SEEK_SET);
     }
 */
-    else if (command == 'E') {
+    else if (command == 'E' || command == '&') {
         return 0;
     }
     return 1;

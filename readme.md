@@ -37,11 +37,12 @@ After performing a clockwise 90° turn on the right face, the memory cube would 
        554
        554
 
-To make Cubically an (almost) usable language, there is one other piece of memory: the "notepad" (also called the scratchpad). This can store one value at a time. Performing a command on the nonexistent sixth face index will perform the command on memory.
+To make Cubically an (almost) usable language, there is one other piece of memory: the "notepad", which is a single-value register. This can store one value at a time. Performing a command on the nonexistent sixth face index will perform the command on memory.
+
+Input (temporarily) is performed using the nonexistent seventh-indexed face. When input is read it is stored there and can be accessed by all commands that access face indexes. It is not changed until input is read again. It is initialized to zero.
 
 # Limitations
 
- - There is no input yet.
  - There are no loops yet.
  - Cubically is not remotely Turing-Complete.
  - A 3x3 is the only cube size right now; this may extend later.
@@ -69,15 +70,23 @@ General commands:
 
 |Command|Description|Arguments|
 |-|-|-|
-|`E`|exit|anything|
-|`@`|add all values of specified face together, print as ASCII|face value (0-6), 6 = notepad|
+|`&`|exit|anything|
+|`+`|add all values of specified face together, add to notepad value, write result on notepad|face index (0-7)|
+|`-`|add all values of specified face together, subtract from notepad value, write result on notepad|^|
+|`*`|add all values of specified face together, multiply by notepad value, write result on notepad|^|
+|`/`|add all values of specified face together, divide notepad value by, write result on notepad|^|
+|`^`|set the notepad value to notepad ^ specified face index|^|
+|`=`|compare notepad and specified face for equality, write result on notepad|actual face index (0-5)|
+|`:`|set notepad to specified face|face index (0-7)|
+
+I/O commands:
+
+|Command|Description|Arguments|
+|-|-|-|
+|`@`|add all values of specified face together, print as ASCII|face index (0-7)|
 |`%`|add all values of specified face together, print as decimal|^|
-|`+`|add all values of specified face together, add to notepad, write result on notepad|^|
-|`-`|add all values of specified face together, subtract from notepad, write result on notepad|^|
-|`*`|add all values of specified face together, multiply by notepad, write result on notepad|^|
-|`/`|add all values of specified face together, divide notepad by, write result on notepad|^|
-|`=`|compare notepad and specified face for equality, write result on notepad|face value (0-5)|
-|`:`|set notepad to specified face|^|
+|`$`|input integer, store in input buffer (index 7)|anything|
+|`~`|input character, store in input buffer (index 7)|anything|
 
 # Faces
 
