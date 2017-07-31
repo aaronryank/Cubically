@@ -4,7 +4,7 @@
 #include <math.h>
 #include "rubiks.h"
 
-int mem;
+int mem, input;
 int jumps[1000], jnum;
 
 int rubiksnotation(char);
