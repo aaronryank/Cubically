@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     printcube();
 }
 
-#define faceval (cube[arg][0][0] + cube[arg][0][1] + cube[arg][0][2] + cube[arg][1][0] + cube[arg][1][1] + cube[arg][1][2] + cube[arg][2][0] + cube[arg][2][1] + cube[arg][2][2])
+#define faceval (arg == 6 ? mem : arg == 7 ? input : (cube[arg][0][0] + cube[arg][0][1] + cube[arg][0][2] + cube[arg][1][0] + cube[arg][1][1] + cube[arg][1][2] + cube[arg][2][0] + cube[arg][2][1] + cube[arg][2][2]))
 
 int execute(int command, int arg)
 {
