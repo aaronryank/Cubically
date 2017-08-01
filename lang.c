@@ -102,7 +102,8 @@ int execute(int command, int arg)
     }
 */
     else if (command == 'E' || command == '&') {
-        return 0;
+        if (faceval)
+            return 0;
     }
     return 1;
 }

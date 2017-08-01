@@ -70,8 +70,8 @@ General commands:
 
 |Command|Description|Arguments|
 |-|-|-|
-|`&`|exit|anything|
-|`+`|add all values of specified face together, add to notepad value, write result on notepad|face index (0-7)|
+|`&`|exit if specified face sum/value is truthy|face index (0-7)|
+|`+`|add all values of specified face together, add to notepad value, write result on notepad|^|
 |`-`|add all values of specified face together, subtract from notepad value, write result on notepad|^|
 |`*`|add all values of specified face together, multiply by notepad value, write result on notepad|^|
 |`/`|add all values of specified face together, divide notepad value by, write result on notepad|^|
