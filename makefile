@@ -17,3 +17,8 @@ $(lang): $(OBJ)
 
 tio:
 	gcc -lm -DTIO rubiks.c lang.c -o rubiks-tio
+clean:
+	rm -f $(OBJ)
+
+clean_visualizer:
+	rm -f $(V_OBJ)

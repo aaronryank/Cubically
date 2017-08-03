@@ -16,6 +16,7 @@ int parens, jumpnum;
 int rubiksnotation(char);
 int execute(int,int);
 int do_jump(void);
+int _faceval(int);
 
 FILE *in;
 
@@ -33,16 +34,16 @@ int main(int argc, char **argv)
         if (c == EOF)
             loop = 0;
 
-        else if (isdigit(c)) {
+        if (isdigit(c)) {
             if (command == '(' || command == ')')
                 jumps[jumpnum].faces[c - '0'] = 1;
             else
-                execute(command,c - '0');
+                loop = loop && execute(command,c - '0');
         } else {
             if (command == '(')
-                jumps[jumpnum++].pos = ftell(in);
+                jumps[jumpnum++].pos = ftell(in) - 1;
             else if (command == ')')
-                do_jump();
+                jumpnum++, do_jump();
             command = c;
         }
     }
@@ -65,19 +66,41 @@ int main(int argc, char **argv)
 
 int do_jump(void)
 {
-    int i, _do_jump;
-    for (i = _do_jump = 0; i < 7; i++)
-        if (jumps[jumpnum-1].faces[i])
-            if (i==7?input:i==6?mem:cube[i][0][0]+cube[i][0][1]+cube[i][0][2]+cube[i][1][0]+cube[i][1][1]+cube[i][1][2]+cube[i][2][0]+cube[i][2][1]+cube[i][2][2])
-                _do_jump = 1;
+    int i, _do_jump1, count1;
+    for (i = _do_jump1 = count1 = 0; i < 7; i++)
+        if (jumps[jumpnum-2].faces[i])
+            if (_faceval(i) && ++count1)
+                _do_jump1 = 1;
 
-    if (_do_jump)
+    if (!count1)
+        _do_jump1 = 1;
+
+    int _do_jump2, count2;
+    for (i = _do_jump2 = count2 = 0; i < 7; i++)
+        if (jumps[jumpnum-1].faces[i])
+            if (_faceval(i) && ++count2)
+                _do_jump2 = 1;
+
+    if (!count2)
+        _do_jump2 = 1;
+
+    if (_do_jump1 || _do_jump2)
         fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
     else
         jumpnum--;
 }
 
-#define faceval (arg == 6 ? mem : arg == 7 ? input : (cube[arg][0][0] + cube[arg][0][1] + cube[arg][0][2] + cube[arg][1][0] + cube[arg][1][1] + cube[arg][1][2] + cube[arg][2][0] + cube[arg][2][1] + cube[arg][2][2]))
+int _faceval(int face)
+{
+    if (face == 7)
+        return input;
+    else if (face == 6)
+        return mem;
+    else
+        return (cube[face][0][0] + cube[face][0][1] + cube[face][0][2] + cube[face][1][0] + cube[face][1][1] + cube[face][1][2] + cube[face][2][0] + cube[face][2][1] + cube[face][2][2]);
+}
+
+#define faceval _faceval(arg)
 
 int execute(int command, int arg)
 {
