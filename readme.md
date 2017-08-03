@@ -93,10 +93,12 @@ Loops:
 
 |Command|Description|Arguments|
 |-|-|-|
-|`(`|create jump point with arguments. if none, create a point that can be jumped to freely. with face indexes, create a point that can be jumped to if every provided face has a truthy sum.|any number of face indexes (0-7)|
+|`(`|create jump point with arguments. if none, create a point that can be jumped to freely. with face indexes, create a point that can be jumped to if any provided face has a truthy sum.|any number of face indexes (0-7)|
 |`)`|jump back to previous jump point with arguments. if none, jump back if previous jump point can be jumped to. with face indexes, jump to previous point if both it can be jumped to and if every provided face has a truthy sum.|^|
 
-Loop idea thanks to @TehPers, who explained it better [here](http://link.to.come) and who implemented it first in the [Lua interpreter](//github.com/Cubically/cubically-lua).
+A better explanation of loops is that `(...)` will be an infinite loop. `(1...)` loops as long as the first face is truthy. `(12...)34` is a loop as long as both `1 || 2` and `3 || 4` is truthy.
+
+Loop idea thanks to [TehPers](//github.com/TehPers), who implemented it first in the [Lua interpreter](//github.com/Cubically/cubically-lua).
 
 # Faces
 
