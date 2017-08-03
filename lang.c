@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdint.h>
 #include <math.h>
 #include "rubiks.h"
 
@@ -9,7 +10,8 @@
 int32_t mem, input;
 
 struct {
-  int pos, faces[7];
+  long int pos;
+  int faces[7];
 } jumps[1000] = {0, {0}};
 int parens, jumpnum;
 
@@ -38,12 +40,12 @@ int main(int argc, char **argv)
             if (command == '(' || command == ')')
                 jumps[jumpnum].faces[c - '0'] = 1;
             else
-                loop = loop && execute(command,c - '0');
+                loop = execute(command,c - '0');
         } else {
             if (command == '(')
                 jumps[jumpnum++].pos = ftell(in) - 1;
             else if (command == ')')
-                do_jump();
+                loop = loop || do_jump();
             command = c;
         }
     }
@@ -92,10 +94,13 @@ int do_jump(void)
     if (!count)
         _do_jump2 = 1;
 
+    jumpnum--;
+
     if (_do_jump1 && _do_jump2)
         fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
     else
-        jumpnum--;
+        return 0;
+    return 1;
 }
 
 int32_t _faceval(int face)
