@@ -6,7 +6,7 @@
 
 #pragma GCC diagnostic ignored "-Wunused-result"
 
-int mem, input;
+int32_t mem, input;
 
 struct {
   int pos, faces[7];
@@ -16,7 +16,7 @@ int parens, jumpnum;
 int rubiksnotation(char);
 int execute(int,int);
 int do_jump(void);
-int _faceval(int);
+int32_t _faceval(int);
 
 FILE *in;
 
@@ -98,7 +98,7 @@ int do_jump(void)
         jumpnum--;
 }
 
-int _faceval(int face)
+int32_t _faceval(int face)
 {
     if (face == 7)
         return input;
