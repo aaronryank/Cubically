@@ -55,6 +55,7 @@ int main(int argc, char **argv)
     fprintf(dbg,"\nNotepad: %d\n\n",mem);
     printcube();
 
+#ifdef LOOP_DEBUG
     int i, j;
     for (i = 0; i < jumpnum; i++) {
         printf("Jump %d: ", i);
@@ -62,6 +63,7 @@ int main(int argc, char **argv)
             printf("%d-%d ",j,jumps[i].faces[j]);
         printf("@%d\n",jumps[i].pos);
     }
+#endif
 }
 
 int do_jump(void)
@@ -156,20 +158,12 @@ int execute(int command, int arg)
     else if (command == '^') {
         mem = pow(mem,faceval);
     }
-/*
-    else if (command == '(') {
-        jumps[jnum++] = ftell(in);
+    else if (command == '<') {
+        mem = (mem < faceval);
     }
-    else if (command == ')') {
-        if (jnum) {
-            fseek(in,jumps[jnum-1],SEEK_SET);
-        }
+    else if (command == '>') {
+        mem = (mem > faceval);
     }
-    else if (command == ']') {
-        if (jnum && !issolved())
-            fseek(in,jumps[jnum-1],SEEK_SET);
-    }
-*/
     else if (command == 'E' || command == '&') {
         if (faceval)
             return 0;

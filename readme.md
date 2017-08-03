@@ -43,7 +43,6 @@ Input (temporarily) is performed using the nonexistent seventh-indexed face. Whe
 
 # Limitations
 
- - There are no loops yet.
  - Cubically is not remotely Turing-Complete.
  - A 3x3 is the only cube size right now; this may extend later.
 
@@ -75,8 +74,10 @@ General commands:
 |`-`|add all values of specified face together, subtract from notepad value, write result on notepad|^|
 |`*`|add all values of specified face together, multiply by notepad value, write result on notepad|^|
 |`/`|add all values of specified face together, divide notepad value by, write result on notepad|^|
-|`^`|set the notepad value to notepad to the power of the specified face index|^|
+|`^`|set the notepad value to `pow(notepad, faceval)`|^|
 |`=`|compare notepad and specified face for equality, write result on notepad|^|
+|`<`|set the notepad to (notepad < faceval)|^|
+|`>`|set the notepad to (notepad > faceval)|^|
 |`:`|set notepad to specified face|^|
 
 I/O commands:
@@ -87,6 +88,15 @@ I/O commands:
 |`%`|add all values of specified face together, print as decimal|^|
 |`$`|input integer, store in input buffer (index 7)|anything|
 |`~`|input character, store in input buffer (index 7)|anything|
+
+Loops:
+
+|Command|Description|Arguments|
+|-|-|-|
+|`(`|create jump point with arguments. if none, create a point that can be jumped to freely. with face indexes, create a point that can be jumped to if every provided face has a truthy sum.|any number of face indexes (0-7)|
+|`)`|jump back to previous jump point with arguments. if none, jump back if previous jump point can be jumped to. with face indexes, jump to previous point if both it can be jumped to and if every provided face has a truthy sum.|^|
+
+Loop idea thanks to @TehPers, who explained it better [here](http://link.to.come) and who implemented it first in the [Lua interpreter](//github.com/Cubically/cubically-lua).
 
 # Faces
 
