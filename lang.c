@@ -43,7 +43,7 @@ int main(int argc, char **argv)
             if (command == '(')
                 jumps[jumpnum++].pos = ftell(in) - 1;
             else if (command == ')')
-                jumpnum++, do_jump();
+                do_jump();
             command = c;
         }
     }
@@ -66,25 +66,31 @@ int main(int argc, char **argv)
 
 int do_jump(void)
 {
-    int i, _do_jump1, count1;
-    for (i = _do_jump1 = count1 = 0; i < 7; i++)
-        if (jumps[jumpnum-2].faces[i])
-            if (_faceval(i) && ++count1)
-                _do_jump1 = 1;
 
-    if (!count1)
+    int i, count, _do_jump1, _do_jump2;
+    for (i = count = _do_jump1 = 0; i < 7; i++)
+    {
+        if (jumps[jumpnum-1].faces[i]) {
+            count++;
+            if (_faceval(i))
+                _do_jump1 = 1;
+        }
+    }
+    if (!count)
         _do_jump1 = 1;
 
-    int _do_jump2, count2;
-    for (i = _do_jump2 = count2 = 0; i < 7; i++)
-        if (jumps[jumpnum-1].faces[i])
-            if (_faceval(i) && ++count2)
+    for (i = count = _do_jump2 = 0; i < 7; i++)
+    {
+        if (jumps[jumpnum].faces[i]) {
+            count++;
+            if (_faceval(i))
                 _do_jump2 = 1;
-
-    if (!count2)
+        }
+    }
+    if (!count)
         _do_jump2 = 1;
 
-    if (_do_jump1 || _do_jump2)
+    if (_do_jump1 && _do_jump2)
         fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
     else
         jumpnum--;
