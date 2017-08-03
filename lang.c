@@ -45,7 +45,7 @@ int main(int argc, char **argv)
             if (command == '(')
                 jumps[jumpnum++].pos = ftell(in) - 1;
             else if (command == ')')
-                do_jump();
+                loop = loop || do_jump();
             command = c;
         }
     }
@@ -94,10 +94,13 @@ int do_jump(void)
     if (!count)
         _do_jump2 = 1;
 
+    jumpnum--;
+
     if (_do_jump1 && _do_jump2)
         fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
     else
-        jumpnum--;
+        return 0;
+    return 1;
 }
 
 int32_t _faceval(int face)
