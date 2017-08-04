@@ -4,17 +4,7 @@
 #include <stdint.h>
 #include <math.h>
 #include "rubiks.h"
-
-#pragma GCC diagnostic ignored "-Wunused-result"
-
-#ifndef DEBUG
-#define DEBUG 0
-#endif
-
-#define clear_jump(x)  for (i = 0; i < 7; i++)            \
-                           jumps[jumpnum+x].faces[i] = 0; \
-                       jumps[jumpnum+x].pos = 0;
-
+#include "lang.h"
 
 int32_t mem, input;
 
@@ -23,11 +13,6 @@ struct {
     int faces[7];
 } jumps[1000] = {0, {0}};
 int parens, jumpnum;
-
-int rubiksnotation(char);
-int execute(int,int);
-int do_jump(void);
-int32_t _faceval(int);
 
 FILE *in;
 
@@ -53,7 +38,7 @@ int main(int argc, char **argv)
             if (c == EOF)
                 loop = 0;
 
-            if (!args || command == '(' || command == ')') {
+            if ((!args && implicit(command)) || special(command)) {
                 int retval = execute(command,-1);
                 loop = loop || retval;
             }
@@ -121,15 +106,14 @@ int do_jump(void)
 
 int32_t _faceval(int face)
 {
+    //printf("faceval called with %d\n",face);
     if (face == 7)
         return input;
     else if (face == 6)
         return mem;
     else
-        return (cube[face][0][0] + cube[face][0][1] + cube[face][0][2] + cube[face][1][0] + cube[face][1][1] + cube[face][1][2] + cube[face][2][0] + cube[face][2][1] + cube[face][2][2]);
+        return (int32_t) (cube[face][0][0] + cube[face][0][1] + cube[face][0][2] + cube[face][1][0] + cube[face][1][1] + cube[face][1][2] + cube[face][2][0] + cube[face][2][1] + cube[face][2][2]);
 }
-
-#define faceval _faceval(arg)
 
 int execute(int command, int arg)
 {
