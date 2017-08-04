@@ -106,7 +106,6 @@ int do_jump(void)
 
 int32_t _faceval(int face)
 {
-    //printf("faceval called with %d\n",face);
     if (face == 7)
         return input;
     else if (face == 6)
@@ -170,7 +169,7 @@ int execute(int command, int arg)
         mem = (mem > faceval);
     }
     else if (command == 'E' || command == '&') {
-        if (faceval)
+        if (faceval || arg == -1)
             return 0;
     }
     else if (command == '(') {

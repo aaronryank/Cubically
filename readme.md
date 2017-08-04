@@ -52,6 +52,8 @@ A non-integer in the source code will set the command to that character. Each in
 
 For example, `Y0` executes the command `Y` with argument `0`. `Y015` executes `Y` with `0`, then with `1`, then with `5`.
 
+Certain commands can be executed with no arguments, and are called when another command is read, such as `$` (read integer as input). See commands below for more info.
+
 # Commands
 
 Memory commands:
@@ -86,8 +88,8 @@ I/O commands:
 |-|-|-|
 |`@`|add all values of specified face together, print as ASCII|face index (0-7)|
 |`%`|add all values of specified face together, print as decimal|^|
-|`$`|input integer, store in input buffer (index 7)|anything|
-|`~`|input character, store in input buffer (index 7)|anything|
+|`$`|input integer, store in input buffer (index 7)|anything or nothing|
+|`~`|input character, store in input buffer (index 7)|anything or nothing|
 
 Loops:
 
