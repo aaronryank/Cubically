@@ -28,25 +28,28 @@ int main(int argc, char **argv)
 
     in = argc >= 2 ? fopen(argv[1],"r") : stdin;
 
-    int loop = 1, command;
+    int loop = 1, command, args = 0;
     while (loop)
     {
         int c = getc(in);
 
-        if (c == EOF)
-            loop = 0;
-
         if (isdigit(c)) {
+            args++;
             if (command == '(' || command == ')')
                 jumps[jumpnum].faces[c - '0'] = 1;
             else
                 loop = execute(command,c - '0');
         } else {
-            if (command == '(')
-                jumps[jumpnum++].pos = ftell(in) - 1;
-            else if (command == ')')
-                loop = loop || do_jump();
+            if (c == EOF)
+                loop = 0;
+
+            if (!args)
+                loop = loop | execute(command,-1);
+
+            //printf("executed %c (%d), loop = %d, pos = %ld\n",command,command,loop,ftell(in));
+
             command = c;
+            args = 0;
         }
     }
 
@@ -70,7 +73,6 @@ int main(int argc, char **argv)
 
 int do_jump(void)
 {
-
     int i, count, _do_jump1, _do_jump2;
     for (i = count = _do_jump1 = 0; i < 7; i++)
     {
@@ -94,12 +96,18 @@ int do_jump(void)
     if (!count)
         _do_jump2 = 1;
 
-    jumpnum--;
+    //jumpnum--;
 
-    if (_do_jump1 && _do_jump2)
-        fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
-    else
+    //printf("Jumping (fpos %ld)\n",ftell(in));
+
+    if (_do_jump1 && _do_jump2) {
+        fseek(in, jumps[jumpnum].pos, SEEK_SET);
+        //printf("Jumped (fpos %ld)\n",ftell(in));
+    }
+    else {
+        jumpnum--;
         return 0;
+    }
     return 1;
 }
 
@@ -173,6 +181,16 @@ int execute(int command, int arg)
         if (faceval)
             return 0;
     }
+    else if (command == '(') {
+        jumps[jumpnum++].pos = ftell(in) - 2;
+    }
+    else if (command == ')') {
+        return do_jump();
+    }
+    else if (command == EOF) {
+        return 0;
+    }
+
     return 1;
 }
 
