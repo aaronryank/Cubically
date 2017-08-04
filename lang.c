@@ -180,6 +180,14 @@ int execute(int command, int arg)
         int retval = do_jump();
         return retval;
     }
+    else if (command == '!') {
+        if (!faceval)
+            do_skip();
+    }
+    else if (command == '?') {
+        if (faceval)
+            do_skip();
+    }
     else if (command == EOF) {
         return 0;
     }
@@ -197,5 +205,17 @@ int rubiksnotation(char x)
       case 'B': return 4;
       case 'D': return 5;
       default:  return -1;
+    }
+}
+
+void do_skip(void)
+{
+    int c = getc(in);
+    if (c == '{') {
+        while (getc(in) != '}');
+    }
+    else {
+        while (isdigit(c = getc(in)));
+        ungetc(c,in);
     }
 }

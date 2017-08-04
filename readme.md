@@ -56,7 +56,7 @@ Certain commands can be executed with no arguments, and are called when another 
 
 # Commands
 
-Memory commands:
+### Memory
 
 |Command|Description|Arguments|
 |-|-|-|
@@ -67,7 +67,7 @@ Memory commands:
 |`F`|turn front cube face clockwise 90°|number of turns|
 |`B`|turn back cube face clockwise 90°|number of turns|
 
-General commands:
+### General
 
 |Command|Description|Arguments|
 |-|-|-|
@@ -82,7 +82,7 @@ General commands:
 |`>`|set the notepad to (notepad > faceval)|^|
 |`:`|set notepad to specified face|^|
 
-I/O commands:
+### I/O
 
 |Command|Description|Arguments|
 |-|-|-|
@@ -91,7 +91,7 @@ I/O commands:
 |`$`|input integer, store in input buffer (index 7)|anything or nothing|
 |`~`|input character, store in input buffer (index 7)|anything or nothing|
 
-Loops:
+### Loops
 
 |Command|Description|Arguments|
 |-|-|-|
@@ -101,6 +101,19 @@ Loops:
 A better explanation of loops is that `(...)` will be an infinite loop. `(1...)` loops as long as the first face is truthy. `(12...)34` is a loop as long as both `1 || 2` and `3 || 4` is truthy.
 
 Loop idea thanks to [TehPers](//github.com/TehPers), who implemented it first in the [Lua interpreter](//github.com/Cubically/cubically-lua).
+
+### Conditionals
+
+|Command|Description|Arguments|
+|-|-|-|
+|`?`|execute next command or code block if specified face is truthy|face index (0-7)|
+|`!`|execute next command or code block if specified face is falsy. also can be used as if-else statement as specified below|face index (0-7) or nothing|
+|`{`|open a code block|nothing|
+|`}`|close a code block|nothing|
+
+`!` can also be used as if-else as shown below. This code is equivalent to `if (face 6 is truthy) { ... } else { ... }`
+
+    ?6{...}!{...}
 
 # Faces
 
