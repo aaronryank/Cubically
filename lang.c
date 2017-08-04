@@ -7,11 +7,20 @@
 
 #pragma GCC diagnostic ignored "-Wunused-result"
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
+#define clear_jump(x)  for (i = 0; i < 7; i++)            \
+                           jumps[jumpnum+x].faces[i] = 0; \
+                       jumps[jumpnum+x].pos = 0;
+
+
 int32_t mem, input;
 
 struct {
-  long int pos;
-  int faces[7];
+    long int pos;
+    int faces[7];
 } jumps[1000] = {0, {0}};
 int parens, jumpnum;
 
@@ -32,6 +41,7 @@ int main(int argc, char **argv)
     while (loop)
     {
         int c = getc(in);
+        DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
         if (isdigit(c)) {
             args++;
@@ -43,19 +53,17 @@ int main(int argc, char **argv)
             if (c == EOF)
                 loop = 0;
 
-            if (!args)
-                loop = loop | execute(command,-1);
+            if (!args || command == '(' || command == ')') {
+                int retval = execute(command,-1);
+                loop = loop || retval;
+            }
 
-            //printf("executed %c (%d), loop = %d, pos = %ld\n",command,command,loop,ftell(in));
+            DEBUG && fprintf(stderr,"executed %c (%d), loop = %d, pos = %ld\n",command,command,loop,ftell(in));
 
             command = c;
             args = 0;
         }
     }
-
-#ifdef DEBUG
-        printf("Command %c argument %c\n",command,isdigit(c)?c:command);
-#endif
 
     fprintf(dbg,"\nNotepad: %d\n\n",mem);
     printcube();
@@ -96,19 +104,19 @@ int do_jump(void)
     if (!count)
         _do_jump2 = 1;
 
-    //jumpnum--;
-
-    //printf("Jumping (fpos %ld)\n",ftell(in));
+    DEBUG && fprintf(stderr,"Jumping (fpos %ld)\n",ftell(in));
 
     if (_do_jump1 && _do_jump2) {
-        fseek(in, jumps[jumpnum].pos, SEEK_SET);
-        //printf("Jumped (fpos %ld)\n",ftell(in));
+        fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
+        DEBUG && fprintf(stderr,"Jumped (fpos %ld)\n",ftell(in));
+        clear_jump(0);
+        return 1;
     }
     else {
+        clear_jump(-1);
         jumpnum--;
         return 0;
     }
-    return 1;
 }
 
 int32_t _faceval(int face)
@@ -182,10 +190,12 @@ int execute(int command, int arg)
             return 0;
     }
     else if (command == '(') {
-        jumps[jumpnum++].pos = ftell(in) - 2;
+        jumps[jumpnum++].pos = ftell(in) - 1;
+        DEBUG && fprintf(stderr,"jumps[jumpnum-1].pos = %ld\n",jumps[jumpnum-1].pos);
     }
     else if (command == ')') {
-        return do_jump();
+        int retval = do_jump();
+        return retval;
     }
     else if (command == EOF) {
         return 0;
