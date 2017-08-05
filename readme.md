@@ -1,6 +1,6 @@
 # Cubically
 
-Cubically is a work-in-progress, painfully complex, very esoteric programming language. 
+Cubically is a [work-in-progress](/cubically), painfully complex, very esoteric programming language.
 
 This repository contains:
 
