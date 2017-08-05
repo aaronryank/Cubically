@@ -123,7 +123,7 @@ These commands are not guaranteed to stay in Cubically; they will be removed if 
 |-|-|-|
 |`` ` ``|set notepad to (notepad XOR faceval) where faceval is the sum of all values on the specified face|face index (0-7)|
 |`_`|set notepad to (notepad modulo faceval)|^|
-|`@`|set notepad to (notepad bitwise-and faceval)|^|
+|`"`|set notepad to (notepad bitwise-and faceval)|^|
 |`\|`|set notepad to (notepad bitwise-or faceval)|^|
 
 # Faces

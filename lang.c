@@ -176,7 +176,7 @@ int execute(int command, int arg)
     else if (command == '_') {
         mem = (mem % faceval);
     }
-    else if (command == '@') {
+    else if (command == '"') {
         mem = (mem & faceval);
     }
     else if (command == '|') {
