@@ -115,6 +115,17 @@ Loop idea thanks to [TehPers](//github.com/TehPers), who implemented it first in
 
     ?6{...}!{...}
 
+# Experimental commands
+
+These commands are not guaranteed to stay in Cubically; they will be removed if more important commands need to be added.
+
+|Command|Description|Arguments|
+|-|-|-|
+|`` ` ``|set notepad to (notepad XOR faceval) where faceval is the sum of all values on the specified face|face index (0-7)|
+|`_`|set notepad to (notepad modulo faceval)|^|
+|`@`|set notepad to (notepad bitwise-and faceval)|^|
+|`` | ``|set notepad to (notepad bitwise-or faceval)|^|
+
 # Faces
 
 |Number|Face|Visualizer color|

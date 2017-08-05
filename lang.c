@@ -173,6 +173,18 @@ int execute(int command, int arg)
     else if (command == '>') {
         mem = (mem > faceval);
     }
+    else if (command == '_') {
+        mem = (mem % faceval);
+    }
+    else if (command == '@') {
+        mem = (mem & faceval);
+    }
+    else if (command == '|') {
+        mem = (mem | faceval);
+    }
+    else if (command == '`') {
+        mem = (mem ^ faceval);
+    }
     else if (command == 'E' || command == '&') {
         if (arg == -1 || faceval)
             return -1;
