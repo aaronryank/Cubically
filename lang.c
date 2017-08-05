@@ -14,6 +14,8 @@ struct {
 } jumps[1000] = {0, {0}};
 int parens, jumpnum;
 
+int if_else;
+
 FILE *in;
 
 int main(int argc, char **argv)
@@ -184,12 +186,18 @@ int execute(int command, int arg)
         return retval;
     }
     else if (command == '!') {
-        if (!faceval)
+        if (faceval || (arg == -1 && if_else)) {
             do_skip();
+            if_else = 0;
+        }
     }
     else if (command == '?') {
-        if (faceval)
+        if (!faceval) {
             do_skip();
+            if_else = 0;
+        } else {
+            if_else = 1;
+        }
     }
     else if (command == EOF) {
         return 0;
