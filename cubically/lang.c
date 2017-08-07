@@ -14,6 +14,8 @@ struct {
 } jumps[1000] = {0, {0}};
 int parens, jumpnum;
 
+int if_else;
+
 FILE *in;
 
 int main(int argc, char **argv)
@@ -40,7 +42,10 @@ int main(int argc, char **argv)
 
             if ((!args && implicit(command)) || special(command)) {
                 int retval = execute(command,-1);
-                loop = loop || retval;
+                if (retval == -1)
+                    loop = 0;
+                else
+                    loop = loop || retval;
             }
 
             DEBUG && fprintf(stderr,"executed %c (%d), loop = %d, pos = %ld\n",command,command,loop,ftell(in));
@@ -168,9 +173,21 @@ int execute(int command, int arg)
     else if (command == '>') {
         mem = (mem > faceval);
     }
+    else if (command == '_') {
+        mem = (mem % faceval);
+    }
+    else if (command == '"') {
+        mem = (mem & faceval);
+    }
+    else if (command == '|') {
+        mem = (mem | faceval);
+    }
+    else if (command == '`') {
+        mem = (mem ^ faceval);
+    }
     else if (command == 'E' || command == '&') {
-        if (faceval || arg == -1)
-            return 0;
+        if (arg == -1 || faceval)
+            return -1;
     }
     else if (command == '(') {
         jumps[jumpnum++].pos = ftell(in) - 1;
@@ -179,6 +196,20 @@ int execute(int command, int arg)
     else if (command == ')') {
         int retval = do_jump();
         return retval;
+    }
+    else if (command == '!') {
+        if (faceval || (arg == -1 && if_else)) {
+            do_skip();
+            if_else = 0;
+        }
+    }
+    else if (command == '?') {
+        if (!faceval) {
+            do_skip();
+            if_else = 0;
+        } else {
+            if_else = 1;
+        }
     }
     else if (command == EOF) {
         return 0;
@@ -197,5 +228,17 @@ int rubiksnotation(char x)
       case 'B': return 4;
       case 'D': return 5;
       default:  return -1;
+    }
+}
+
+void do_skip(void)
+{
+    int c = getc(in);
+    if (c == '{') {
+        while (getc(in) != '}');
+    }
+    else {
+        while (isdigit(c = getc(in)));
+        ungetc(c,in);
     }
 }
