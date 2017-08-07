@@ -100,8 +100,6 @@ Certain commands can be executed with no arguments, and are called when another 
 
 A better explanation of loops is that `(...)` will be an infinite loop. `(1...)` loops as long as the first face is truthy. `(12...)34` is a loop as long as both `1 || 2` and `3 || 4` is truthy.
 
-Loop idea thanks to [TehPers](//github.com/TehPers), who implemented it first in the [Lua interpreter](//github.com/Cubically/cubically-lua).
-
 ### Conditionals
 
 |Command|Description|Arguments|
