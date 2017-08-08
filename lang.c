@@ -14,7 +14,7 @@ struct {
 } jumps[1000] = {0, {0}};
 int parens, jumpnum;
 
-int if_else;
+int do_else;
 
 FILE *in;
 
@@ -133,7 +133,7 @@ int execute(int command, int arg)
         mem -= faceval;
     }
     else if (command == '/') {
-        mem /= faceval;
+        mem && (mem /= faceval);
     }
     else if (command == '*') {
         mem *= faceval;
@@ -142,7 +142,9 @@ int execute(int command, int arg)
         mem = (mem == faceval);
     }
     else if (command == '$') {
-        scanf("%d",&input);
+        int retval = scanf("%d",&input);
+        if (retval < 0)
+            input = 0;
     }
     else if (command == '~') {
         input = getchar();
@@ -198,17 +200,17 @@ int execute(int command, int arg)
         return retval;
     }
     else if (command == '!') {
-        if (faceval || (arg == -1 && if_else)) {
+        if (faceval || (arg == -1 && do_else)) {
             do_skip();
-            if_else = 0;
+            do_else = 0;
         }
     }
     else if (command == '?') {
         if (!faceval) {
             do_skip();
-            if_else = 0;
+            do_else = 1;
         } else {
-            if_else = 1;
+            do_else = 0;
         }
     }
     else if (command == EOF) {
