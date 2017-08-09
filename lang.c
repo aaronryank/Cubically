@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
     int i;
     char *fname = 0;
-    for (i = 0; i < argc; i++) {
+    for (i = 1; i < argc; i++) {
         if (argv[i][0] == '-')
             CUBESIZE = -atoi(argv[i]);
         else
@@ -134,15 +134,11 @@ int32_t _faceval(int face)
     else if (face == 6)
         return mem;
     else {
-        int32_t retval;
+        int32_t retval = 0;
         size_t i, j;
         for (i = 0; i < CUBESIZE; i++)
             for (j = 0; j < CUBESIZE; j++)
-#if 0
-                retval += (int32_t) cube[face][i][j];
-#else
                 retval += (int32_t) CUBE(face,i,j);
-#endif
         return retval;
     }
 }

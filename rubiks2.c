@@ -9,7 +9,6 @@
 # define dbg stderr
 #endif
 
-//int cube[6][CUBESIZE][CUBESIZE];
 int *cube;
 
 #define CUBE(x,y,z) cube[((x)*CUBESIZE*CUBESIZE) + ((y)*CUBESIZE) + (z)]
@@ -91,7 +90,6 @@ void turncube(int face, int turns)
             for (i = 0; i < 3; i++)
                 for (j = 0; j < CUBESIZE; j++)
                     swap(&CUBE(mod[i],d,j),&CUBE(mod[i+1],d,j));
-                    //swap(&cube[mod[i]][d][j],&cube[mod[i+1]][d][j]);
             rotateface(face,1);
         }
     }
@@ -105,13 +103,10 @@ void turncube(int face, int turns)
             while (tmp--) {
                 for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
                     swap(&CUBE(DOWN,d1,i),&CUBE(RIGHT,j,d1));
-                    //swap(&cube[DOWN][d1][i],&cube[RIGHT][j][d1]);
                 for (i = 0; i < CUBESIZE; i++)
                     swap(&CUBE(RIGHT,i,d1),&CUBE(UP,d2,i));
-                    //swap(&cube[RIGHT][i][d1],&cube[UP][d2][i]);
                 for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
                     swap(&CUBE(UP,d2,i),&CUBE(LEFT,j,d2));
-                    //swap(&cube[UP][d2][i],&cube[LEFT][j][d2]);
                 rotateface(face,1);
             }
         }
@@ -128,25 +123,17 @@ void turncube(int face, int turns)
         while (turns--) {
             for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
                 swap(&CUBE(mod[0],j,dd),&CUBE(mod[1],i,d));
-                //swap(&cube[mod[0]][j][dd],&cube[mod[1]][i][d]);
             for (i = 0; i < CUBESIZE; i++)
                 swap(&CUBE(mod[1],i,d),&CUBE(mod[2],i,d));
-                //swap(&cube[mod[1]][i][d],&cube[mod[2]][i][d]);
             for (i = 0; i < CUBESIZE; i++)
                 swap(&CUBE(mod[2],i,d),&CUBE(mod[3],i,d));
-                //swap(&cube[mod[2]][i][d],&cube[mod[3]][i][d]);
             rotateface(face,1);
         }
     }
 }
 
-// cube[face][line][cubelet]
-// so cube[0][1][1] is the middle cube of the top face
-
 void rotate_face_clockwise(size_t n, int face)
 {
-    printf("before rotation\n");
-    printcube();
     size_t i, j;
     int *rotated = malloc(6 * n * n * sizeof(int));
     memcpy(rotated,cube,6 * n * n * sizeof(int));
@@ -155,13 +142,8 @@ void rotate_face_clockwise(size_t n, int face)
     for (i = 0; i < n; i++)
         for (j = 0; j < n; j++)
             ROTATED(face,i,j) = CUBE(face,n - j - 1,i);
-            //rotated[i][j] = a[n - j - 1][i];
 
-    //memcpy(a, rotated, sizeof a[0][0] * n * n);
     memcpy(cube, rotated, 6 * n * n * sizeof(int));
-
-    printf("after rotation\n");
-    printcube();
 }
 
 void rotateface(int face, int clockwise)
@@ -174,28 +156,6 @@ void rotateface(int face, int clockwise)
         for (i = 0; i < 3; i++)
             rotate_face_clockwise(CUBESIZE,face);
 }
-
-/*
-void rotateface(int face, int clockwise)
-{
-    if (clockwise == 1 && face != BACK) {
-        swap(&cube[face][0][0], &cube[face][2][0]);
-        swap(&cube[face][0][1], &cube[face][1][0]);
-        swap(&cube[face][0][2], &cube[face][2][0]);
-        swap(&cube[face][1][0], &cube[face][2][1]);
-        swap(&cube[face][1][2], &cube[face][2][1]);
-        swap(&cube[face][2][2], &cube[face][2][0]);
-    }
-    else if (clockwise == 1 && face == BACK) {
-        swap(&cube[face][0][0], &cube[face][0][2]);
-        swap(&cube[face][1][0], &cube[face][0][1]);
-        swap(&cube[face][2][0], &cube[face][0][2]);
-        swap(&cube[face][0][1], &cube[face][1][2]);
-        swap(&cube[face][2][1], &cube[face][1][2]);
-        swap(&cube[face][2][2], &cube[face][0][2]);
-    }
-}
-*/
 
 int issolved(void)
 {
