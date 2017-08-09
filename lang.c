@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <math.h>
+#include <stdlib.h>
 #include "rubiks2.h"
 #include "lang.h"
 
