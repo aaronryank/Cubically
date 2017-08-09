@@ -20,6 +20,7 @@ FILE *in;
 
 int main(int argc, char **argv)
 {
+    CUBESIZE = 3;
     initcube();
 
     in = argc >= 2 ? fopen(argv[1],"r") : stdin;
@@ -120,8 +121,14 @@ int32_t _faceval(int face)
         return input;
     else if (face == 6)
         return mem;
-    else
-        return (int32_t) (cube[face][0][0] + cube[face][0][1] + cube[face][0][2] + cube[face][1][0] + cube[face][1][1] + cube[face][1][2] + cube[face][2][0] + cube[face][2][1] + cube[face][2][2]);
+    else {
+        int32_t retval;
+        size_t i, j;
+        for (i = 0; i < CUBESIZE; i++)
+            for (j = 0; j < CUBESIZE; j++)
+                retval += (int32_t) cube[face][i][j];
+        return retval;
+    }
 }
 
 int execute(int command, int arg)
