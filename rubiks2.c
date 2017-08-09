@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "rubiks.h"
+#include "rubiks2.h"
 
 #ifdef VISUALIZER
 # define dbg stdout
@@ -9,7 +9,10 @@
 # define dbg stderr
 #endif
 
-int cube[6][CUBESIZE][CUBESIZE];
+//int cube[6][CUBESIZE][CUBESIZE];
+int *cube;
+
+#define CUBE(x,y,z) cube[((x)*CUBESIZE*CUBESIZE) + ((y)*CUBESIZE) + (z)]
 
 void initcube(void)
 {
@@ -19,7 +22,7 @@ void initcube(void)
     for (face = 0; face < 6; face++)
         for (line = 0; line < CUBESIZE; line++)
             for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
-                cube[face][line][cubelet] = face;
+                CUBE(face,line,cubelet) = face;
 }
 
 char *color(int x)
@@ -45,14 +48,14 @@ void printcube(void)
         for (i = 0; i < CUBESIZE; i++)
             fprintf(dbg," ");
         for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
-            fprintf(dbg,"%s%d",color(cube[0][line][cubelet]),cube[0][line][cubelet]);
+            fprintf(dbg,"%s%d",color(CUBE(0,line,cubelet)),CUBE(0,line,cubelet));
         fprintf(dbg,"\n");
     }
 
     for (line = 0; line < CUBESIZE; line++) {
         for (face = 1; face < 5; face++)
             for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
-                fprintf(dbg,"%s%d",color(cube[face][line][cubelet]),cube[face][line][cubelet]);
+                fprintf(dbg,"%s%d",color(CUBE(face,line,cubelet)),CUBE(face,line,cubelet));
         fprintf(dbg,"\n");
     }
 
@@ -60,7 +63,7 @@ void printcube(void)
         for (i = 0; i < CUBESIZE; i++)
             fprintf(dbg," ");
         for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
-            fprintf(dbg,"%s%d",color(cube[5][line][cubelet]),cube[5][line][cubelet]);
+            fprintf(dbg,"%s%d",color(CUBE(5,line,cubelet)),CUBE(5,line,cubelet));
         fprintf(dbg,"\n");
     }
     fprintf(dbg,"\n");
@@ -87,7 +90,8 @@ void turncube(int face, int turns)
         while (turns--) {
             for (i = 0; i < 3; i++)
                 for (j = 0; j < CUBESIZE; j++)
-                    swap(&cube[mod[i]][d][j],&cube[mod[i+1]][d][j]);
+                    swap(&CUBE(mod[i],d,j),&CUBE(mod[i+1],d,j));
+                    //swap(&cube[mod[i]][d][j],&cube[mod[i+1]][d][j]);
             rotateface(face,1);
         }
     }
@@ -100,11 +104,14 @@ void turncube(int face, int turns)
                 tmp = 3;
             while (tmp--) {
                 for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
-                    swap(&cube[DOWN][d1][i],&cube[RIGHT][j][d1]);
+                    swap(&CUBE(DOWN,d1,i),&CUBE(RIGHT,j,d1));
+                    //swap(&cube[DOWN][d1][i],&cube[RIGHT][j][d1]);
                 for (i = 0; i < CUBESIZE; i++)
-                    swap(&cube[RIGHT][i][d1],&cube[UP][d2][i]);
+                    swap(&CUBE(RIGHT,i,d1),&CUBE(UP,d2,i));
+                    //swap(&cube[RIGHT][i][d1],&cube[UP][d2][i]);
                 for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
-                    swap(&cube[UP][d2][i],&cube[LEFT][j][d2]);
+                    swap(&CUBE(UP,d2,i),&CUBE(LEFT,j,d2));
+                    //swap(&cube[UP][d2][i],&cube[LEFT][j][d2]);
                 rotateface(face,1);
             }
         }
@@ -120,11 +127,14 @@ void turncube(int face, int turns)
 
         while (turns--) {
             for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
-                swap(&cube[mod[0]][j][dd],&cube[mod[1]][i][d]);
+                swap(&CUBE(mod[0],j,dd),&CUBE(mod[1],i,d));
+                //swap(&cube[mod[0]][j][dd],&cube[mod[1]][i][d]);
             for (i = 0; i < CUBESIZE; i++)
-                swap(&cube[mod[1]][i][d],&cube[mod[2]][i][d]);
+                swap(&CUBE(mod[1],i,d),&CUBE(mod[2],i,d));
+                //swap(&cube[mod[1]][i][d],&cube[mod[2]][i][d]);
             for (i = 0; i < CUBESIZE; i++)
-                swap(&cube[mod[2]][i][d],&cube[mod[3]][i][d]);
+                swap(&CUBE(mod[2],i,d),&CUBE(mod[3],i,d));
+                //swap(&cube[mod[2]][i][d],&cube[mod[3]][i][d]);
             rotateface(face,1);
         }
     }
@@ -133,16 +143,25 @@ void turncube(int face, int turns)
 // cube[face][line][cubelet]
 // so cube[0][1][1] is the middle cube of the top face
 
-void rotate_array_clockwise(size_t n, int a[n][n])
+void rotate_face_clockwise(size_t n, int face)
 {
+    printf("before rotation\n");
+    printcube();
     size_t i, j;
-    int rotated[n][n];
+    int *rotated = malloc(6 * n * n * sizeof(int));
+    memcpy(rotated,cube,6 * n * n * sizeof(int));
+    #define ROTATED(x,y,z) rotated[(x*n*n) + (y*n) + z]
 
     for (i = 0; i < n; i++)
         for (j = 0; j < n; j++)
-            rotated[i][j] = a[n - j - 1][i];
+            ROTATED(face,i,j) = CUBE(face,n - j - 1,i);
+            //rotated[i][j] = a[n - j - 1][i];
 
-    memcpy(a, rotated, sizeof a[0][0] * n * n);
+    //memcpy(a, rotated, sizeof a[0][0] * n * n);
+    memcpy(cube, rotated, 6 * n * n * sizeof(int));
+
+    printf("after rotation\n");
+    printcube();
 }
 
 void rotateface(int face, int clockwise)
@@ -150,10 +169,10 @@ void rotateface(int face, int clockwise)
     int i;
 
     if (clockwise == 1 && face != BACK)
-        rotate_array_clockwise(CUBESIZE,cube[face]);
+        rotate_face_clockwise(CUBESIZE,face);
     else if (clockwise == 1 && face == BACK)
         for (i = 0; i < 3; i++)
-            rotate_array_clockwise(CUBESIZE,cube[face]);
+            rotate_face_clockwise(CUBESIZE,face);
 }
 
 /*
@@ -184,7 +203,7 @@ int issolved(void)
     for (face = 0; face < 6; face++)
         for (line = 0; line < 3; line++)
             for (cubelet = 0; cubelet < 3; cubelet++)
-                if (cube[face][line][cubelet] != face)
+                if (CUBE(face,line,cubelet) != face)
                     return 0;
     return 1;
 }

@@ -1,8 +1,8 @@
 CC := gcc
 CFLAGS := -g -lm -O3
 
-OBJ := rubiks.o stdin.o lang.o
-V_OBJ := rubiks.o stdin.o visualizer.o
+OBJ := rubiks2.o lang.o
+V_OBJ := rubiks2.o stdin.o visualizer.o
 
 lang := rubiks-lang
 visualizer := visualizer
@@ -16,7 +16,7 @@ $(lang): $(OBJ)
 	$(CC) $(OBJ) -o $(lang) $(CFLAGS)
 
 tio:
-	gcc -lm -DTIO rubiks.c lang.c -o rubiks-tio
+	gcc -lm -DTIO rubiks2.c lang.c -o rubiks-tio
 clean:
 	rm -f $(OBJ)
 

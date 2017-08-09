@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <math.h>
-#include "rubiks.h"
+#include "rubiks2.h"
 #include "lang.h"
 
 int32_t mem, input;
@@ -18,12 +18,24 @@ int do_else;
 
 FILE *in;
 
+int CUBESIZE;
+
 int main(int argc, char **argv)
 {
     CUBESIZE = 3;
+
+    int i;
+    char *fname = 0;
+    for (i = 0; i < argc; i++) {
+        if (argv[i][0] == '-')
+            CUBESIZE = -atoi(argv[i]);
+        else
+            fname = argv[i];
+    }
+
     initcube();
 
-    in = argc >= 2 ? fopen(argv[1],"r") : stdin;
+    in = fname ? fopen(fname,"r") : stdin;
 
     if (!in) {
         fprintf(stderr,"Error: could not open source file %s\n",argv[1]);
@@ -126,7 +138,11 @@ int32_t _faceval(int face)
         size_t i, j;
         for (i = 0; i < CUBESIZE; i++)
             for (j = 0; j < CUBESIZE; j++)
+#if 0
                 retval += (int32_t) cube[face][i][j];
+#else
+                retval += (int32_t) CUBE(face,i,j);
+#endif
         return retval;
     }
 }
