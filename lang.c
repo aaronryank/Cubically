@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <math.h>
 #include <stdlib.h>
+#include <errno.h>
 #include "rubiks2.h"
 #include "lang.h"
 
@@ -25,21 +26,45 @@ int main(int argc, char **argv)
 {
     CUBESIZE = 3;
 
-    int i;
-    char *fname = 0;
-    for (i = 1; i < argc; i++) {
-        if (argv[i][0] == '-')
-            CUBESIZE = -atoi(argv[i]);
-        else
-            fname = argv[i];
+    if (argc < 3 || strchr(argv[1],'h')) {
+        fprintf(stderr,"Usage: %s <flags> <file | string> <size>"             "\n"\
+                       "Flags: f | second argument is a file"                 "\n"\
+                       "       s | second argument is a string"               "\n"\
+                       "       u | read file/string as UTF-8"                 "\n"\
+                       "       c | read file/string as Cubically SBCS"        "\n"\
+                       "<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n",argv[0]);
+        return -1;
     }
+
+    int flag_arg = 0;   // 1 = file, 2 = string
+    int flag_cp = 0;    // 1 = UTF-8, 2 = Cubically SBCS
+    int i, s = strlen(argv[1]);
+    for (i = 0; i < s; i++) {
+        switch (tolower(argv[1][i])) {
+          case 'f': flag_arg = 1; break;
+          case 's': flag_arg = 2; break;
+          case 'u': flag_cp  = 1; break;
+          case 'c': flag_cp  = 2; break;
+        }
+    }
+
+    if (argv[3])
+        CUBESIZE = atoi(argv[3]);
+
+    if (CUBESIZE < 0)
+        CUBESIZE = -CUBESIZE;
+    if (CUBESIZE < 2)
+        CUBESIZE = 3;
 
     initcube();
 
-    in = fname ? fopen(fname,"r") : stdin;
+    if (flag_arg == 1)
+        in = fopen(argv[2],"r");
+    else if (flag_arg == 2)
+        in = fmemopen(argv[2],strlen(argv[2]),"r");
 
     if (!in) {
-        fprintf(stderr,"Error: could not open source file %s\n",argv[1]);
+        fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
         return -1;
     }
 
