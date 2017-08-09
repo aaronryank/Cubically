@@ -127,6 +127,7 @@ int32_t _faceval(int face)
 int execute(int command, int arg)
 {
     if (do_else && !(command == '!' && arg == -1))
+        do_else = 0;
 
     if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
