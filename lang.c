@@ -24,6 +24,11 @@ int main(int argc, char **argv)
 
     in = argc >= 2 ? fopen(argv[1],"r") : stdin;
 
+    if (!in) {
+        fprintf(stderr,"Error: could not open source file %s\n",argv[1]);
+        return -1;
+    }
+
     int loop = 1, command, args = 0;
     while (loop)
     {
