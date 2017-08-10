@@ -18,6 +18,7 @@ The interpreter is used like so:
            s | second argument is a string
            u | read file/string as UTF-8
            c | read file/string as Cubically SBCS
+           i | interactive mode, print cube before each input
     <size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.
 
 As a 3x3x3 memory cube is standard, it will be used throughout the tutorial and examples here.
@@ -98,6 +99,7 @@ Certain commands can be executed with no arguments, and are called when another 
 |`%`|add all values of specified face together, print as decimal|^|
 |`$`|input integer, store in input buffer (index 7)|anything or nothing|
 |`~`|input character, store in input buffer (index 7)|anything or nothing|
+|`#`|interpret input character (0-7) as argument to previous command|nothing|
 
 ### Loops
 

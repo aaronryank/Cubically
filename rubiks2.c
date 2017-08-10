@@ -28,6 +28,7 @@ char *color(int x)
 {
 #ifndef TIO
     switch (x) {
+      case -1:return "\e[0;0m";
       case 0: return "\e[0;31m";
       case 1: return "\e[0;34m";
       case 2: return "\e[0;35m";
@@ -65,7 +66,7 @@ void printcube(void)
             fprintf(dbg,"%s%d",color(CUBE(5,line,cubelet)),CUBE(5,line,cubelet));
         fprintf(dbg,"\n");
     }
-    fprintf(dbg,"\n");
+    fprintf(dbg,"%s\n",color(-1));
     fflush(dbg);
 }
 

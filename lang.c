@@ -21,23 +21,26 @@ int do_else;
 FILE *in;
 
 int CUBESIZE;
+int INTERACTIVE;
 
 int main(int argc, char **argv)
 {
     CUBESIZE = 3;
 
     if (argc < 3 || strchr(argv[1],'h')) {
-        fprintf(stderr,"Usage: %s <flags> <file | string> <size>"             "\n"\
-                       "Flags: f | second argument is a file"                 "\n"\
-                       "       s | second argument is a string"               "\n"\
-                       "       u | read file/string as UTF-8"                 "\n"\
-                       "       c | read file/string as Cubically SBCS"        "\n"\
+        fprintf(stderr,"Usage: %s <flags> <file | string> <size>"                  "\n"\
+                       "Flags: f | second argument is a file"                      "\n"\
+                       "       s | second argument is a string"                    "\n"\
+                       "       u | read file/string as UTF-8"                      "\n"\
+                       "       c | read file/string as Cubically SBCS"             "\n"\
+                       "       i | interactive mode, print cube before each input" "\n"\
                        "<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n",argv[0]);
         return -1;
     }
 
     int flag_arg = 0;   // 1 = file, 2 = string
     int flag_cp = 0;    // 1 = UTF-8, 2 = Cubically SBCS
+    int flag_int = 0;   // 0 = non-interactive, 1 = interactive
     int i, s = strlen(argv[1]);
     for (i = 0; i < s; i++) {
         switch (tolower(argv[1][i])) {
@@ -45,6 +48,7 @@ int main(int argc, char **argv)
           case 's': flag_arg = 2; break;
           case 'u': flag_cp  = 1; break;
           case 'c': flag_cp  = 2; break;
+          case 'i': flag_int = 1; break;
         }
     }
 
@@ -68,11 +72,18 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    INTERACTIVE = flag_int;
+
     int loop = 1, command, args = 0;
     while (loop)
     {
         int c = getc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
+
+        if (c == '#') {
+            execute(c,-1);
+            c = input+'0';
+        }
 
         if (isdigit(c)) {
             args++;
@@ -194,7 +205,13 @@ int execute(int command, int arg)
     else if (command == '=') {
         mem = (mem == faceval);
     }
-    else if (command == '$') {
+    else if (command == '$' || command == '#') {
+        if(INTERACTIVE) {
+            fprintf(dbg,"\nNotepad: %d\n\n",mem);
+            printcube();
+            fprintf(dbg,"Input:");
+            fflush(dbg);
+        }
         int retval = scanf("%d",&input);
         if (retval < 0)
             input = 0;
