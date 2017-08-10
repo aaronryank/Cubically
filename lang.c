@@ -74,6 +74,11 @@ int main(int argc, char **argv)
         int c = getwc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
+        if (c == '#') {
+            execute(c,-1);
+            c = input+'0';
+        }
+
         if (isdigit(c)) {
             args++;
             if (command == '(' || command == ')')
@@ -204,7 +209,7 @@ int execute(int command, int arg)
     else if (command == L'=') {
         mem = (mem == faceval);
     }
-    else if (command == L'$') {
+    else if (command == L'$' || command == L'#') {
         int retval = scanf("%d",&input);
         if (retval < 0)
             input = 0;
