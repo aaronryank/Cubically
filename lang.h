@@ -13,7 +13,7 @@
 #define faceval _faceval(arg)
 
 #define special(x)  (x == '(' || x == ')')
-#define implicit(x) (x == '(' || x == ')' || x == '$' || x == '~' || x == '&' || x == 'E' || x == '?' || x == '!')
+#define implicit(x) (x == '(' || x == ')' || x == '$' || x == '~' || x == '&' || x == 'E' || x == '!')
 
 int rubiksnotation(char);
 int execute(int,int);
