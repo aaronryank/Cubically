@@ -99,6 +99,7 @@ Certain commands can be executed with no arguments, and are called when another 
 |`%`|add all values of specified face together, print as decimal|^|
 |`$`|input integer, store in input buffer (index 7)|anything or nothing|
 |`~`|input character, store in input buffer (index 7)|anything or nothing|
+|`#`|interpret input character (0-7) as argument to previous command|nothing|
 
 ### Loops
 

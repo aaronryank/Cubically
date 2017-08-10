@@ -80,6 +80,11 @@ int main(int argc, char **argv)
         int c = getc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
+        if (c == '#') {
+            execute(c,-1);
+            c = input+'0';
+        }
+
         if (isdigit(c)) {
             args++;
             if (command == '(' || command == ')')
@@ -200,7 +205,7 @@ int execute(int command, int arg)
     else if (command == '=') {
         mem = (mem == faceval);
     }
-    else if (command == '$') {
+    else if (command == '$' || command == '#') {
         if(INTERACTIVE) {
             fprintf(dbg,"\nNotepad: %d\n\n",mem);
             printcube();
