@@ -18,6 +18,7 @@ The interpreter is used like so:
            s | second argument is a string
            u | read file/string as UTF-8
            c | read file/string as Cubically SBCS
+           i | interactive mode, print cube before each input
     <size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.
 
 As a 3x3x3 memory cube is standard, it will be used throughout the tutorial and examples here.
