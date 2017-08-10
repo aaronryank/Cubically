@@ -290,7 +290,14 @@ void do_skip(void)
 {
     int c = getc(in);
     if (c == '{') {
-        while (getc(in) != '}');
+        int loop = 1, level = 0;
+        while (loop) {
+            c = getc(in);
+            if (c == '{')
+                level++;
+            else if (c == '}')
+                loop = level--;
+        }
     }
     else {
         while (isdigit(c = getc(in)));
