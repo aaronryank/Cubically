@@ -253,7 +253,7 @@ int execute(int command, int arg)
     }
     else if (command == L'E' || command == L'&') {
         if (arg == -1 || faceval)
-            return -1;
+            return 0;
     }
     else if (command == L'(') {
         jumps[jumpnum++].pos = ftell(in) - 1;
