@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <wchar.h>
+#include <locale.h>
 #include "rubiks2.h"
 #include "lang.h"
 
@@ -17,14 +18,17 @@ struct {
 } jumps[1000];
 int parens, jumpnum;
 
-int do_else;
+int do_else;   /* ?7{if}!{else} */
 
 FILE *in;
 
-int CUBESIZE;
+int CUBESIZE;  /* 3 = 3x3x3, 4 = 4x4x4, etc */
+
+int cur_depth;  /* depth of face turn */
 
 int main(int argc, char **argv)
 {
+    setlocale(LC_ALL,"");
     CUBESIZE = 3;
 
     if (argc < 3 || strchr(argv[1],'h')) {
@@ -74,6 +78,11 @@ int main(int argc, char **argv)
     {
         int c = getwc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
+
+        if ((flag_cp == 1 && superscript_utf8(c)) || (flag_cp == 2 && superscript_sbcs(c))) {
+            cur_depth *= 10;
+            cur_depth += unsuperscript(c,flag_cp);
+        }
 
         if (isdigit(c)) {
             args++;
@@ -182,6 +191,12 @@ int32_t _faceval(int face)
 
 int execute(int command, int arg)
 {
+/* depth is ready to roll
+    if (cur_depth) {
+        printf("Current depth %d\n",cur_depth);
+        cur_depth = 0;
+    }
+*/
     if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
 

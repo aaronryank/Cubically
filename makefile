@@ -1,7 +1,7 @@
 CC := gcc
 CFLAGS := -g -lm -O3
 
-OBJ := rubiks2.o lang.o
+OBJ := rubiks2.o codepage.o lang.o
 V_OBJ := rubiks2.o stdin.o visualizer.o
 
 lang := rubiks-lang
