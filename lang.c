@@ -12,8 +12,8 @@ int32_t mem, input;
 
 struct {
     long int pos;
-    int faces[7];
-} jumps[1000] = {0, {0}};
+    int faces[8];
+} jumps[1000];
 int parens, jumpnum;
 
 int do_else;
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     int loop = 1, command, args = 0;
     while (loop)
     {
-        int c = getc(in);
+        int c = getwc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
         if (isdigit(c)) {
@@ -115,8 +115,17 @@ int main(int argc, char **argv)
 
 int do_jump(void)
 {
+/*
+    int j;
+    for (j = 0; j < 8; j++)
+        printf("%d ",jumps[jumpnum-1].faces[j]);
+    puts("");
+    for (j = 0; j < 8; j++)
+        printf("%d ",jumps[jumpnum].faces[j]);
+    puts("");
+*/
     int i, count, _do_jump1, _do_jump2;
-    for (i = count = _do_jump1 = 0; i < 7; i++)
+    for (i = count = _do_jump1 = 0; i < 8; i++)
     {
         if (jumps[jumpnum-1].faces[i]) {
             count++;
@@ -127,7 +136,7 @@ int do_jump(void)
     if (!count)
         _do_jump1 = 1;
 
-    for (i = count = _do_jump2 = 0; i < 7; i++)
+    for (i = count = _do_jump2 = 0; i < 8; i++)
     {
         if (jumps[jumpnum].faces[i]) {
             count++;
@@ -148,6 +157,7 @@ int do_jump(void)
     }
     else {
         clear_jump(-1);
+        clear_jump(0);
         jumpnum--;
         return 0;
     }
@@ -171,7 +181,7 @@ int32_t _faceval(int face)
 
 int execute(int command, int arg)
 {
-    if (do_else && !(command == '!' && arg == -1))
+    if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
 
     if (rubiksnotation(command)+1) {
@@ -179,86 +189,86 @@ int execute(int command, int arg)
         int turns = arg;
         turncube(face,turns);
     }
-    else if (command == '+') {
+    else if (command == L'+') {
         mem += faceval;
     }
-    else if (command == '-') {
+    else if (command == L'-') {
         mem -= faceval;
     }
-    else if (command == '/') {
+    else if (command == L'/') {
         mem && (mem /= faceval);
     }
-    else if (command == '*') {
+    else if (command == L'*') {
         mem *= faceval;
     }
-    else if (command == '=') {
+    else if (command == L'=') {
         mem = (mem == faceval);
     }
-    else if (command == '$') {
+    else if (command == L'$') {
         int retval = scanf("%d",&input);
         if (retval < 0)
             input = 0;
     }
-    else if (command == '~') {
+    else if (command == L'~') {
         input = getchar();
     }
-    else if (command == '%') {
+    else if (command == L'%') {
         if (arg == 6)
             printf("%d",mem);
         else
             printf("%d",faceval);
         fflush(stdout);
     }
-    else if (command == '@') {
+    else if (command == L'@') {
         if (arg == 6)
             putchar(mem % 128);
         else
             putchar(faceval % 128);
         fflush(stdout);
     }
-    else if (command == ':') {
+    else if (command == L':') {
         mem = faceval;
     }
-    else if (command == '^') {
+    else if (command == L'^') {
         mem = pow(mem,faceval);
     }
-    else if (command == '<') {
+    else if (command == L'<') {
         mem = (mem < faceval);
     }
-    else if (command == '>') {
+    else if (command == L'>') {
         mem = (mem > faceval);
     }
-    else if (command == '_') {
+    else if (command == L'_') {
         mem = (mem % faceval);
     }
-    else if (command == '"') {
+    else if (command == L'"') {
         mem = (mem & faceval);
     }
-    else if (command == '|') {
+    else if (command == L'|') {
         mem = (mem | faceval);
     }
-    else if (command == '`') {
+    else if (command == L'`') {
         mem = (mem ^ faceval);
     }
-    else if (command == 'E' || command == '&') {
+    else if (command == L'E' || command == L'&') {
         if (arg == -1 || faceval)
             return -1;
     }
-    else if (command == '(') {
+    else if (command == L'(') {
         jumps[jumpnum++].pos = ftell(in) - 1;
         DEBUG && fprintf(stderr,"jumps[jumpnum-1].pos = %ld\n",jumps[jumpnum-1].pos);
     }
-    else if (command == ')') {
+    else if (command == L')') {
         int retval = do_jump();
         return retval;
     }
-    else if (command == '!') {
+    else if (command == L'!') {
         if (faceval || (arg == -1 && do_else)) {
             do_skip();
             do_else = 0;
         }
     }
-    else if (command == '?') {
+    else if (command == L'?') {
         if (!faceval) {
             do_skip();
             do_else = 1;
@@ -276,23 +286,23 @@ int execute(int command, int arg)
 int rubiksnotation(char x)
 {
     switch (x) {
-      case 'U': return 0;
-      case 'L': return 1;
-      case 'F': return 2;
-      case 'R': return 3;
-      case 'B': return 4;
-      case 'D': return 5;
-      default:  return -1;
+      case L'U': return 0;
+      case L'L': return 1;
+      case L'F': return 2;
+      case L'R': return 3;
+      case L'B': return 4;
+      case L'D': return 5;
+      default:   return -1;
     }
 }
 
 void do_skip(void)
 {
-    int c = getc(in);
+    int c = getwc(in);
     if (c == '{') {
         int loop = 1, level = 0;
         while (loop) {
-            c = getc(in);
+            c = getwc(in);
             if (c == '{')
                 level++;
             else if (c == '}')
@@ -300,7 +310,7 @@ void do_skip(void)
         }
     }
     else {
-        while (isdigit(c = getc(in)));
-        ungetc(c,in);
+        while (isdigit(c = getwc(in)));
+        ungetwc(c,in);
     }
 }
