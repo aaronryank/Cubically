@@ -135,6 +135,7 @@ These commands are not guaranteed to stay in Cubically; they will be removed if 
 |`_`|set notepad to (notepad modulo faceval)|^|
 |`"`|set notepad to (notepad bitwise-and faceval)|^|
 |`\|`|set notepad to (notepad bitwise-or faceval)|^|
+|`#`|interpret character from stdin (0-7) as argument to previous command|nothing|
 
 # Faces
 
