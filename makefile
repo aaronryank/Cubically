@@ -16,7 +16,7 @@ $(lang): $(OBJ)
 	$(CC) $(OBJ) -o $(lang) $(CFLAGS)
 
 tio:
-	gcc -lm -DTIO rubiks2.c lang.c -o rubiks-tio
+	gcc -lm -DTIO rubiks2.c codepage.c lang.c -o rubiks-tio
 clean:
 	rm -f $(OBJ)
 
