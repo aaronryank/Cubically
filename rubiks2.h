@@ -8,7 +8,7 @@ extern int CUBESIZE;
 
 #define CUBE(x,y,z) cube[((x)*CUBESIZE*CUBESIZE) + ((y)*CUBESIZE) + (z)]
 
-extern void initcube(void), printcube(void), turncube(int, int), swap(int*, int*), rotateface(int, int);
+extern void initcube(void), printcube(void), turncube(int, int, int), swap(int*, int*), rotateface(int, int);
 extern char *color(int);
 extern int issolved(void);
 

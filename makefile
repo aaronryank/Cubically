@@ -20,3 +20,5 @@ clean:
 
 clean_visualizer:
 	rm -f $(V_OBJ)
+sandbox:
+	$(CC) $(CFLAGS) rubiks2.c sandbox.c -o sandbox

@@ -62,9 +62,9 @@ int main(int argc, char **argv)
     initcube();
 
     if (flag_arg == 1)
-        in = fopen(argv[2],"r");
+        in = fopen(argv[2],"rb");
     else if (flag_arg == 2)
-        in = fmemopen(argv[2],strlen(argv[2]),"r");
+        in = fmemopen(argv[2],strlen(argv[2]),"rb");
 
     if (!in) {
         fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
@@ -74,10 +74,12 @@ int main(int argc, char **argv)
     int loop = 1, command, args = 0;
     while (loop)
     {
-        int c = getwc(in);
+        wchar_t c = getwc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
-        if ((flag_cp == 1 && superscript_utf8(c)) || (flag_cp == 2 && superscript_sbcs(c))) {
+        putwchar(c);
+
+        if ((flag_cp == CP_UTF8 && superscript_utf8(c)) || (flag_cp == CP_SBCS && superscript_sbcs(c))) {
             cur_depth *= 10;
             cur_depth += unsuperscript(c,flag_cp);
         }
@@ -89,8 +91,10 @@ int main(int argc, char **argv)
             else
                 loop = execute(command,c - '0');
         } else {
-            if (c == EOF)
+            if (c == EOF) {
                 loop = 0;
+                printf("EOF");
+            }
 
             if ((!args && implicit(command)) || special(command)) {
                 int retval = execute(command,-1);
@@ -189,19 +193,18 @@ int32_t _faceval(int face)
 
 int execute(int command, int arg)
 {
-/* depth is ready to roll
     if (cur_depth) {
         printf("Current depth %d\n",cur_depth);
         cur_depth = 0;
     }
-*/
+
     if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
 
     if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
         int turns = arg;
-        turncube(face,turns);
+        turncube(face,turns,cur_depth);
     }
     else if (command == L'+') {
         mem += faceval;

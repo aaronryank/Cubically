@@ -77,8 +77,13 @@ void swap(int *a, int *b)
     *b = temp;
 }
 
-void turncube(int face, int turns)
+#define depth_offset(x) x ? (x -= depth) : (x += depth)
+
+void turncube(int face, int turns, int depth)
 {
+    if (depth >= CUBESIZE)
+        return;
+
     int mod[4], i, j;
     if (face == UP || face == DOWN) {
         mod[0] = (face == UP) ? LEFT : RIGHT;
@@ -87,16 +92,27 @@ void turncube(int face, int turns)
         mod[3] = BACK;
 
         int d = (face == UP ? 0 : CUBESIZE-1);
+
+        depth_offset(d);
+
         while (turns--) {
             for (i = 0; i < 3; i++)
                 for (j = 0; j < CUBESIZE; j++)
                     swap(&CUBE(mod[i],d,j),&CUBE(mod[i+1],d,j));
-            rotateface(face,1);
+
+            if (depth == 0)
+                rotateface(face,1);
+            else if (depth == CUBESIZE-1)
+                rotateface(face == UP ? DOWN : UP,3);
         }
     }
     else if (face == FRONT || face == BACK) {
         int d1 = (face == FRONT) ? 0 : CUBESIZE-1;
-        int d2 = d1 ? 0 : CUBESIZE-1;
+        int d2 = (face == FRONT) ? CUBESIZE-1 : 0;
+
+        depth_offset(d1);
+        depth_offset(d2);
+
         while (turns--) {
             int tmp = 1;
             if (face == BACK)
@@ -108,7 +124,11 @@ void turncube(int face, int turns)
                     swap(&CUBE(RIGHT,i,d1),&CUBE(UP,d2,i));
                 for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
                     swap(&CUBE(UP,d2,i),&CUBE(LEFT,j,d2));
-                rotateface(face,1);
+
+                if (depth == 0)
+                    rotateface(face,1);
+                else if (depth == CUBESIZE-1)
+                    rotateface(face == FRONT ? BACK : FRONT,3);
             }
         }
     }
@@ -118,8 +138,11 @@ void turncube(int face, int turns)
         mod[2] = FRONT;
         mod[3] = (face == RIGHT) ? DOWN : UP;
 
-        int d = (face == RIGHT) ? CUBESIZE-1 : 0;
-        int dd = d ? 0 : CUBESIZE-1;
+        int d  = (face == RIGHT) ? CUBESIZE-1 : 0;
+        int dd = (face == RIGHT) ? 0 : CUBESIZE-1;
+
+        depth_offset(d);
+        depth_offset(dd);
 
         while (turns--) {
             for (i = 0, j = CUBESIZE-1; i < CUBESIZE; i++, j--)
@@ -128,7 +151,11 @@ void turncube(int face, int turns)
                 swap(&CUBE(mod[1],i,d),&CUBE(mod[2],i,d));
             for (i = 0; i < CUBESIZE; i++)
                 swap(&CUBE(mod[2],i,d),&CUBE(mod[3],i,d));
-            rotateface(face,1);
+
+            if (depth == 0)
+                rotateface(face,1);
+            else if (depth == CUBESIZE-1)
+                rotateface(face == RIGHT ? LEFT : RIGHT,3);
         }
     }
 }
@@ -151,11 +178,14 @@ void rotateface(int face, int clockwise)
 {
     int i;
 
-    if (clockwise == 1 && face != BACK)
-        rotate_face_clockwise(CUBESIZE,face);
-    else if (clockwise == 1 && face == BACK)
-        for (i = 0; i < 3; i++)
+    while (clockwise--)
+    {
+        if (face != BACK)
             rotate_face_clockwise(CUBESIZE,face);
+        else if (face == BACK)
+            for (i = 0; i < 3; i++)
+                rotate_face_clockwise(CUBESIZE,face);
+    }
 }
 
 int issolved(void)

@@ -12,8 +12,8 @@
 
 #define faceval _faceval(arg)
 
-#define special(x)  (x == '(' || x == ')')
-#define implicit(x) (x == '(' || x == ')' || x == '$' || x == '~' || x == '&' || x == 'E' || x == '!')
+#define special(x)  (x == L'(' || x == L')')
+#define implicit(x) (x == L'(' || x == L')' || x == L'$' || x == L'~' || x == L'&' || x == L'E' || x == L'!')
 
 // U+2070 SUPERSCRIPT 0
 // U+00B9 SUPERSCRIPT 1
@@ -33,6 +33,9 @@
                              ((x >= L'\u2074') && (x <= L'\u2079')))
 
 #define superscript_sbcs(x) ((x >= 0) && (x <= 9))
+
+#define CP_UTF8 1
+#define CP_SBCS 2
 
 extern int unsuperscript(int,int);
 
