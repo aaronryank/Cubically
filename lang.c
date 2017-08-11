@@ -74,26 +74,26 @@ int main(int argc, char **argv)
     int loop = 1, command, args = 0;
     while (loop)
     {
-        wchar_t c = getwc(in);
+        int c = getwc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
-        putwchar(c);
+        //putwchar(c);
 
         if ((flag_cp == CP_UTF8 && superscript_utf8(c)) || (flag_cp == CP_SBCS && superscript_sbcs(c))) {
             cur_depth *= 10;
             cur_depth += unsuperscript(c,flag_cp);
         }
 
-        if (isdigit(c)) {
+        if (isdigit(wctob(c))) {
             args++;
-            if (command == '(' || command == ')')
-                jumps[jumpnum].faces[c - '0'] = 1;
+            if (command == L'(' || command == L')')
+                jumps[jumpnum].faces[c - L'0'] = 1;
             else
-                loop = execute(command,c - '0');
+                loop = execute(command,c - L'0');
         } else {
-            if (c == EOF) {
+            if (wctob(c) == EOF) {
                 loop = 0;
-                printf("EOF");
+                fprintf(stderr,"EOF");
             }
 
             if ((!args && implicit(command)) || special(command)) {
