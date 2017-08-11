@@ -23,15 +23,20 @@ int main(int argc, char **argv)
     initcube();
     stdin_set();
 
-    while (1) {
+    int loop = 1;
+    while (loop) {
         printf("\e[H\e[2J");
         printcube();
         move = getchar();
 
-        if (move == 'E')
-            stdin_reset(), exit(EXIT_SUCCESS);
+        if (move == 'E' || move == '&')
+            loop = 0;
 
         move = rubiksnotation(move);
-        turncube(move,1);
+        turncube(move,1,0);
     }
+
+    free(cube);
+    stdin_reset();
+    exit(EXIT_SUCCESS);
 }

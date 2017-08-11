@@ -26,7 +26,10 @@ int cur_depth;  /* depth of face turn */
 
 int main(int argc, char **argv)
 {
-    setlocale(LC_ALL,"");
+    /* we're reading Unicode */
+    setlocale(LC_ALL,"C.UTF-8");
+    setlocale(LC_CTYPE,"C.UTF-8");
+
     CUBESIZE = 3;
 
     if (argc < 3 || strchr(argv[1],'h')) {
@@ -62,39 +65,39 @@ int main(int argc, char **argv)
     initcube();
 
     if (flag_arg == 1)
-        in = fopen(argv[2],"rb");
+        in = fopen(argv[2],"r");
     else if (flag_arg == 2)
-        in = fmemopen(argv[2],strlen(argv[2]),"rb");
+        in = fmemopen(argv[2],strlen(argv[2]),"r");
 
     if (!in) {
         fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
         return -1;
     }
 
-    int loop = 1, command, args = 0;
+    int loop = 1, args = 0;
+    wint_t command, c;
     while (loop)
     {
-        int c = getwc(in);
+        c = getwc(in);
         DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
 
         //putwchar(c);
+        //printf("%d (%C) && %d (%s)\n",c,c,errno,strerror(errno));
 
         if ((flag_cp == CP_UTF8 && superscript_utf8(c)) || (flag_cp == CP_SBCS && superscript_sbcs(c))) {
             cur_depth *= 10;
             cur_depth += unsuperscript(c,flag_cp);
         }
 
-        if (isdigit(wctob(c))) {
+        else if (isdigit(wctob(c))) {
             args++;
             if (command == L'(' || command == L')')
-                jumps[jumpnum].faces[c - L'0'] = 1;
+                jumps[jumpnum].faces[wctob(c) - '0'] = 1;
             else
-                loop = execute(command,c - L'0');
+                loop = execute(command,wctob(c) - '0');
         } else {
-            if (wctob(c) == EOF) {
+            if (c == WEOF)   // Wide-char EOF
                 loop = 0;
-                fprintf(stderr,"EOF");
-            }
 
             if ((!args && implicit(command)) || special(command)) {
                 int retval = execute(command,-1);
@@ -123,6 +126,8 @@ int main(int argc, char **argv)
         printf("@%d\n",jumps[i].pos);
     }
 #endif
+
+    free(cube);
 }
 
 int do_jump(void)
@@ -191,13 +196,14 @@ int32_t _faceval(int face)
     }
 }
 
-int execute(int command, int arg)
+int execute(wint_t command, int arg)
 {
+/* testing
     if (cur_depth) {
-        printf("Current depth %d\n",cur_depth);
+        printf("Current depth %d (command %c, arg %d)\n",cur_depth,wctob(command),arg);
         cur_depth = 0;
     }
-
+*/
     if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
 
@@ -294,13 +300,14 @@ int execute(int command, int arg)
         }
     }
     else if (command == EOF) {
+        printf("Returning 0");
         return 0;
     }
 
     return 1;
 }
 
-int rubiksnotation(char x)
+int rubiksnotation(wint_t x)
 {
     switch (x) {
       case L'U': return 0;

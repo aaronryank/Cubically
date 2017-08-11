@@ -1,6 +1,8 @@
 #pragma once
 
-#pragma GCC diagnostic ignored "-Wunused-result"
+#include <wchar.h>
+
+//#pragma GCC diagnostic ignored "-Wunused-result"
 
 #ifndef DEBUG
 #define DEBUG 0
@@ -39,8 +41,8 @@
 
 extern int unsuperscript(int,int);
 
-int rubiksnotation(char);
-int execute(int,int);
+int rubiksnotation(wint_t);
+int execute(wint_t,int);
 int do_jump(void);
 int32_t _faceval(int);
 void do_skip(void);
