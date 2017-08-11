@@ -2,15 +2,13 @@ CC := gcc
 CFLAGS := -g -lm -O3
 
 OBJ := rubiks2.o codepage.o lang.o
-V_OBJ := rubiks2.o stdin.o visualizer.o
 
 lang := rubiks-lang
-visualizer := visualizer
 
 all: $(lang)
 
-$(visualizer): $(V_OBJ)
-	$(CC) $(CFLAGS) -DVISUALIZER $(V_OBJ) -o $(visualizer)
+visualizer:
+	$(CC) $(CFLAGS) -DVISUALIZER rubiks2.c visualizer.c stdin.c -o visualizer
 
 $(lang): $(OBJ)
 	$(CC) $(OBJ) -o $(lang) $(CFLAGS)

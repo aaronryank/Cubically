@@ -10,6 +10,7 @@
 #endif
 
 int *cube;
+int CUBESIZE;
 
 #define CUBE(x,y,z) cube[((x)*CUBESIZE*CUBESIZE) + ((y)*CUBESIZE) + (z)]
 

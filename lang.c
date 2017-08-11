@@ -22,8 +22,6 @@ int do_else;   /* ?7{if}!{else} */
 
 FILE *in;
 
-int CUBESIZE;  /* 3 = 3x3x3, 4 = 4x4x4, etc */
-
 int cur_depth;  /* depth of face turn */
 
 int main(int argc, char **argv)
