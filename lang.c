@@ -275,7 +275,7 @@ int execute(wint_t command, int arg)
     }
     else if (command == L'E' || command == L'&') {
         if (arg == -1 || faceval)
-            return 0;
+            return -1;
     }
     else if (command == L'(') {
         jumps[jumpnum++].pos = ftell(in) - 1;
