@@ -8,7 +8,7 @@
 #define DEBUG 0
 #endif
 
-#define clear_jump(x)  for (i = 0; i < 8; i++)            \
+#define clear_jump(x)  for (i = 0; i < 9; i++)            \
                            jumps[jumpnum+x].faces[i] = 0; \
                        jumps[jumpnum+x].pos = 0;
 

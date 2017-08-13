@@ -14,7 +14,7 @@ int32_t mem, input;
 
 struct {
     long int pos;
-    int faces[8];
+    int faces[9];
 } jumps[1000];
 int parens, jumpnum;
 
@@ -142,7 +142,7 @@ int do_jump(void)
     puts("");
 */
     int i, count, _do_jump1, _do_jump2;
-    for (i = count = _do_jump1 = 0; i < 8; i++)
+    for (i = count = _do_jump1 = 0; i < 9; i++)
     {
         if (jumps[jumpnum-1].faces[i]) {
             count++;
@@ -153,7 +153,7 @@ int do_jump(void)
     if (!count)
         _do_jump1 = 1;
 
-    for (i = count = _do_jump2 = 0; i < 8; i++)
+    for (i = count = _do_jump2 = 0; i < 9; i++)
     {
         if (jumps[jumpnum].faces[i]) {
             count++;
@@ -182,6 +182,8 @@ int do_jump(void)
 
 int32_t _faceval(int face)
 {
+    if (face == 8)
+        return !issolved();
     if (face == 7)
         return input;
     else if (face == 6)

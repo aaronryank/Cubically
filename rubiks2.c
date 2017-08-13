@@ -192,8 +192,8 @@ int issolved(void)
 {
     int face, line, cubelet;
     for (face = 0; face < 6; face++)
-        for (line = 0; line < 3; line++)
-            for (cubelet = 0; cubelet < 3; cubelet++)
+        for (line = 0; line < CUBESIZE; line++)
+            for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
                 if (CUBE(face,line,cubelet) != face)
                     return 0;
     return 1;
