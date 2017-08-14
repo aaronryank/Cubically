@@ -34,7 +34,10 @@
                              (x == L'\u00B3') || \
                              ((x >= L'\u2074') && (x <= L'\u2079')))
 
-#define superscript_sbcs(x) ((x >= 0) && (x <= 9))
+#define subscript_utf8(x) ((x >= L'\u2080') && (x <= L'\u2089'))
+
+#define superscript_sbcs(x) ((x >= 0x00) && (x <= 0x09))
+#define subscript_sbcs(x) ((x >= 0x10) && (x <= 0x19))
 
 #define CP_UTF8 1
 #define CP_SBCS 2

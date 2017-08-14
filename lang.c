@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 
     CUBESIZE = 3;
 
+    /* incorrect number of args or flag is -h */
     if (argc < 3 || strchr(argv[1],'h')) {
         fprintf(stderr,"Usage: %s <flags> <file | string> <size>"             "\n"\
                        "Flags: f | second argument is a file"                 "\n"\
@@ -54,9 +55,11 @@ int main(int argc, char **argv)
         }
     }
 
+    // if string 3 is present, interpret as a number, set cubesize to it
     if (argv[3])
         CUBESIZE = atoi(argv[3]);
 
+    // if invalid...
     if (CUBESIZE < 0)
         CUBESIZE = -CUBESIZE;
     if (CUBESIZE < 2)
@@ -64,9 +67,9 @@ int main(int argc, char **argv)
 
     initcube();
 
-    if (flag_arg == 1)
+    if (flag_arg == 1)  // file
         in = fopen(argv[2],"r");
-    else if (flag_arg == 2)
+    else if (flag_arg == 2)  // string (broken)
         in = fmemopen(argv[2],strlen(argv[2]),"r");
 
     if (!in) {
@@ -79,26 +82,33 @@ int main(int argc, char **argv)
     while (loop)
     {
         c = getwc(in);
-        DEBUG && fprintf(stderr,"Read %c (%d)\n",c,c);
+        DEBUG && fprintf(stderr,"Read %C (%d)\n",c,wctob(c));
 
-        //putwchar(c);
-        //printf("%d (%C) && %d (%s)\n",c,c,errno,strerror(errno));
-
+        /* if superscript number */
         if ((flag_cp == CP_UTF8 && superscript_utf8(c)) || (flag_cp == CP_SBCS && superscript_sbcs(c))) {
             cur_depth *= 10;
             cur_depth += unsuperscript(c,flag_cp);
         }
+        /* if subscript number */
+        else if ((flag_cp == CP_UTF8 && subscript_utf8(c)) || (flag_cp == CP_SBCS && subscript_sbcs(c))) {
+            cur_depth *= 10;
+            cur_depth += unsubscript(c,flag_cp);
+        }
 
+        /* digit */
         else if (isdigit(wctob(c))) {
             args++;
             if (command == L'(' || command == L')')
                 jumps[jumpnum].faces[wctob(c) - '0'] = 1;
             else
                 loop = execute(command,wctob(c) - '0');
-        } else {
-            if (c == WEOF)   // Wide-char EOF
+        }
+        /* new command */
+        else {
+            if (c == WEOF)   /* wide-char end-of-file */
                 loop = 0;
 
+            /* if no args passed and command can be called implicitly, or if it is a special command */
             if ((!args && implicit(command)) || special(command)) {
                 int retval = execute(command,-1);
                 if (retval == -1)
@@ -107,14 +117,15 @@ int main(int argc, char **argv)
                     loop = loop || retval;
             }
 
-            DEBUG && fprintf(stderr,"executed %c (%d), loop = %d, pos = %ld\n",command,command,loop,ftell(in));
+            DEBUG && fprintf(stderr,"executed %C (%d), loop = %d, pos = %ld\n",command,wctob(command),loop,ftell(in));
 
-            command = c;
-            args = 0;
-            cur_depth = 0;
+            command = c;    /* set new command */
+            args = 0;       /* reset argument count */
+            cur_depth = 0;  /* reset layer depth of face rotation */
         }
     }
 
+    /* debugging information */
     fprintf(dbg,"\nNotepad: %d\n\n",mem);
     printcube();
 
@@ -122,7 +133,7 @@ int main(int argc, char **argv)
     int i, j;
     for (i = 0; i < jumpnum; i++) {
         printf("Jump %d: ", i);
-        for (j = 0; j < 7; j++)
+        for (j = 0; j < 9; j++)
             printf("%d-%d ",j,jumps[i].faces[j]);
         printf("@%d\n",jumps[i].pos);
     }
@@ -133,15 +144,16 @@ int main(int argc, char **argv)
 
 int do_jump(void)
 {
-/*
+#ifdef LOOP_DEBUG
     int j;
-    for (j = 0; j < 8; j++)
+    for (j = 0; j < 9; j++)
         printf("%d ",jumps[jumpnum-1].faces[j]);
     puts("");
-    for (j = 0; j < 8; j++)
+    for (j = 0; j < 9; j++)
         printf("%d ",jumps[jumpnum].faces[j]);
     puts("");
-*/
+#endif
+
     int i, count, _do_jump1, _do_jump2;
     for (i = count = _do_jump1 = 0; i < 9; i++)
     {
@@ -201,12 +213,9 @@ int32_t _faceval(int face)
 
 int execute(wint_t command, int arg)
 {
-/* testing
-    if (cur_depth) {
-        printf("Current depth %d (command %c, arg %d)\n",cur_depth,wctob(command),arg);
-        cur_depth = 0;
-    }
-*/
+    if (cur_depth)
+        DEBUG && printf("Current depth %d (command %c, arg %d)\n",cur_depth,wctob(command),arg);
+
     if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
 

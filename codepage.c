@@ -17,3 +17,11 @@ int unsuperscript(int x, int flag)
       default: return 0;
     }
 }
+
+int unsubscript(int x, int flag)
+{
+    if (flag == 2)   // SBCS
+        return x - 0x10;
+
+    return x - 0x2080;
+}
