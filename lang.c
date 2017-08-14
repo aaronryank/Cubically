@@ -214,6 +214,15 @@ int execute(wint_t command, int arg)
         int turns = arg;
         turncube(face,turns,cur_depth);
     }
+    else if (command == L'M') {
+        turncube(LEFT,arg,(CUBESIZE-1)/2);
+    }
+    else if (command == L'E') {
+        turncube(DOWN,arg,(CUBESIZE-1)/2);
+    }
+    else if (command == L'S') {
+        turncube(FRONT,arg,(CUBESIZE-1)/2);
+    }
     else if (command == L'+') {
         mem += faceval;
     }
