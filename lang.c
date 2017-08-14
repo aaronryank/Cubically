@@ -111,6 +111,7 @@ int main(int argc, char **argv)
 
             command = c;
             args = 0;
+            cur_depth = 0;
         }
     }
 
@@ -284,7 +285,7 @@ int execute(wint_t command, int arg)
     else if (command == L'`') {
         mem = (mem ^ faceval);
     }
-    else if (command == L'E' || command == L'&') {
+    else if (command == L'&') {
         if (arg == -1 || faceval)
             return -1;
     }
