@@ -81,8 +81,12 @@ void swap(int *a, int *b)
 
 void turncube(int face, int turns, int depth)
 {
-    if (depth >= CUBESIZE)
+    if (depth >= CUBESIZE || depth < 0)
         return;
+    if (turns <= 0)
+        return;
+
+    turns %= 4;
 
     int mod[4], i, j;
     if (face == UP || face == DOWN) {

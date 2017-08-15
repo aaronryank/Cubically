@@ -9,6 +9,7 @@
 #include <locale.h>
 #include "rubiks2.h"
 #include "lang.h"
+#include "codepage.h"
 
 int32_t mem, input;
 
@@ -98,6 +99,13 @@ int main(int argc, char **argv)
         else if ((flag_cp == CP_UTF8 && subscript_utf8(c)) || (flag_cp == CP_SBCS && subscript_sbcs(c))) {
             cur_depth *= 10;
             cur_depth += unsubscript(c,flag_cp);
+        }
+
+        /* double struck digits */
+        else if ((flag_cp == CP_UTF8 && doublestruck_utf8(c)) || (flag_cp == CP_SBCS && doublestruck_sbcs(c))) {
+            int x = undoublestruck(c,flag_cp);
+            //printf("\n%d\n",x);
+            loop = execute(command,_faceval(x));
         }
 
         /* digit */
@@ -293,16 +301,16 @@ int execute(wint_t command, int arg)
     else if (command == L'|') {
         mem |= faceval;
     }
-    else if ((flags.codepage == CP_UTF8 && command == L'\u2295') || (flags.codepage == CP_SBCS && command == 0x80)) {
+    else if ((flags.codepage == CP_UTF8 && command == 0x2295) || (flags.codepage == CP_SBCS && command == 0x80)) {
         mem ^= faceval;
     }
-    else if ((flags.codepage == CP_UTF8 && command == L'\u00AB') || (flags.codepage == CP_SBCS && command == 0x81)) {
+    else if ((flags.codepage == CP_UTF8 && command == 0x00AB) || (flags.codepage == CP_SBCS && command == 0x81)) {
         mem <<= faceval;
     }
-    else if ((flags.codepage == CP_UTF8 && command == L'\u00BB') || (flags.codepage == CP_SBCS && command == 0x82)) {
+    else if ((flags.codepage == CP_UTF8 && command == 0x00BB) || (flags.codepage == CP_SBCS && command == 0x82)) {
         mem >>= faceval;
     }
-    else if ((flags.codepage == CP_UTF8 && command == L'\u00B7') || (flags.codepage == CP_SBCS && command == 0x83)) {
+    else if ((flags.codepage == CP_UTF8 && command == 0x00B7) || (flags.codepage == CP_SBCS && command == 0x83)) {
         mem &= faceval;
     }
     else if (command == L'&') {
