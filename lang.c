@@ -289,16 +289,22 @@ int execute(wint_t command, int arg)
         mem = (mem > faceval);
     }
     else if (command == L'_') {
-        mem = (mem % faceval);
-    }
-    else if (command == L'"') {
-        mem = (mem & faceval);
+        mem %= faceval;
     }
     else if (command == L'|') {
-        mem = (mem | faceval);
+        mem |= faceval;
     }
-    else if ((flags.codepage == CP_UTF8 && command == L'\u22BB') || (flags.codepage == CP_SBCS && command == 0x80)) {
-        mem = (mem ^ faceval);
+    else if ((flags.codepage == CP_UTF8 && command == L'\u2295') || (flags.codepage == CP_SBCS && command == 0x80)) {
+        mem ^= faceval;
+    }
+    else if ((flags.codepage == CP_UTF8 && command == L'\u00AB') || (flags.codpeage == CP_SBCS && command == 0x81)) {
+        mem <<= faceval;
+    }
+    else if ((flags.codepage == CP_UTF8 && command == L'\u00BB') || (flags.codepage == CP_SBCS && command == 0x82)) {
+        mem >>= faceval;
+    }
+    else if ((flags.codepage == CP_UTF8 && command == L'\u00B7') || (flags.codepage == CP_SBCS && command == 0x83)) {
+        mem &= faceval;
     }
     else if (command == L'&') {
         if (arg == -1 || faceval)
