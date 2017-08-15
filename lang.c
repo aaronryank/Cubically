@@ -24,6 +24,10 @@ FILE *in;
 
 int cur_depth;  /* depth of face turn */
 
+struct {
+    int codepage;
+} flags;
+
 int main(int argc, char **argv)
 {
     /* we're reading Unicode */
@@ -54,6 +58,8 @@ int main(int argc, char **argv)
           case 'c': flag_cp  = 2; break;
         }
     }
+
+    flags.codepage = flag_cp;  // universal
 
     // if string 3 is present, interpret as a number, set cubesize to it
     if (argv[3])
@@ -291,7 +297,7 @@ int execute(wint_t command, int arg)
     else if (command == L'|') {
         mem = (mem | faceval);
     }
-    else if (command == L'`') {
+    else if ((flags.codepage == CP_UTF8 && command == L'\u22BB') || (flags.codepage == CP_SBCS && command == 0x80)) {
         mem = (mem ^ faceval);
     }
     else if (command == L'&') {
