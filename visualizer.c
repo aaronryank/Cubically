@@ -24,16 +24,22 @@ int main(int argc, char **argv)
     stdin_set();
 
     int loop = 1;
+    int depth = 0;
     while (loop) {
         printf("\e[H\e[2J");
         printcube();
+        printf("\n\e[0mDepth offset: %d\e[H",depth);
         move = getchar();
 
         if (move == 'E' || move == '&')
             loop = 0;
+        else if (move == '+')
+            depth++;
+        else if (move == '-')
+            depth--;
 
         move = rubiksnotation(move);
-        turncube(move,1,0);
+        turncube(move,1,depth);
     }
 
     free(cube);
