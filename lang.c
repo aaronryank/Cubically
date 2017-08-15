@@ -92,8 +92,7 @@ int main(int argc, char **argv)
 
         /* if superscript number */
         if ((flag_cp == CP_UTF8 && superscript_utf8(c)) || (flag_cp == CP_SBCS && superscript_sbcs(c))) {
-            cur_depth *= 10;
-            cur_depth += unsuperscript(c,flag_cp);
+            cur_depth += _faceval(unsuperscript(c,flag_cp));
         }
         /* if subscript number */
         else if ((flag_cp == CP_UTF8 && subscript_utf8(c)) || (flag_cp == CP_SBCS && subscript_sbcs(c))) {
@@ -297,7 +296,7 @@ int execute(wint_t command, int arg)
     else if ((flags.codepage == CP_UTF8 && command == L'\u2295') || (flags.codepage == CP_SBCS && command == 0x80)) {
         mem ^= faceval;
     }
-    else if ((flags.codepage == CP_UTF8 && command == L'\u00AB') || (flags.codpeage == CP_SBCS && command == 0x81)) {
+    else if ((flags.codepage == CP_UTF8 && command == L'\u00AB') || (flags.codepage == CP_SBCS && command == 0x81)) {
         mem <<= faceval;
     }
     else if ((flags.codepage == CP_UTF8 && command == L'\u00BB') || (flags.codepage == CP_SBCS && command == 0x82)) {
