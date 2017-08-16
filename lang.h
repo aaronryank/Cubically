@@ -15,7 +15,7 @@
 #define faceval _faceval(arg)
 
 #define special(x)  (x == L'(' || x == L')')
-#define implicit(x) (x == L'(' || x == L')' || x == L'$' || x == L'~' || x == L'&' || x == L'E' || x == L'!')
+#define implicit(x) (x == L'(' || x == L')' || x == L'$' || x == L'~' || x == L'&' || x == L'E' || x == L'!' || (rubiksnotation(x) + 1))
 
 int rubiksnotation(wint_t);
 int execute(wint_t,int);

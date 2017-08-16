@@ -116,6 +116,12 @@ int main(int argc, char **argv)
             else
                 loop = execute(command,wctob(c) - '0');
         }
+
+        else if (c == L'\'') {
+            args++;
+            loop = execute(command,3);
+        }
+
         /* new command */
         else {
             if (c == WEOF)   /* wide-char end-of-file */
@@ -234,7 +240,7 @@ int execute(wint_t command, int arg)
 
     if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
-        int turns = arg;
+        int turns = abs(arg);
         turncube(face,turns,cur_depth);
     }
     else if (command == L'M') {
