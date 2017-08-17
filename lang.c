@@ -268,12 +268,18 @@ int execute(wint_t command, int arg)
         mem = (mem == faceval);
     }
     else if (command == L'$') {
-        int retval = scanf("%d",&input);
-        if (retval < 0)
-            input = 0;
+        int x = abs(arg);
+        while (x--)
+        {
+            int retval = scanf("%d",&input);
+            if (retval < 0)
+                input = 0;
+        }
     }
     else if (command == L'~') {
-        input = getchar();
+        int x = abs(arg);
+        while (x--)
+            input = getchar();
     }
     else if (command == L'%') {
         if (arg == 6)
