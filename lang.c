@@ -351,12 +351,30 @@ int execute(wint_t command, int arg)
             do_else = 0;
         }
     }
+    else if (command == 0x16B1) {
+        char buf[1000] = {0};
+        fgets(buf,999,stdin);
+        rubiks_eval(buf);
+    }
     else if (command == EOF) {
         printf("Returning 0");
         return 0;
     }
 
     return 1;
+}
+
+void rubiks_eval(char *s)
+{
+    int lastface;
+
+    while (*s) {
+        if (rubiksnotation(btowc(*s))+1)
+            turncube((lastface = rubiksnotation(btowc(*s))),1,0);
+        else if (*s == '\'')
+            turncube(lastface,2,0);
+        *s++;
+    }
 }
 
 int rubiksnotation(wint_t x)
