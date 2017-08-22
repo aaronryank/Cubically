@@ -27,6 +27,7 @@ int cur_depth;  /* depth of face turn */
 
 struct {
     int codepage;
+    int string;
 } flags;
 
 int main(int argc, char **argv)
@@ -61,6 +62,7 @@ int main(int argc, char **argv)
     }
 
     flags.codepage = flag_cp;  // universal
+    flags.string = flag_arg - 1;
 
     // if string 3 is present, interpret as a number, set cubesize to it
     if (argv[3])
@@ -395,19 +397,25 @@ int rubiksnotation(wint_t x)
 
 void do_skip(void)
 {
-    int c = getwc(in);
-    if (c == '{') {
+    wint_t c = flags.string ? btowc(getc(in)) : getwc(in);
+
+    if (c == L'{') {
         int loop = 1, level = 0;
         while (loop) {
-            c = getwc(in);
-            if (c == '{')
+            c = flags.string ? btowc(getc(in)) : getwc(in);
+            if (c == L'{')
                 level++;
-            else if (c == '}')
+            else if (c == L'}')
                 loop = level--;
         }
     }
     else {
-        while (isdigit(c = getwc(in)));
-        ungetwc(c,in);
+        if (flags.string) {
+            while (isdigit(c = getc(in)));
+            ungetc(c,in);
+        } else {
+            while (isdigit(wctob(c = getc(in))));
+            ungetwc(c,in);
+        }
     }
 }
