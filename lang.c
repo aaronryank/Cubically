@@ -88,7 +88,10 @@ int main(int argc, char **argv)
     wint_t command, c;
     while (loop)
     {
-        c = getwc(in);
+        if (flag_arg == 1)
+            c = getwc(in);
+        else if (flag_arg == 2)
+            c = btowc(getc(in));
         DEBUG && fprintf(stderr,"Read %C (%d)\n",c,wctob(c));
 
         /* if superscript number */
