@@ -2,8 +2,6 @@
 
 #include <wchar.h>
 
-//#pragma GCC diagnostic ignored "-Wunused-result"
-
 #ifndef DEBUG
 #define DEBUG 0
 #endif
@@ -15,7 +13,7 @@
 #define faceval _faceval(arg)
 
 #define special(x)  (x == L'(' || x == L')')
-#define implicit(x) (x == L'(' || x == L')' || x == L'$' || x == L'~' || x == L'&' || x == L'E' || x == L'!' || (rubiksnotation(x) + 1))
+#define implicit(x) (x == L'(' || x == L')' || x == L'$' || x == L'~' || x == L'&' || x == L'E' || x == L'!' || (rubiksnotation(x) + 1) || x == L'M' || x == L'E' || x == L'S')
 
 int rubiksnotation(wint_t);
 int execute(wint_t,int);
