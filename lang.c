@@ -287,17 +287,17 @@ int execute(wint_t command, int arg)
             input = getchar();
     }
     else if (command == L'%') {
-        if (arg == 6)
+        if (arg == -1)
             printf("%d",mem);
         else
             printf("%d",faceval);
         fflush(stdout);
     }
     else if (command == L'@') {
-        if (arg == 6)
-            putchar(mem % 128);
+        if (arg == -1)
+            putchar(mem);
         else
-            putchar(faceval % 128);
+            putchar(faceval);
         fflush(stdout);
     }
     else if (command == L':') {
