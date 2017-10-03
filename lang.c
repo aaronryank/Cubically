@@ -30,6 +30,8 @@ struct {
     int string;
 } flags;
 
+void rubiks_eval(char *s); // not sure where to put this, it'll go here for now
+
 int main(int argc, char **argv)
 {
     /* we're reading Unicode */
