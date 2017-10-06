@@ -20,6 +20,7 @@ struct {
 int parens, jumpnum;
 
 int do_else;   /* ?7{if}!{else} */
+int skip;
 
 FILE *in;
 
@@ -339,7 +340,7 @@ int execute(wint_t command, int arg)
         return retval;
     }
     else if (command == L'!') {
-        if (faceval || (arg == -1 && do_else)) {
+        if (faceval || !(arg == -1 && do_else)) {
             do_skip();
             do_else = 0;
         }
