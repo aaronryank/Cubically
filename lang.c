@@ -135,7 +135,7 @@ int main(int argc, char **argv)
                 loop = 0;
 
             /* if no args passed and command can be called implicitly, or if it is a special command */
-            if ((!args && implicit(command)) || special(command)) {
+            if (!args || special(command)) {
                 int retval = execute(command,-1);
                 if (retval == -1)
                     loop = 0;
@@ -225,7 +225,7 @@ int32_t _faceval(int face)
         return !issolved();
     if (face == 7)
         return input;
-    else if (face == 6)
+    else if (face == 6 || face == -1)
         return mem;
     else {
         int32_t retval = 0;
@@ -289,17 +289,11 @@ int execute(wint_t command, int arg)
             input = getchar();
     }
     else if (command == L'%') {
-        if (arg == -1)
-            printf("%d",mem);
-        else
-            printf("%d",faceval);
+        printf("%d",faceval);
         fflush(stdout);
     }
     else if (command == L'@') {
-        if (arg == -1)
-            putchar(mem);
-        else
-            putchar(faceval);
+        putchar(faceval);
         fflush(stdout);
     }
     else if (command == L':') {
@@ -364,7 +358,6 @@ int execute(wint_t command, int arg)
         rubiks_eval(buf);
     }
     else if (command == EOF) {
-        printf("Returning 0");
         return 0;
     }
 
