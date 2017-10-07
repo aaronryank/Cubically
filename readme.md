@@ -2,7 +2,7 @@
 
 Cubically is a [work-in-progress](//github.com/cubically) esoteric programming language built to be complex and painful, and to encourage users to extensively [study](//github.com/cubically/algorithms) Rubik's Cubes.
 
-The most recent [version](//github.com/aaronryank/cubically/releases) of Cubically is [2.1](//github.com/aaronryank/cubically/releases/tag/v2.1).
+The most recent [version](//github.com/aaronryank/cubically/releases) of Cubically is [2.2](//github.com/aaronryank/cubically/releases/tag/v2.1).
 
 # Interpreter
 
