@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "rubiks2.h"
+#include "rubiks.h"
 
 #ifdef VISUALIZER
 # define dbg stdout

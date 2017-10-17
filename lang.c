@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <wchar.h>
 #include <locale.h>
-#include "rubiks2.h"
+#include "rubiks.h"
 #include "lang.h"
 #include "codepage.h"
 
@@ -355,8 +355,8 @@ int execute(wint_t command, int arg)
     }
     else if (command == 0x16B1) {
         char buf[1000] = {0};
-        fgets(buf,999,stdin);
-        rubiks_eval(buf);
+        if (fgets(buf,999,stdin))
+            rubiks_eval(buf);
     }
     else if (command == EOF) {
         return 0;

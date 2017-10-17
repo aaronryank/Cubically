@@ -1,6 +1,6 @@
 #include <locale.h>
 #include <wchar.h>
-#include "rubiks2.h"
+#include "rubiks.h"
 
 int main(void)
 {
