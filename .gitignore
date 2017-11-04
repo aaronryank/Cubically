@@ -1,5 +1,4 @@
 *.o
-rubiks-lang
-visualizer
 *.exe
-rubiks-tio
+cubically
+visualizer

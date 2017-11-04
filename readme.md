@@ -6,14 +6,13 @@ The most recent [version](//github.com/aaronryank/cubically/releases) of Cubical
 
 # Interpreter
 
- - To build the interpreter, type `make`. This will generate the executable `rubiks-lang`.
- - To build the TryItOnline interpreter, which prints debugging information without color, type `make tio`. This will generate the executable `rubiks-tio`.
+ - To build the interpreter, type `make`. This will generate the executable `cubically`.
  - To build the visualizer, type `make visualizer`. This will generate the executable `visualizer`.
  - To clean up the object files after building, type `make clean`.
 
 The interpreter is used like so:
 
-    Usage: rubiks-lang <flags> <file | string> <size>
+    Usage: cubically <flags> <file | string> <size>
     Flags: f | second argument is a file
            s | second argument is a string
            u | read file/string as UTF-8
@@ -26,4 +25,4 @@ As a 3x3x3 memory cube is standard, it will be used throughout the tutorial and 
 
 To learn how to use Cubically, check out [the Wiki!](//github.com/aaronryank/Cubically/wiki) It contains up-to-date information about every part of the language. Sometimes.
 
-If you need help on a specific point, or something is unclear, feel free to [open an issue](//github.com/aaronryank/Cubically/issues) or ping me (`@MDXF`) in the [Cubically chatroom](//chat.stackexchange.com/rooms/62883/cubically).
+If you need help on a specific point, or something is unclear, feel free to [open an issue](//github.com/aaronryank/Cubically/issues) or, if you have 20 reputation on StackExchange, ping me (`@MDXF`) in the [Cubically chatroom](//chat.stackexchange.com/rooms/62883/cubically).

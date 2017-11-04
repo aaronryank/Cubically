@@ -3,6 +3,14 @@
 #include <stdlib.h>
 #include "rubiks.h"
 
+#ifdef _WIN32
+# include <io.h>
+# define is_a_tty _isatty
+#else
+# include <unistd.h>
+# define is_a_tty isatty
+#endif
+
 #ifdef VISUALIZER
 # define dbg stdout
 #else
@@ -27,18 +35,18 @@ void initcube(void)
 
 char *color(int x)
 {
-#ifndef TIO
-    switch (x) {
-      case 0: return "\e[0;31m";
-      case 1: return "\e[0;34m";
-      case 2: return "\e[0;35m";
-      case 3: return "\e[0;32m";
-      case 4: return "\e[0;36m";
-      case 5: return "\e[0;33m";
+    if (is_a_tty(fileno(stderr))) {
+        switch (x) {
+          case 0: return "\e[0;31m";
+          case 1: return "\e[0;34m";
+          case 2: return "\e[0;35m";
+          case 3: return "\e[0;32m";
+          case 4: return "\e[0;36m";
+          case 5: return "\e[0;33m";
+        }
+    } else {
+        return "";
     }
-#else
-    return "";
-#endif
 }
 
 void printcube(void)

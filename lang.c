@@ -54,20 +54,22 @@ int main(int argc, char **argv)
 
     int flag_arg = 0;   // 1 = file, 2 = string
     int flag_cp = 0;    // 1 = UTF-8, 2 = Cubically SBCS
+    int flag_save = 0;  // 0 = discard tmpfile, 1 = save tmpfile
     int i, s = strlen(argv[1]);
     for (i = 0; i < s; i++) {
         switch (tolower(argv[1][i])) {
-          case 'f': flag_arg = 1; break;
-          case 's': flag_arg = 2; break;
-          case 'u': flag_cp  = 1; break;
-          case 'c': flag_cp  = 2; break;
+          case 'f': flag_arg  = 1; break;
+          case 's': flag_arg  = 2; break;
+          case 'u': flag_cp   = 1; break;
+          case 'c': flag_cp   = 2; break;
+          case 't': flag_save = 1; break;
         }
     }
 
-    flags.codepage = flag_cp;  // universal
+    flags.codepage = flag_cp;     // universal
     flags.string = flag_arg - 1;
 
-    // if string 3 is present, interpret as a number, set cubesize to it
+    // if argument 3 is present, interpret as a number, set cubesize to it
     if (argv[3])
         CUBESIZE = atoi(argv[3]);
 
@@ -79,10 +81,14 @@ int main(int argc, char **argv)
 
     initcube();
 
-    if (flag_arg == 1)  // file
+    if (flag_arg == 1) {           // file
         in = fopen(argv[2],"r");
-    else if (flag_arg == 2)  // string (broken)
-        in = fmemopen(argv[2],strlen(argv[2]),"r");
+    }
+    else if (flag_arg == 2) {      // string (broken)
+        in = fopen(".cubically.tmp","w+");
+        fwrite(argv[2],sizeof(char),strlen(argv[2]),in);
+        rewind(in);
+    }
 
     if (!in) {
         fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
@@ -167,6 +173,10 @@ int main(int argc, char **argv)
 #endif
 
     free(cube);
+    fclose(in);
+
+    if (flag_arg == 2 && flag_save == 0)
+        remove(".cubically.tmp");
 }
 
 int do_jump(void)
@@ -242,6 +252,8 @@ int execute(wint_t command, int arg)
 {
     if (cur_depth)
         DEBUG && printf("Current depth %d (command %c, arg %d)\n",cur_depth,wctob(command),arg);
+
+    DEBUG && printf("Command %C (%d|%d), arg %d\n",command,command,wctob(command),arg);
 
     if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
@@ -358,7 +370,7 @@ int execute(wint_t command, int arg)
         if (fgets(buf,999,stdin))
             rubiks_eval(buf);
     }
-    else if (command == EOF) {
+    else if (command == EOF || command == WEOF) {
         return 0;
     }
 
