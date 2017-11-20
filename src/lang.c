@@ -11,7 +11,8 @@
 #include "lang.h"
 #include "codepage.h"
 
-int32_t mem, input;
+int32_t mem   = 0;
+int32_t input = -1;
 
 struct {
     long int pos;
