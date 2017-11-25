@@ -11,6 +11,8 @@
 #include "lang.h"
 #include "codepage.h"
 
+int DEBUG = 0;
+
 int32_t mem   = 0;
 int32_t input = -1;
 
@@ -18,7 +20,7 @@ struct {
     long int pos;
     int faces[9];
 } jumps[1000];
-int parens, jumpnum;
+int parens, jumpnum, jumped;
 
 int do_else;   /* ?7{if}!{else} */
 int skip;
@@ -32,7 +34,8 @@ struct {
     int string;
 } flags;
 
-void rubiks_eval(char *s); // not sure where to put this, it'll go here for now
+wint_t *code;
+int codepos;
 
 int main(int argc, char **argv)
 {
@@ -64,6 +67,7 @@ int main(int argc, char **argv)
           case 'u': flag_cp   = 1; break;
           case 'c': flag_cp   = 2; break;
           case 't': flag_save = 1; break;
+          case 'd': DEBUG     = 1; break;
         }
     }
 
@@ -82,28 +86,54 @@ int main(int argc, char **argv)
 
     initcube();
 
+    code = malloc(1024 * sizeof(wint_t));
+    memset(code,0,1024);
+
     if (flag_arg == 1) {           // file
         in = fopen(argv[2],"r");
+
+        if (!in) {
+            fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
+            return -1;
+        }
+
+        wint_t c;
+        int i = 0;
+        while ((c = getwc(in)) != WEOF) {
+            if (i && !(i % 1024))
+                code = realloc(code,i + 1024 * sizeof(wint_t));
+            code[i] = c;
+
+            if (c != L' ' && c != L'\n' && c != L'\t')
+                i++;
+        }
+        code[++i] = WEOF;
+        fclose(in);
     }
     else if (flag_arg == 2) {      // string (broken)
-        in = fopen(".cubically.tmp","w+");
-        fwrite(argv[2],sizeof(char),strlen(argv[2]),in);
-        rewind(in);
+        int i = 0;
+        while (i < strlen(argv[2])) {
+            if (i && !(i % 1024))
+                code = realloc(code,i + 1024 * sizeof(wint_t));
+            code[i] = btowc(argv[2][i]);
+
+            if (argv[2][i] != ' ' || argv[2][i] != '\n' || argv[2][i] != '\t')
+                i++;
+        }
+        code[++i] = WEOF;
     }
 
-    if (!in) {
-        fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
-        return -1;
-    }
+    if (DEBUG)
+        for (i = 0; code[i]; i++)
+            printf("%C",code[i]);
+    DEBUG && puts("");
 
     int loop = 1, args = 0;
+    codepos = 0;
     wint_t command, c;
     while (loop)
     {
-        if (flag_arg == 1)
-            c = getwc(in);
-        else if (flag_arg == 2)
-            c = btowc(getc(in));
+        c = code[codepos++];
         DEBUG && fprintf(stderr,"Read %C (%d)\n",c,wctob(c));
 
         /* if superscript number */
@@ -119,7 +149,6 @@ int main(int argc, char **argv)
         /* double struck digits */
         else if ((flag_cp == CP_UTF8 && doublestruck_utf8(c)) || (flag_cp == CP_SBCS && doublestruck_sbcs(c))) {
             int x = undoublestruck(c,flag_cp);
-            //printf("\n%d\n",x);
             loop = execute(command,_faceval(x));
         }
 
@@ -139,10 +168,10 @@ int main(int argc, char **argv)
 
         /* new command */
         else {
-            if (c == WEOF)   /* wide-char end-of-file */
+            if (c == WEOF || c == 0)   /* wide-char end-of-file */
                 loop = 0;
 
-            /* if no args passed and command can be called implicitly, or if it is a special command */
+            /* if no args passed or if it is a special command */
             if (!args || special(command)) {
                 int retval = execute(command,-1);
                 if (retval == -1)
@@ -153,9 +182,14 @@ int main(int argc, char **argv)
 
             DEBUG && fprintf(stderr,"executed %C (%d), loop = %d, pos = %ld\n",command,wctob(command),loop,ftell(in));
 
-            command = c;    /* set new command */
-            args = 0;       /* reset argument count */
-            cur_depth = 0;  /* reset layer depth of face rotation */
+            if (!jumped) {
+                command = c;    /* set new command */
+            } else {
+                jumped = 0;
+                command = ' ';
+            }
+            args = 0;           /* reset argument count */
+            cur_depth = 0;      /* reset layer depth of face rotation */
         }
     }
 
@@ -174,10 +208,7 @@ int main(int argc, char **argv)
 #endif
 
     free(cube);
-    fclose(in);
-
-    if (flag_arg == 2 && flag_save == 0)
-        remove(".cubically.tmp");
+    return 0;
 }
 
 int do_jump(void)
@@ -215,12 +246,13 @@ int do_jump(void)
     if (!count)
         _do_jump2 = 1;
 
-    DEBUG && fprintf(stderr,"Jumping (fpos %ld)\n",ftell(in));
+    DEBUG && fprintf(stderr,"Jumping (pos %d)\n",codepos);
 
     if (_do_jump1 && _do_jump2) {
-        fseek(in, jumps[jumpnum-1].pos, SEEK_SET);
-        DEBUG && fprintf(stderr,"Jumped (fpos %ld)\n",ftell(in));
+        codepos = jumps[jumpnum-1].pos;
+        DEBUG && fprintf(stderr,"Jumped (pos %d)\n",codepos);
         clear_jump(0);
+        jumped = 1;
         return 1;
     }
     else {
@@ -251,10 +283,7 @@ int32_t _faceval(int face)
 
 int execute(wint_t command, int arg)
 {
-    if (cur_depth)
-        DEBUG && printf("Current depth %d (command %c, arg %d)\n",cur_depth,wctob(command),arg);
-
-    DEBUG && printf("Command %C (%d|%d), arg %d\n",command,command,wctob(command),arg);
+    DEBUG && printf("Command %C (%d | %d), arg %d\n",command,command,wctob(command),arg);
 
     if (do_else && !(command == L'!' && arg == -1))
         do_else = 0;
@@ -345,8 +374,8 @@ int execute(wint_t command, int arg)
             return -1;
     }
     else if (command == L'(') {
-        jumps[jumpnum++].pos = ftell(in) - 1;
-        DEBUG && fprintf(stderr,"jumps[jumpnum-1].pos = %ld\n",jumps[jumpnum-1].pos);
+        jumps[jumpnum++].pos = codepos - 1;
+        DEBUG && fprintf(stderr,"jumps[jumpnum-1].pos = %d\n",codepos);
     }
     else if (command == L')') {
         int retval = do_jump();
@@ -366,29 +395,11 @@ int execute(wint_t command, int arg)
             do_else = 0;
         }
     }
-    else if (command == 0x16B1) {
-        char buf[1000] = {0};
-        if (fgets(buf,999,stdin))
-            rubiks_eval(buf);
-    }
-    else if (command == EOF || command == WEOF) {
+    else if (command == EOF || command == WEOF || command == 0) {
         return 0;
     }
 
     return 1;
-}
-
-void rubiks_eval(char *s)
-{
-    int lastface;
-
-    while (*s) {
-        if (rubiksnotation(btowc(*s))+1)
-            turncube((lastface = rubiksnotation(btowc(*s))),1,0);
-        else if (*s == '\'')
-            turncube(lastface,2,0);
-        *s++;
-    }
 }
 
 int rubiksnotation(wint_t x)
@@ -406,12 +417,12 @@ int rubiksnotation(wint_t x)
 
 void do_skip(void)
 {
-    wint_t c = flags.string ? btowc(getc(in)) : getwc(in);
+    wint_t c = code[codepos++];
 
     if (c == L'{') {
         int loop = 1, level = 0;
         while (loop) {
-            c = flags.string ? btowc(getc(in)) : getwc(in);
+            c = code[codepos++];
             if (c == L'{')
                 level++;
             else if (c == L'}')
@@ -419,12 +430,7 @@ void do_skip(void)
         }
     }
     else {
-        if (flags.string) {
-            while (isdigit(c = getc(in)));
-            ungetc(c,in);
-        } else {
-            while (isdigit(wctob(c = getc(in))));
-            ungetwc(c,in);
-        }
+        while (isdigit(wctob(c = code[codepos++])));
+        codepos--;
     }
 }
