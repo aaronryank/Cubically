@@ -5,7 +5,6 @@ script:
  - make visualizer CFLAGS=-coverage
  - ./cubically fu examples/cat.cb < examples/input.txt
  - ./cubically fu examples/cubifier.cb < examples/input.txt
- - ./cubically fu examples/samelen.cb < examples/input.txt
  - ./cubically fu examples/sum.cb < examples/input-integer.txt
  - gcov src/*.c
 
