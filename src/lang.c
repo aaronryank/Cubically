@@ -20,12 +20,10 @@ struct {
     long int pos;
     int faces[9];
 } jumps[1000];
-int parens, jumpnum, jumped;
+int jumpnum, jumped;
 
 int do_else;   /* ?7{if}!{else} */
 int skip;
-
-FILE *in;
 
 int cur_depth;  /* depth of face turn */
 
@@ -90,7 +88,7 @@ int main(int argc, char **argv)
     memset(code,0,1024);
 
     if (flag_arg == 1) {           // file
-        in = fopen(argv[2],"r");
+        FILE *in = fopen(argv[2],"r");
 
         if (!in) {
             fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
@@ -180,8 +178,6 @@ int main(int argc, char **argv)
                     loop = loop || retval;
             }
 
-            DEBUG && fprintf(stderr,"executed %C (%d), loop = %d, pos = %ld\n",command,wctob(command),loop,ftell(in));
-
             if (!jumped) {
                 command = c;    /* set new command */
             } else {
@@ -197,32 +193,12 @@ int main(int argc, char **argv)
     fprintf(dbg,"\nNotepad: %d\n\n",mem);
     printcube();
 
-#ifdef LOOP_DEBUG
-    int i, j;
-    for (i = 0; i < jumpnum; i++) {
-        printf("Jump %d: ", i);
-        for (j = 0; j < 9; j++)
-            printf("%d-%d ",j,jumps[i].faces[j]);
-        printf("@%d\n",jumps[i].pos);
-    }
-#endif
-
     free(cube);
     return 0;
 }
 
 int do_jump(void)
 {
-#ifdef LOOP_DEBUG
-    int j;
-    for (j = 0; j < 9; j++)
-        printf("%d ",jumps[jumpnum-1].faces[j]);
-    puts("");
-    for (j = 0; j < 9; j++)
-        printf("%d ",jumps[jumpnum].faces[j]);
-    puts("");
-#endif
-
     int i, count, _do_jump1, _do_jump2;
     for (i = count = _do_jump1 = 0; i < 9; i++)
     {
