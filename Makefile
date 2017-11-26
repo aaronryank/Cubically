@@ -1,7 +1,7 @@
-CC := gcc
-CFLAGS := -g -lm -O3
-
+CC  := gcc
 OBJ := src/rubiks.o src/codepage.o src/lang.o
+
+override CFLAGS += -g -lm -O3
 
 lang := cubically
 

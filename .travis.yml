@@ -1,4 +1,13 @@
-
 language: c
 compiler: gcc
-script: make && make visualizer
+script:
+ - make CFLAGS=-coverage
+ - make visualizer CFLAGS=-coverage
+ - ./cubically examples/cat.cb < examples/input.txt
+ - ./cubically examples/cubifier.cb < examples/input.txt
+ - ./cubically examples/samelen.cb < examples/input.txt
+ - ./cubically examples/sum.cb < examples/input-integer.txt
+ - gcov src/*.c
+
+after_success: 
+ - bash <(curl -s https://codecov.io/bash)
