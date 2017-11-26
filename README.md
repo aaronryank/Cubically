@@ -1,4 +1,4 @@
-# Cubically [![Build Status](https://travis-ci.org/aaronryank/cubically.svg?branch=master)](https://travis-ci.org/aaronryank/cubically)
+# Cubically [![Build Status](https://travis-ci.org/aaronryank/cubically.svg?branch=master)](https://travis-ci.org/aaronryank/cubically) [![Code Coverage](https://codecov.io/github/aaronryank/cubically/coverage.svg?branch=master)](https://codecov.io/github/aaronryank/cubically?branch=master)
 
 Cubically is a [work-in-progress](//github.com/cubically) esoteric programming language built to be complex and painful, and to encourage users to extensively [study](//github.com/cubically/algorithms) Rubik's Cubes.
 
