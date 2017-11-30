@@ -22,6 +22,8 @@ struct {
 } jumps[1000];
 int jumpnum, jumped;
 
+
+int evaluated;
 int do_else;   /* ?7{if}!{else} */
 int skip;
 
@@ -178,10 +180,11 @@ int main(int argc, char **argv)
                     loop = loop || retval;
             }
 
-            if (!jumped) {
+            if (!jumped && !evaluated) {
                 command = c;    /* set new command */
             } else {
                 jumped = 0;
+                evaluated = 0;
                 command = ' ';
             }
             args = 0;           /* reset argument count */
@@ -371,6 +374,9 @@ int execute(wint_t command, int arg)
             do_else = 0;
         }
     }
+    else if ((flags.codepage == CP_UTF8 && command == 0xB6) || (flags.codepage == CP_SBCS && command == 0x86)) {
+        cubically_evaluate();
+    }
     else if (command == EOF || command == WEOF || command == 0) {
         return 0;
     }
@@ -409,4 +415,45 @@ void do_skip(void)
         while (isdigit(wctob(c = code[codepos++])));
         codepos--;
     }
+}
+
+void cubically_evaluate(void)
+{
+    int i;
+    char *buf = malloc(1024);
+    fgets(buf,1024,stdin);
+
+    if (buf[strlen(buf)-1] == '\n')
+        buf[strlen(buf)-1] = 0;
+
+    int len = strlen(buf);
+    int pos = codepos-1;
+    wint_t *set = wcsdup(&code[codepos-1]);
+
+    if (DEBUG) {
+        printf("input: %s, remaining code buffer: ",buf);
+
+        int i;
+        for (i = 0; set[i]; i++)
+            printf("%C",set[i]);
+
+        fflush(stdout);
+    }
+
+    wint_t *new = malloc((len + 1) * sizeof(wint_t));
+    mbstowcs(new,buf,len);
+
+    wcscpy(&code[pos-1],new);   // pos-1 to clear evaluate character
+    wcscpy(&code[pos+len-1],set);
+
+    if (DEBUG) {
+        printf("Code: ");
+        for (i = 0; code[i]; i++)
+            printf("%C",code[i]);
+        puts("");
+        fflush(stdout);
+    }
+
+    evaluated = 1;
+    codepos -= 2;
 }
