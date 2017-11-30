@@ -6,7 +6,9 @@ script:
  - ./cubically fu examples/cat.cb < examples/input.txt
  - ./cubically fu examples/cubifier.cb < examples/input.txt
  - ./cubically fu examples/sum.cb < examples/input-integer.txt
+ - ./cubically fu examples/eval.cb < examples/input.txt
+ - ./cubically fs R2L2U2D2
  - gcov src/*.c
 
-after_success: 
+after_success:
  - bash <(curl -s https://codecov.io/bash)
