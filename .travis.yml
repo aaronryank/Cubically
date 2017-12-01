@@ -15,7 +15,7 @@ script:
  - ./cubically fs R2L2U2D2F2B\' 6
  - ./cubically fs R2L2U2D2F2B2 0
  - ./cubically fs R2L2U2D2F2B2 -3
- - ./cubically fcd examples/cubifier.cb < examples/input.txt
+ - ./cubically fcd examples/cat.cb < examples/input.txt
  - gcov src/*.c
 
 after_success:
