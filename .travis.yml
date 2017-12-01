@@ -8,7 +8,7 @@ script:
  - ./cubically fu examples/sum.cb < examples/input-integer.txt
  - ./cubically fu examples/eval.cb < examples/input.txt
  - ./cubically fs examples/period.cb <<<R2L2
- - ./cubically fs R2?6{haha nope}
+ - ./cubically fs R2?{haha nope}
  - ./cubically fs 'RLUDFBMESXYZ^<>_2|'
  - ./cubically ThisWontWork || echo 'This is so the build succeeds'
  - ./cubically fu ThisWontWork || echo 'This is so the build succeeds'
