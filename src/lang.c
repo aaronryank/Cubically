@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         FILE *in = fopen(argv[2],"r");
 
         if (!in) {
-            fprintf(stderr,"Error: could not read %s `%s`: %s\n",flag_arg == 2 ? "string" : "file",argv[2],strerror(errno));
+            fprintf(stderr,"Error: could not read file `%s`: %s\n",argv[2],strerror(errno));
             return -1;
         }
 
