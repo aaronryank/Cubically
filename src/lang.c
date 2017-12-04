@@ -288,13 +288,19 @@ int execute(wint_t command, int arg)
         mem -= faceval;
     }
     else if (command == L'/') {
-        mem && (mem /= faceval);
+        if (arg == -1)
+            input && (mem /= input);
+        else
+            faceval && (mem /= faceval);
     }
     else if (command == L'*') {
         mem *= faceval;
     }
     else if (command == L'=') {
-        mem = (mem == faceval);
+        if (arg == -1)
+            mem = (mem == input);
+        else
+            mem = (mem == faceval);
     }
     else if (command == L'$') {
         int x = abs(arg);
@@ -319,7 +325,10 @@ int execute(wint_t command, int arg)
         fflush(stdout);
     }
     else if (command == L':') {
-        mem = faceval;
+        if (arg == -1)
+            mem = input;
+        else
+            mem = faceval;
     }
     else if (command == L'^') {
         mem = pow(mem,faceval);
@@ -331,7 +340,7 @@ int execute(wint_t command, int arg)
         mem = (mem > faceval);
     }
     else if (command == L'_') {
-        mem %= faceval;
+        faceval && (mem %= faceval);
     }
     else if (command == L'|') {
         mem |= faceval;
