@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         int i = 0;
         while ((c = getwc(in)) != WEOF) {
             if (i && !(i % 1024))
-                code = realloc(code,i + 1024 * sizeof(wint_t));
+                code = realloc(code,(i + 1024) * sizeof(wint_t));
             code[i] = c;
 
             if (c != L' ' && c != L'\n' && c != L'\t')
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
         int i = 0;
         while (i < strlen(argv[2])) {
             if (i && !(i % 1024))
-                code = realloc(code,i + 1024 * sizeof(wint_t));
+                code = realloc(code,(i + 1024) * sizeof(wint_t));
             code[i] = btowc(argv[2][i]);
 
             if (argv[2][i] != ' ' || argv[2][i] != '\n' || argv[2][i] != '\t')
