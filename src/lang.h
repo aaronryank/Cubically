@@ -13,3 +13,15 @@ int execute(wint_t,int);
 int do_jump(void);
 int32_t _faceval(int);
 void do_skip(void);
+
+typedef struct {
+  wint_t command;
+  int arg;
+} command;
+    
+wint_t *parse_file(FILE *);
+command *parse_commands(wint_t *);
+
+int interp(void);
+
+command *commands;

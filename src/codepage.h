@@ -25,8 +25,7 @@
 #define doublestruck_utf8(x) ((x >= 0x1D7D8) && (x <= 0x1D7E1))
 #define doublestruck_sbcs(x) ((x >= 0x90) && (x <= 0x99))
 
-#define CP_UTF8 1
-#define CP_SBCS 2
+enum { CP_UNDEF, CP_UTF8, CP_SBCS } codepages;
 
 extern int unsuperscript(wint_t,int);
 extern int unsubscript(wint_t,int);
