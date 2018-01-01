@@ -1,4 +1,4 @@
-# Note that many features of the language are currently not working properly as I am refactoring everything about the interpreter. Cubically itself is not being modified and anything that worked in the old interpreter will work in the new one.
+# Note that many features of the language are currently not working properly as I am refactoring everything about the interpreter. Cubically itself is not being modified and anything that worked in the old interpreter will work in the new one. You can still use the old Cubically [here](http://cubically.tryitonline.net).
 
 # Cubically [![Build Status](https://travis-ci.org/aaronryank/cubically.svg?branch=master)](https://travis-ci.org/aaronryank/cubically) [![Code Coverage](https://codecov.io/github/aaronryank/cubically/coverage.svg?branch=master)](https://codecov.io/github/aaronryank/cubically?branch=master)
 
