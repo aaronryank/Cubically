@@ -40,6 +40,30 @@ wint_t *parse_file(FILE *in)
     return source;
 }
 
+wint_t *parse_string(char *str)
+{
+    wint_t c, *source;
+    int p = 0;
+
+    source = malloc(1024 * sizeof(wint_t));
+    memset(source, 0, 1024);
+
+    if (!source) {
+        fprintf(stderr, "Error allocating memory for source buffer: %s\n", strerror(errno));
+        return NULL;
+    }
+
+    while ((c = btowc(*str))) {
+        if (p && !(p % 1024))
+            source = realloc(source, sizeof(wint_t) * (p + 1024));
+        if (!iswhitespace(c))
+            source[p++] = c;
+        str++;
+    }
+
+    return source;
+}
+
 command *parse_commands(wint_t *source)
 {
     wint_t cmd = 0;

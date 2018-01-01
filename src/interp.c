@@ -26,8 +26,6 @@ struct {
 } jumps[999];
 int jumpnum;
 
-void cubically_evaluate(void){}
-
 int call_command(void)
 {
     if (commands[pos].arg == -1) {
@@ -292,45 +290,37 @@ void do_skip(void)
         }
     }
 }
-/*
+
 void cubically_evaluate(void)
 {
-    int i;
     char *buf = malloc(1024);
-    fgets(buf,1024,stdin);
+    memset(buf, 0, 1024);
+
+    if (!fgets(buf,1024,stdin))
+        return;
 
     if (buf[strlen(buf)-1] == '\n')
         buf[strlen(buf)-1] = 0;
 
-    int len = strlen(buf);
-    int pos = codepos-1;
-    wint_t *set = wcsdup(&code[codepos-1]);
+    wint_t *str = parse_string(buf);
+    printf("Read: <%S>\n", str);
+    command *cmds = parse_commands(str);
+    int l; // number of new commands
+    int r; // number of old commands remaining in source
+    int i; // used for final insert loop
 
-    if (DEBUG) {
-        printf("input: %s, remaining code buffer: ",buf);
-
-        int i;
-        for (i = 0; set[i]; i++)
-            printf("%C",set[i]);
-
-        fflush(stdout);
+    for (l = 0; cmds[l].command; l++) printf("Read: %c%d\n", cmds[l].command, cmds[l].arg);
+    l--; // no clue
+    for (r = pos; commands[r].command; r++);
+    for (; r > pos; r--) {
+        commands[r+l].command = commands[r].command;
+        commands[r+l].arg = commands[r].arg;
     }
 
-    wint_t *new = malloc((len + 1) * sizeof(wint_t));
-    mbstowcs(new,buf,len);
-
-    wcscpy(&code[pos-1],new);   // pos-1 to clear evaluate character
-    wcscpy(&code[pos+len-1],set);
-
-    if (DEBUG) {
-        printf("Code: ");
-        for (i = 0; code[i]; i++)
-            printf("%C",code[i]);
-        puts("");
-        fflush(stdout);
+    for (i = 0; cmds[i].command; i++) {
+        commands[pos+i].command = cmds[i].command;
+        commands[pos+i].arg = cmds[i].arg;
     }
 
-    evaluated = 1;
-    codepos -= 2;
+    pos--;
 }
-*/
