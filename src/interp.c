@@ -303,14 +303,15 @@ void cubically_evaluate(void)
         buf[strlen(buf)-1] = 0;
 
     wint_t *str = parse_string(buf);
-    printf("Read: <%S>\n", str);
+    DEBUG && printf("Read: <%S>\n", str);
     command *cmds = parse_commands(str);
     int l; // number of new commands
     int r; // number of old commands remaining in source
     int i; // used for final insert loop
 
-    for (l = 0; cmds[l].command; l++) printf("Read: %c%d\n", cmds[l].command, cmds[l].arg);
+    for (l = 0; cmds[l].command; l++) { DEBUG && printf("Read: %c%d\n", cmds[l].command, cmds[l].arg); }
     l--; // no clue
+
     for (r = pos; commands[r].command; r++);
     for (; r > pos; r--) {
         commands[r+l].command = commands[r].command;
