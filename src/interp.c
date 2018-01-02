@@ -152,16 +152,16 @@ int execute(wint_t command, int arg)
     else if (command == L'|') {
         mem |= faceval;
     }
-    else if ((codepage == CP_UTF8 && command == 0x2295) || (codepage == CP_SBCS && command == 0x80)) {
+    else if (command == 0x80) {
         mem ^= faceval;
     }
-    else if ((codepage == CP_UTF8 && command == 0x00AB) || (codepage == CP_SBCS && command == 0x81)) {
+    else if (command == 0x81) {
         mem <<= faceval;
     }
-    else if ((codepage == CP_UTF8 && command == 0x00BB) || (codepage == CP_SBCS && command == 0x82)) {
+    else if (command == 0x82) {
         mem >>= faceval;
     }
-    else if ((codepage == CP_UTF8 && command == 0x00B7) || (codepage == CP_SBCS && command == 0x83)) {
+    else if (command == 0x83) { 
         mem &= faceval;
     }
     else if (command == L'&') {
@@ -196,7 +196,7 @@ int execute(wint_t command, int arg)
             do_else = 0;
         }
     }
-    else if ((codepage == CP_UTF8 && command == 0xB6) || (codepage == CP_SBCS && command == 0x86)) {
+    else if (command == 0x86) {
         cubically_evaluate();
     }
 

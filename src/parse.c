@@ -34,7 +34,7 @@ wint_t *parse_file(FILE *in)
         if (p && !(p % 1024))
             source = realloc(source, sizeof(wint_t) * (p + 1024));
         if (!iswhitespace(c))
-            source[p++] = c;
+            source[p++] = sbcs_convert(c);
     }
 
     return source;
@@ -57,7 +57,7 @@ wint_t *parse_string(char *str)
         if (p && !(p % 1024))
             source = realloc(source, sizeof(wint_t) * (p + 1024));
         if (!iswhitespace(c))
-            source[p++] = c;
+            source[p++] = sbcs_convert(c);
         str++;
     }
 
