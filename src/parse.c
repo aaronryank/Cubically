@@ -23,7 +23,7 @@ int *parse_file(FILE *in)
     int *source;
     int p = 0;
 
-    source = malloc(1024);
+    source = malloc(sizeof(int) * 1024);
     memset(source,0,1024);
 
     if (!source) {
@@ -33,7 +33,7 @@ int *parse_file(FILE *in)
 
     while ((c = getwc(in)) != WEOF) {
         if (p && !(p % 1024))
-            source = realloc(source, sizeof(wint_t) * (p + 1024));
+            source = realloc(source, sizeof(int) * (p + 1024));
         if (!iswhitespace(c))
             source[p++] = sbcs_convert(c);
     }
