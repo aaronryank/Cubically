@@ -9,7 +9,6 @@
 #include <locale.h>
 #include "rubiks.h"
 #include "lang.h"
-#include "codepage.h"
 
 int32_t mem    = 0;
 int32_t solved = 1;
@@ -21,8 +20,8 @@ int cur_depth;
 extern int DEBUG, codepage;
 
 struct {
-  int pos;
-  int faces[9];
+    int pos;
+    int faces[9];
 } jumps[999];
 int jumpnum;
 
@@ -67,49 +66,46 @@ int interp(void)
     return 0;
 }
 
-int execute(wint_t command, int arg)
+int execute(char command, int arg)
 {
-    DEBUG && printf("Command %C (%d | %d), arg %d\n",command,command,wctob(command),arg);
-
-    if (do_else && !(command == L'!' && arg == -1))
-        do_else = 0;
+    DEBUG && printf("Command %c (%d | %d), arg %d\n", command, command, wctob(command), arg);
 
     if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
         int turns = abs(arg);
         turncube(face,turns,cur_depth);
     }
-    else if (command == L'M') {
+    else if (command == 'M') {
         turncube(LEFT,abs(arg),(CUBESIZE-1)/2);
     }
-    else if (command == L'E') {
+    else if (command == 'E') {
         turncube(DOWN,abs(arg),(CUBESIZE-1)/2);
     }
-    else if (command == L'S') {
+    else if (command == 'S') {
         turncube(FRONT,abs(arg),(CUBESIZE-1)/2);
     }
-    else if (command == L'+') {
+    else if (command == '+') {
         mem += faceval;
     }
-    else if (command == L'-') {
+    else if (command == '-') {
         mem -= faceval;
     }
-    else if (command == L'/') {
+    else if (command == '/') {
         if (arg == -1)
             input && (mem /= input);
         else
             faceval && (mem /= faceval);
     }
-    else if (command == L'*') {
+    else if (command == '*') {
         mem *= faceval;
     }
-    else if (command == L'=') {
+    else if (command == '=') {
         if (arg == -1)
             mem = (mem == input);
         else
             mem = (mem == faceval);
     }
-    else if (command == L'$') {
+    else if (command == '$') {
         int x = abs(arg);
         while (x--)
         {
@@ -118,38 +114,38 @@ int execute(wint_t command, int arg)
                 input = 0;
         }
     }
-    else if (command == L'~') {
+    else if (command == '~') {
         int x = abs(arg);
         while (x--)
             input = getchar();
     }
-    else if (command == L'%') {
+    else if (command == '%') {
         printf("%d",faceval);
         fflush(stdout);
     }
-    else if (command == L'@') {
+    else if (command == '@') {
         putchar(faceval);
         fflush(stdout);
     }
-    else if (command == L':') {
+    else if (command == ':') {
         if (arg == -1)
             mem = input;
         else
             mem = faceval;
     }
-    else if (command == L'^') {
+    else if (command == '^') {
         mem = pow(mem,faceval);
     }
-    else if (command == L'<') {
+    else if (command == '<') {
         mem = (mem < faceval);
     }
-    else if (command == L'>') {
+    else if (command == '>') {
         mem = (mem > faceval);
     }
-    else if (command == L'_') {
+    else if (command == '_') {
         faceval && (mem %= faceval);
     }
-    else if (command == L'|') {
+    else if (command == '|') {
         mem |= faceval;
     }
     else if (command == 0x80) {
@@ -161,14 +157,14 @@ int execute(wint_t command, int arg)
     else if (command == 0x82) {
         mem >>= faceval;
     }
-    else if (command == 0x83) { 
+    else if (command == 0x83) {
         mem &= faceval;
     }
-    else if (command == L'&') {
+    else if (command == '&') {
         if (arg == -1 || faceval)
             return -1;
     }
-    else if (command == L'(') {
+    else if (command == '(') {
         if (arg == -1) {
             jumps[jumpnum++].pos = pos;
             DEBUG && fprintf(stderr,"jumps[jumpnum-1].pos = %d\n", pos);
@@ -176,25 +172,19 @@ int execute(wint_t command, int arg)
             jumps[jumpnum].faces[arg] = 1;
         }
     }
-    else if (command == L')') {
+    else if (command == ')') {
         if (arg == -1)
             do_jump();
         else
             jumps[jumpnum].faces[arg] = 1;
     }
-    else if (command == L'!') {
-        if (faceval) {
+    else if (command == '!') {
+        if (faceval)
             do_skip();
-            do_else = 0;
-        }
     }
-    else if (command == L'?') {
-        if (!faceval) {
+    else if (command == '?') {
+        if (!faceval)
             do_skip();
-            do_else = 1;
-        } else {
-            do_else = 0;
-        }
     }
     else if (command == 0x86) {
         cubically_evaluate();
@@ -203,19 +193,20 @@ int execute(wint_t command, int arg)
     return 0;
 }
 
-int rubiksnotation(wint_t x)
+int rubiksnotation(char x)
 {
     switch (x) {
-        case L'U': return 0;
-        case L'L': return 1;
-        case L'F': return 2;
-        case L'R': return 3;
-        case L'B': return 4;
-        case L'D': return 5;
-        default:   return -1;
+        case 'U': return 0;
+        case 'L': return 1;
+        case 'F': return 2;
+        case 'R': return 3;
+        case 'B': return 4;
+        case 'D': return 5;
+        default:  return -1;
     }
 }
 
+/* this logic is flawless but I hate this function with a burning passion */
 int do_jump(void)
 {
     int i, count, _do_jump1, _do_jump2;
@@ -277,15 +268,15 @@ int32_t _faceval(int face)
 
 void do_skip(void)
 {
-    command c = commands[pos++];
+    char c = commands[++pos].command;
 
-    if (c.command == L'{') {
+    if (c == '{') {
         int loop = 1, level = 0;
         while (loop) {
-            c = commands[pos++];
-            if (c.command == L'{')
+            c = commands[++pos].command;
+            if (c == '{')
                 level++;
-            else if (c.command == L'}')
+            else if (c == '}')
                 loop = level--;
         }
     }
@@ -302,8 +293,8 @@ void cubically_evaluate(void)
     if (buf[strlen(buf)-1] == '\n')
         buf[strlen(buf)-1] = 0;
 
-    wint_t *str = parse_string(buf);
-    DEBUG && printf("Read: <%S>\n", str);
+    char *str = parse_string(buf);
+    DEBUG && printf("Read: <%s>\n", str);
     command *cmds = parse_commands(str);
     int l; // number of new commands
     int r; // number of old commands remaining in source

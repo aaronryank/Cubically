@@ -17,12 +17,13 @@ int undigit(wint_t c)
     return 0;
 }
 
-wint_t *parse_file(FILE *in)
+char *parse_file(FILE *in)
 {
-    wint_t c, *source;
+    wint_t c;
+    char *source;
     int p = 0;
 
-    source = malloc(1024 * sizeof(wint_t));
+    source = malloc(1024);
     memset(source,0,1024);
 
     if (!source) {
@@ -40,12 +41,13 @@ wint_t *parse_file(FILE *in)
     return source;
 }
 
-wint_t *parse_string(char *str)
+char *parse_string(char *str)
 {
-    wint_t c, *source;
+    int c;
+    char *source;
     int p = 0;
 
-    source = malloc(1024 * sizeof(wint_t));
+    source = malloc(1024);
     memset(source, 0, 1024);
 
     if (!source) {
@@ -64,9 +66,9 @@ wint_t *parse_string(char *str)
     return source;
 }
 
-command *parse_commands(wint_t *source)
+command *parse_commands(char *source)
 {
-    wint_t cmd = 0;
+    char cmd = 0;
     int idx = 0, i = 0, arg = 0;
     command *commands = NULL;
     commands = malloc(1024 * sizeof(command));
@@ -97,7 +99,7 @@ int conv9(int digit, int command)
         return digit == 0 ? 9 : digit;
 }
 
-int get_command(wint_t *source, int *idx, wint_t *command, int *arg)
+int get_command(char *source, int *idx, char *command, int *arg)
 {
     *command = 0;
     *arg = -1;

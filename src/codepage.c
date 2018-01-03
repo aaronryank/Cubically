@@ -1,7 +1,7 @@
 #include <wchar.h>
-#include "codepage.h"
+#include "lang.h"
 
-int numberize(wint_t x, int flag)
+int numberize(char x, int flag)
 {
     if (x >= 0x90 && x <= 0x99)
         return x - 0x90;
@@ -10,8 +10,11 @@ int numberize(wint_t x, int flag)
     return x;
 }
 
-int sbcs_convert(wint_t x, int flag)
+char sbcs_convert(wint_t x)
 {
+    if (codepage == CP_SBCS)
+        return wctob(x);
+
     if (x >= 0x2080 && x <= 0x2089)
         return x - 0x2080 + 0x10;
     else if (x >= 0x1D7D8 && x <= 0x1D7D1)

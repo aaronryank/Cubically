@@ -9,7 +9,6 @@
 #include <locale.h>
 #include "rubiks.h"
 #include "lang.h"
-#include "codepage.h"
 
 int DEBUG;
 int codepage;
@@ -70,7 +69,7 @@ int main(int argc, char **argv)
         in = fopen(".cubically.tmp", "r");
     }
 
-    wint_t *source = parse_file(in);
+    char *source = parse_file(in);
     fclose(in);
 
     commands = parse_commands(source);
@@ -84,4 +83,3 @@ int main(int argc, char **argv)
     free(cube);
     return 0;
 }
-
