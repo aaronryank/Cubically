@@ -17,10 +17,10 @@ int undigit(wint_t c)
     return 0;
 }
 
-char *parse_file(FILE *in)
+int *parse_file(FILE *in)
 {
     wint_t c;
-    char *source;
+    int *source;
     int p = 0;
 
     source = malloc(1024);
@@ -41,10 +41,10 @@ char *parse_file(FILE *in)
     return source;
 }
 
-char *parse_string(char *str)
+int *parse_string(char *str)
 {
     int c;
-    char *source;
+    int *source;
     int p = 0;
 
     source = malloc(1024);
@@ -66,9 +66,9 @@ char *parse_string(char *str)
     return source;
 }
 
-command *parse_commands(char *source)
+command *parse_commands(int *source)
 {
-    char cmd = 0;
+    int cmd = 0;
     int idx = 0, i = 0, arg = 0;
     command *commands = NULL;
     commands = malloc(1024 * sizeof(command));

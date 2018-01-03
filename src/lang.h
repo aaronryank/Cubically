@@ -19,19 +19,20 @@ int32_t _faceval(int);
 void do_skip(void);
 
 typedef struct {
-  wint_t command;
+  int command;
   int arg;
 } command;
     
-char *parse_file(FILE *);
-char *parse_string(char *);
-command *parse_commands(char *);
+int *parse_file(FILE *);
+int *parse_string(char *);
+command *parse_commands(int *);
 
 int interp(void);
 void cubically_evaluate(void);
 int rubiksnotation(char);
 
-char sbcs_convert(wint_t);
+int sbcs_convert(wint_t);
+int numberize(int);
 
 extern command *commands;
 extern int codepage;

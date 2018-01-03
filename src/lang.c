@@ -69,7 +69,7 @@ int main(int argc, char **argv)
         in = fopen(".cubically.tmp", "r");
     }
 
-    char *source = parse_file(in);
+    int *source = parse_file(in);
     fclose(in);
 
     commands = parse_commands(source);

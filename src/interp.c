@@ -293,8 +293,8 @@ void cubically_evaluate(void)
     if (buf[strlen(buf)-1] == '\n')
         buf[strlen(buf)-1] = 0;
 
-    char *str = parse_string(buf);
-    DEBUG && printf("Read: <%s>\n", str);
+    int *str = parse_string(buf);
+    DEBUG && printf("Read: <%s>\n", (char*) str);
     command *cmds = parse_commands(str);
     int l; // number of new commands
     int r; // number of old commands remaining in source
