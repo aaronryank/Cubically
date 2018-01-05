@@ -25,34 +25,63 @@ struct {
 } jumps[999];
 int jumpnum;
 
+#define CPC commands[pos].command
+#define CPA commands[pos].arg
+
 int call_command(void)
 {
-    if (commands[pos].arg == -1) {
-        int ret = execute(commands[pos].command, commands[pos].arg);
+    if (commands[pos].argc == 0) {
+        int ret = execute(CPC, -1);
         return ret;
     }
 
-    char arg[20] = {0};
-    int i = 0;
-    sprintf(arg, "%d", commands[pos].arg);
+    int i, exec;
+    for (i = exec = 0; i < commands[pos].argc; i++) {
+        int arg = CPA[i];
 
-    while (arg[i]) {
-        int ret = execute(commands[pos].command, arg[i++] - '0');
+        if (arg >= 100) {
+            arg -= 100;
+
+            if (issubscript(arg)) {
+                cur_depth *= 10;
+                cur_depth += numberize(arg);
+                continue;
+            }
+            else if (issuperscript(arg)) {
+                cur_depth *= 10;
+                cur_depth += _faceval(numberize(arg));
+                continue;
+            }
+            else {
+                arg = _faceval(numberize(arg));
+            }
+        }
+
+        exec++;
+        int ret = execute(CPC, arg);
         if (ret)
             return ret;
     }
 
-    if (commands[pos].command == L'(' || commands[pos].command == L')')
-        execute(commands[pos].command, -1);
+    if (CPC == '(' || CPC == ')' || !exec)
+        execute(CPC, -1);
 
-    return 0;
+    cur_depth = 0;
 }
 
 int interp(void)
 {
     while (commands[pos].command) {
-        if (DEBUG)
-            printf("interpreting %c(%d)\n",commands[pos].command, commands[pos].arg);
+        if (DEBUG) {
+            printf("interpreting %c(",commands[pos].command);
+            int i;
+            for (i = 0; i < commands[pos].argc; i++) {
+                printf("%d",commands[pos].arg[i]);
+                if (i != (commands[pos].argc - 1))
+                    putchar(',');
+            }
+            puts(")");
+        }
 
         if (call_command())
             break;
@@ -68,7 +97,7 @@ int interp(void)
 
 int execute(char command, int arg)
 {
-    DEBUG && printf("Command %c (%d | %d), arg %d\n", command, command, wctob(command), arg);
+    DEBUG && printf("Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
 
     if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
@@ -300,18 +329,20 @@ void cubically_evaluate(void)
     int r; // number of old commands remaining in source
     int i; // used for final insert loop
 
-    for (l = 0; cmds[l].command; l++) { DEBUG && printf("Read: %c%d\n", cmds[l].command, cmds[l].arg); }
+    for (l = 0; cmds[l].command; l++);// { DEBUG && printf("Read: %c%d\n", cmds[l].command, cmds[l].arg); }
     l--; // no clue
+
+    // FIXME copying args
 
     for (r = pos; commands[r].command; r++);
     for (; r > pos; r--) {
         commands[r+l].command = commands[r].command;
-        commands[r+l].arg = commands[r].arg;
+        commands[r+l].argc = commands[r].argc;
     }
 
     for (i = 0; cmds[i].command; i++) {
         commands[pos+i].command = cmds[i].command;
-        commands[pos+i].arg = cmds[i].arg;
+        commands[pos+i].argc = cmds[i].argc;
     }
 
     pos--;

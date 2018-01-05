@@ -11,7 +11,8 @@ enum { CP_UNDEF, CP_UTF8, CP_SBCS } codepages;
 
 #define faceval _faceval(arg)
 
-#define special(x)  (x == L'(' || x == L')')
+#define issubscript(x)   (x >= 0x10 && x <= 0x19)
+#define issuperscript(x) (x >= 0 && x <= 9)
 
 int execute(char, int);
 int do_jump(void);
@@ -20,7 +21,8 @@ void do_skip(void);
 
 typedef struct {
   int command;
-  int arg;
+  int arg[100];
+  int argc;
 } command;
     
 int *parse_file(FILE *);
