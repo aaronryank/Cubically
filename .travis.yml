@@ -19,7 +19,6 @@ script:
  - ./cubically fcd examples/cat.cb < examples/input.txt
  - ./cubically fu examples/subscripts.cb 15
  - ./cubically fu examples/superscripts.cb 15
- - ./cubically fu examples/doublestruck.cb 15
  - gcov src/*.c
 
 after_success:
