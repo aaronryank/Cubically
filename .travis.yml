@@ -13,10 +13,13 @@ script:
  - ./cubically fs 'RLUDFBMESXYZ^<>_2|'
  - ./cubically ThisWontWork || echo 'This is so the build succeeds'
  - ./cubically fu ThisWontWork || echo 'This is so the build succeeds'
- - ./cubically fs R2L2U2D2F2B\' 6
- - ./cubically fs R2L2U2D2F2B2 0
- - ./cubically fs R2L2U2D2F2B2 -3
+ - ./cubically us R2L2U2D2F2B\' 6
+ - ./cubically us R2L2U2D2F2B2 0
+ - ./cubically us R2L2U2D2F2B2 -3
  - ./cubically fcd examples/cat.cb < examples/input.txt
+ - ./cubically fu examples/subscripts.cb 15
+ - ./cubically fu examples/superscripts.cb 15
+ - ./cubically fu examples/doublestruck.cb 15
  - gcov src/*.c
 
 after_success:
