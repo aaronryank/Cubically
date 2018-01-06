@@ -326,17 +326,23 @@ void cubically_evaluate(void)
     for (l = 0; cmds[l].command; l++);// { DEBUG && printf("Read: %c%d\n", cmds[l].command, cmds[l].arg); }
     l--; // no clue
 
-    // FIXME copying args
+    // IMPROVE copying args
 
     for (r = pos; commands[r].command; r++);
     for (; r > pos; r--) {
         commands[r+l].command = commands[r].command;
         commands[r+l].argc = commands[r].argc;
+        int _;
+        for (_ = 0; _ < 100; _++)
+            commands[r+l].arg[_] = commands[r].arg[_];
     }
 
     for (i = 0; cmds[i].command; i++) {
         commands[pos+i].command = cmds[i].command;
         commands[pos+i].argc = cmds[i].argc;
+        int _;
+        for (_ = 0; _ < 100; _++)
+            commands[pos+i].arg[_] = cmds[i].arg[_];
     }
 
     pos--;
