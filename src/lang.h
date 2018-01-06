@@ -37,4 +37,4 @@ int sbcs_convert(wint_t);
 int numberize(int);
 
 extern command *commands;
-extern int codepage;
+extern int DEBUG, codepage;

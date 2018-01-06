@@ -82,6 +82,7 @@ command *parse_commands(int *source)
     }
 
     while (get_command(source, &idx, &cmd, arg, &argc)) {
+        DEBUG && printf("Parsed command %c/%d, %d arg(s), position %d\n", cmd, cmd, argc, idx);
         commands[i].command = cmd;
         commands[i].argc = argc;
         for (j = 0; j < argc; j++)

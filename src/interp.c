@@ -17,8 +17,6 @@ int pos;
 int do_else;
 int cur_depth;
 
-extern int DEBUG, codepage;
-
 struct {
     int pos;
     int faces[9];
@@ -67,6 +65,7 @@ int call_command(void)
         execute(CPC, -1);
 
     cur_depth = 0;
+    return 0;
 }
 
 int interp(void)
