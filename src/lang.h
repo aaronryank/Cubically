@@ -14,7 +14,7 @@ enum { CP_UNDEF, CP_UTF8, CP_SBCS } codepages;
 #define issubscript(x)   (x >= 0x10 && x <= 0x19)
 #define issuperscript(x) (x >= 0 && x <= 9)
 
-int execute(char, int);
+int execute(int, int);
 int do_jump(void);
 int32_t _faceval(int);
 void do_skip(void);

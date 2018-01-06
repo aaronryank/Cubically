@@ -29,8 +29,7 @@ int jumpnum;
 int call_command(void)
 {
     if (commands[pos].argc == 0) {
-        int ret = execute(CPC, -1);
-        return ret;
+        return execute(CPC, -1);
     }
 
     int i, exec;
@@ -70,12 +69,12 @@ int call_command(void)
 
 int interp(void)
 {
-    while (commands[pos].command) {
+    while (CPC) {
         if (DEBUG) {
-            printf("interpreting %c(",commands[pos].command);
+            printf("interpreting %d/%c(",CPC,CPC);
             int i;
             for (i = 0; i < commands[pos].argc; i++) {
-                printf("%d",commands[pos].arg[i]);
+                printf("%d",CPA[i]);
                 if (i != (commands[pos].argc - 1))
                     putchar(',');
             }
@@ -94,7 +93,7 @@ int interp(void)
     return 0;
 }
 
-int execute(char command, int arg)
+int execute(int command, int arg)
 {
     DEBUG && printf("Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
 
