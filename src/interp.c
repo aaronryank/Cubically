@@ -135,11 +135,8 @@ int execute(int command, int arg)
     else if (command == '$') {
         int x = abs(arg);
         while (x--)
-        {
-            int retval = scanf("%d",&input);
-            if (retval < 0)
+            if (scanf("%d", &input) < 0)
                 input = 0;
-        }
     }
     else if (command == '~') {
         int x = abs(arg);
