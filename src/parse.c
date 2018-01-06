@@ -95,14 +95,6 @@ command *parse_commands(int *source)
     return commands;
 }
 
-int conv9(int digit, int command)
-{
-    if (command == '~' || command == '$')
-        return digit;
-    else
-        return digit ?: 9;
-}
-
 int get_command(int *source, int *idx, int *command, int arg[100], int *argc)
 {
     *command = 0;
@@ -110,9 +102,8 @@ int get_command(int *source, int *idx, int *command, int arg[100], int *argc)
 
     while (source[*idx]) {
         if (L_isdigit(source[*idx]) || isintegraldigit(source[*idx])) {
-            arg[(*argc)++] = conv9(undigit(source[*idx]), *command);
-        }
-        else {
+            arg[(*argc)++] = undigit(source[*idx]);
+        } else {
             if (*command)
                 return 1;
             else

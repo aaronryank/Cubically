@@ -278,7 +278,6 @@ int do_jump(void)
 
 int32_t _faceval(int face)
 {
-    face = face == 9 ? 0 : face;
     if (face == 8)
         return !issolved();
     if (face == 7)
