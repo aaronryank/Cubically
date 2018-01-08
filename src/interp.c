@@ -32,6 +32,15 @@ int call_command(void)
         return execute(CPC, -1);
     }
 
+    if (CPC == 'f') {
+        int i, val;
+        for (i = val = 0; i < commands[pos].argc; i++) {
+            val *= 10;
+            val += CPA[i];
+        }
+        return execute('f', val);
+    }
+
     int i, exec;
     for (i = exec = 0; i < commands[pos].argc; i++) {
         int arg = CPA[i];
@@ -95,6 +104,7 @@ int execute(int command, int arg)
     static int depth = 0;
     static int func_returns[1000] = {0};
     static int fc = 0;
+    static int solvemode = 0;
 
     DEBUG && printf("Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
 
@@ -107,6 +117,7 @@ int execute(int command, int arg)
         int face  = rubiksnotation(command);
         int turns = abs(arg);
         turncube(face, turns % 4, cur_depth);
+        PRINTMOVES && fprintf(stderr, "%c%d", command, turns);
     }
     else if (command == 'M') {
         turncube(LEFT,abs(arg),(CUBESIZE-1)/2);
@@ -239,6 +250,17 @@ int execute(int command, int arg)
             DEBUG && printf("Jumped out of function to %d\n", pos);
         }
     }
+    else if (command == 's') {
+        solvemode = _faceval(8) ? 1 : -1;
+    }
+
+    if (solvemode == -1) {
+        solvemode = _faceval(8) ? 1 : -1;
+    } else if (solvemode == 1 && !_faceval(8)) {
+        fputs("Solved!", stderr);
+        return 1;
+    }
+
     return 0;
 }
 

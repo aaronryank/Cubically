@@ -38,4 +38,4 @@ int numberize(int);
 
 extern int mem;
 extern command *commands;
-extern int DEBUG, codepage;
+extern int DEBUG, PRINTMOVES, codepage;

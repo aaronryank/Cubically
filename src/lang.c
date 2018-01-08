@@ -10,7 +10,7 @@
 #include "rubiks.h"
 #include "lang.h"
 
-int DEBUG;
+int DEBUG, PRINTMOVES;
 int codepage;
 command *commands;
 
@@ -42,6 +42,7 @@ int main(int argc, char **argv)
           case 'u': codepage  = CP_UTF8; break;
           case 'c': codepage  = CP_SBCS; break;
           case 'd': DEBUG     = 1; break;
+          case 'p': PRINTMOVES= 1; break;
         }
     }
 
@@ -77,7 +78,7 @@ int main(int argc, char **argv)
 
     interp();
 
-    fprintf(stderr, "Notepad: %d\n\n", mem);
+    fprintf(stderr, "\nNotepad: %d\n\n", mem);
     printcube();
 
     if (flag_arg == 2)
