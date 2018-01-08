@@ -77,6 +77,9 @@ int main(int argc, char **argv)
 
     interp();
 
+    fprintf(stderr, "Notepad: %d\n\n", mem);
+    printcube();
+
     if (flag_arg == 2)
         remove(".cubically.tmp");
 

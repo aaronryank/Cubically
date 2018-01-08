@@ -69,7 +69,7 @@ int call_command(void)
 
 int interp(void)
 {
-    while (CPC) {
+    for (pos = 0; CPC; pos++) {
         if (DEBUG) {
             printf("interpreting %d/%c(",CPC,CPC);
             int i;
@@ -83,24 +83,30 @@ int interp(void)
 
         if (call_command())
             break;
-
-        pos++;
     }
-
-    fprintf(stderr, "Notepad: %d\n\n", mem);
-    printcube();
 
     return 0;
 }
 
 int execute(int command, int arg)
 {
+    static int infuncdef = 0;
+    static int functions[1000] = {0};
+    static int depth = 0;
+    static int func_returns[1000] = {0};
+    static int fc = 0;
+
     DEBUG && printf("Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
+
+    if (infuncdef && command != 0x20) { // slight hardcoding but less than the alternative
+        DEBUG && printf("Not interpreting; defining a function\n");
+        return 0;
+    }
 
     if (rubiksnotation(command)+1) {
         int face  = rubiksnotation(command);
         int turns = abs(arg);
-        turncube(face,turns,cur_depth);
+        turncube(face, turns % 4, cur_depth);
     }
     else if (command == 'M') {
         turncube(LEFT,abs(arg),(CUBESIZE-1)/2);
@@ -213,7 +219,25 @@ int execute(int command, int arg)
     else if (command == 0x86) {
         cubically_evaluate();
     }
-
+    else if (command == 'f') {
+        if (arg == -1 || functions[arg] == -1)
+            return 0;
+        func_returns[depth++] = pos;
+        pos = functions[arg];
+        DEBUG && printf("Jumped into function to %d\n", pos);
+    }
+    else if (command == 0x84) {
+        functions[++fc] = pos;
+        infuncdef = 1;
+    }
+    else if (command == 0x20) {
+        if (infuncdef)
+            infuncdef = 0;
+        else if (depth) {
+            pos = func_returns[--depth];
+            DEBUG && printf("Jumped out of function to %d\n", pos);
+        }
+    }
     return 0;
 }
 

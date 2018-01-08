@@ -36,5 +36,6 @@ int rubiksnotation(char);
 int sbcs_convert(wint_t);
 int numberize(int);
 
+extern int mem;
 extern command *commands;
 extern int DEBUG, codepage;
