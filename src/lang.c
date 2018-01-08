@@ -10,7 +10,7 @@
 #include "rubiks.h"
 #include "lang.h"
 
-int DEBUG, PRINTMOVES;
+int DEBUG, PRINTMOVES, SOLVEMODE;
 int codepage;
 command *commands;
 
@@ -43,6 +43,7 @@ int main(int argc, char **argv)
           case 'c': codepage  = CP_SBCS; break;
           case 'd': DEBUG     = 1; break;
           case 'p': PRINTMOVES= 1; break;
+          case 'S': SOLVEMODE = 1; break;
         }
     }
 

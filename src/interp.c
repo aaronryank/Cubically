@@ -106,6 +106,9 @@ int execute(int command, int arg)
     static int fc = 0;
     static int solvemode = 0;
 
+    if (SOLVEMODE && !solvemode)
+        solvemode = -1;
+
     DEBUG && printf("Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
 
     if (infuncdef && command != 0x20) { // slight hardcoding but less than the alternative
