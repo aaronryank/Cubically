@@ -20,6 +20,7 @@ script:
  - ./cubically fu examples/subscripts.cb 15
  - ./cubically fu examples/superscripts.cb 15
  - ./cubically fu examples/depth.cb
+ - ./cubically fu examples/functions.cb
  - gcov src/*.c
 
 after_success:

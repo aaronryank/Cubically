@@ -220,8 +220,9 @@ int execute(int command, int arg)
         cubically_evaluate();
     }
     else if (command == 'f') {
-        if (arg == -1 || functions[arg] == -1)
+        if (arg == -1 || arg > fc)
             return 0;
+
         func_returns[depth++] = pos;
         pos = functions[arg];
         DEBUG && printf("Jumped into function to %d\n", pos);
