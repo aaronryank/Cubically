@@ -10,7 +10,7 @@ script:
  - ./cubically fu examples/huge.cb
  - ./cubically fu examples/period.cb <<<R2L2
  - ./cubically fs R2?{haha\ nope}
- - ./cubically fs 'RLUDFBMESXYZ^<>_2|'
+ - ./cubically fs 'RLUDFBMESXYZ^<>_2|/=2:'
  - ./cubically ThisWontWork || echo 'This is so the build succeeds'
  - ./cubically fu ThisWontWork || echo 'This is so the build succeeds'
  - ./cubically us R2L2U2D2F2B\' 6
@@ -21,6 +21,8 @@ script:
  - ./cubically fu examples/superscripts.cb 15
  - ./cubically fu examples/depth.cb
  - ./cubically fu examples/functions.cb
+ - ./cubically fSup examples/solve.cb
+ - ./cubically us '(0R)'
  - gcov src/*.c
 
 after_success:
