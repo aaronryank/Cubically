@@ -28,20 +28,29 @@ int jumpnum;
 
 int call_command(void)
 {
+    /* if implicit, call with -1 */
     if (commands[pos].argc == 0) {
         return execute(CPC, -1);
     }
 
+    /* functions require multiple-digit integers */
     if (CPC == 'f') {
         int i, val;
+        /* so turn the array of one-digit integers into a single integer */
         for (i = val = 0; i < commands[pos].argc; i++) {
             val *= 10;
             val += CPA[i];
         }
+        /* and execute `f` with that integer */
         return execute('f', val);
     }
 
-    int i, exec;
+    int i; 
+    int exec; /* number of times the command has been executed.
+                 this is needed for commands with superscripts/subscripts,
+                 which need individual parsing via this loop but do not
+                 immediately call the command. */
+
     for (i = exec = 0; i < commands[pos].argc; i++) {
         int arg = CPA[i];
 
@@ -58,17 +67,22 @@ int call_command(void)
                 cur_depth += _faceval(numberize(arg));
                 continue;
             }
-            else {
+            else { /* double-struck */
                 arg = _faceval(numberize(arg));
             }
         }
 
         exec++;
         int ret = execute(CPC, arg);
+
+        /* execute returns nonzero when it fails,
+           quit early with a nonzero return value when it does. */
         if (ret)
             return ret;
     }
 
+    /* loopers must be called implicitly,
+       calling them with arguments simply cause the arguments to build off of each other */
     if (CPC == '(' || CPC == ')' || !exec)
         execute(CPC, -1);
 
@@ -79,17 +93,22 @@ int call_command(void)
 int interp(void)
 {
     for (pos = 0; CPC; pos++) {
+        /* print debugging information if flag set */
         if (DEBUG) {
-            fprintf(stderr, "interpreting %d/%c(", CPC, CPC);
+            fprintf(stderr, "interpreting [%x] %c(", CPC, CPC);
             int i;
+
+            /* print each argument */
             for (i = 0; i < commands[pos].argc; i++) {
                 fprintf(stderr, "%d", CPA[i]);
                 if (i != (commands[pos].argc - 1))
-                    putchar(',');
+                    putc(',', stderr);
             }
-            puts(")");
+            fprintf(stderr, ")\n");
         }
 
+        /* call_command returns nonzero if it quits early;
+           we need to too */
         if (call_command())
             break;
     }
@@ -99,24 +118,29 @@ int interp(void)
 
 int execute(int command, int arg)
 {
-    static int infuncdef = 0;
-    static int functions[1000] = {0};
-    static int depth = 0;
-    static int func_returns[1000] = {0};
-    static int fc = 0;
-    static int solvemode = 0;
+    static int infuncdef = 0;             /* boolean; tells whether the interpreter is reading the first instance of a function */
+    static int functions[1000] = {0};     /* stack of function starting positions */
+    static int fc = 0;                    /* top of the functions stack */
+    static int func_returns[1000] = {0};  /* stack of positions for the interpreter to return to when it exits a function */
+    static int depth = 0;                 /* top of the func_returns stack */
+    static int solvemode = 0;             /* tells whether the interpreter should exit when the cube becomes solved:
+                                             -1 if the mode has been set but the cube was solved when it was set,
+                                             1 if the cube has been unsolved since the mode was set */
 
+    /* if the command-line flag for solvemode has been set,
+        set the interpreter boolean */
     if (SOLVEMODE && !solvemode)
         solvemode = -1;
 
-    DEBUG && fprintf(stderr, "Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
+    DEBUG && fprintf(stderr, "Command %x, arg %d, depth %d\n", command, arg, cur_depth);
 
-    if (infuncdef && command != 0x20) { // slight hardcoding but less than the alternative
+    /* if defining a function and the command doesn't exit a function's definition, don't interpret */
+    if (infuncdef && command != 0x20) {
         DEBUG && fprintf(stderr, "Not interpreting; defining a function\n");
         return 0;
     }
 
-    if (rubiksnotation(command)+1) {
+    if (rubiksnotation(command) + 1) {
         int face  = rubiksnotation(command);
         int turns = abs(arg);
         turncube(face, turns % 4, cur_depth);
@@ -343,10 +367,13 @@ void do_skip(void)
 {
     char c = commands[++pos].command;
 
+    /* if we need to skip an entire block */
     if (c == '{') {
         int loop = 1, level = 0;
         while (loop) {
             c = commands[++pos].command;
+
+            /* matching code blocks for nested conditionals */
             if (c == '{')
                 level++;
             else if (c == '}')
@@ -373,12 +400,15 @@ void cubically_evaluate(void)
     int r; // number of old commands remaining in source
     int i; // used for final insert loop
 
-    for (l = 0; cmds[l].command; l++);// { DEBUG && printf("Read: %c%d\n", cmds[l].command, cmds[l].arg); }
+    for (l = 0; cmds[l].command; l++);
     l--; // no clue
 
     // IMPROVE copying args
 
+    /* get number of commands remaining in source */
     for (r = pos; commands[r].command; r++);
+
+    /* make space for the new commands */
     for (; r > pos; r--) {
         commands[r+l].command = commands[r].command;
         commands[r+l].argc = commands[r].argc;
@@ -387,6 +417,7 @@ void cubically_evaluate(void)
             commands[r+l].arg[_] = commands[r].arg[_];
     }
 
+    /* copy the new commands into the source */
     for (i = 0; cmds[i].command; i++) {
         commands[pos+i].command = cmds[i].command;
         commands[pos+i].argc = cmds[i].argc;
@@ -395,5 +426,6 @@ void cubically_evaluate(void)
             commands[pos+i].arg[_] = cmds[i].arg[_];
     }
 
+    /* we overwrite the current command; rewind a bit so that the new command gets interpreted */
     pos--;
 }

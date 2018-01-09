@@ -24,13 +24,19 @@ int main(int argc, char **argv)
     CUBESIZE = 3;
 
     /* incorrect number of args or flag is -h */
-    if (argc < 3 || strchr(argv[1], 'h')) {
-        fprintf(stderr, "Usage: %s <flags> <file | string> <size>"             "\n"\
+    if (argc < 3 || (argc == 2 && strchr(argv[1], 'h'))) {
+        fprintf(stderr, "Usage: %s <flags> <file | string> <size>\n"           "\n"\
                         "Flags: f | second argument is a file"                 "\n"\
                         "       s | second argument is a string"               "\n"\
                         "       u | read file/string as UTF-8"                 "\n"\
-                        "       c | read file/string as Cubically SBCS"        "\n"\
-                        "<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n", argv[0]);
+                        "       c | read file/string as Cubically SBCS"        "\n", argv[0]);
+
+        if (argc == 2 && strchr(argv[1], 'h'))
+            fprintf(stderr, "       S | solve-mode"                       "\n"\
+                            "       p | print moves as they are executed" "\n"\
+                            "       d | print debugging information"      "\n");
+
+        fprintf(stderr, "\n<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n");
         return 0;
     }
 
@@ -39,13 +45,13 @@ int main(int argc, char **argv)
     int i, s = strlen(argv[1]);
     for (i = 0; i < s; i++) {
         switch (tolower(argv[1][i])) {
-          case 'f': flag_arg  = _FILE; break;
-          case 's': flag_arg  = STRING; break;
-          case 'u': codepage  = CP_UTF8; break;
-          case 'c': codepage  = CP_SBCS; break;
-          case 'd': DEBUG     = 1; break;
-          case 'p': PRINTMOVES= 1; break;
-          case 'S': SOLVEMODE = 1; break;
+          case 'f': flag_arg   = _FILE; break;
+          case 's': flag_arg   = STRING; break;
+          case 'u': codepage   = CP_UTF8; break;
+          case 'c': codepage   = CP_SBCS; break;
+          case 'd': DEBUG      = 1; break;
+          case 'p': PRINTMOVES = 1; break;
+          case 'S': SOLVEMODE  = 1; break;
         }
     }
 
