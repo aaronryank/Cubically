@@ -10,6 +10,7 @@
 #include "rubiks.h"
 #include "lang.h"
 
+/* globals */
 int DEBUG, PRINTMOVES, SOLVEMODE;
 int codepage;
 command *commands;
@@ -17,22 +18,23 @@ command *commands;
 int main(int argc, char **argv)
 {
     /* we're reading Unicode */
-    setlocale(LC_ALL,"C.UTF-8");
-    setlocale(LC_CTYPE,"C.UTF-8");
+    setlocale(LC_ALL, "C.UTF-8");
+    setlocale(LC_CTYPE, "C.UTF-8");
 
     CUBESIZE = 3;
 
     /* incorrect number of args or flag is -h */
-    if (argc < 3 || strchr(argv[1],'h')) {
-        fprintf(stderr,"Usage: %s <flags> <file | string> <size>"             "\n"\
-                       "Flags: f | second argument is a file"                 "\n"\
-                       "       s | second argument is a string"               "\n"\
-                       "       u | read file/string as UTF-8"                 "\n"\
-                       "       c | read file/string as Cubically SBCS"        "\n"\
-                       "<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n", argv[0]);
+    if (argc < 3 || strchr(argv[1], 'h')) {
+        fprintf(stderr, "Usage: %s <flags> <file | string> <size>"             "\n"\
+                        "Flags: f | second argument is a file"                 "\n"\
+                        "       s | second argument is a string"               "\n"\
+                        "       u | read file/string as UTF-8"                 "\n"\
+                        "       c | read file/string as Cubically SBCS"        "\n"\
+                        "<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n", argv[0]);
         return 0;
     }
 
+    /* parse command-line arguments */
     int flag_arg = 0;   enum { _FILE = 1, STRING = 2};
     int i, s = strlen(argv[1]);
     for (i = 0; i < s; i++) {
@@ -47,11 +49,11 @@ int main(int argc, char **argv)
         }
     }
 
-    // if argument 3 is present, interpret as a number, set cubesize to it
+    /* if argument 3 is present, interpret as a number, set cubesize to it */
     if (argv[3])
         CUBESIZE = atoi(argv[3]);
 
-    // if invalid...
+    /* if invalid... */
     if (CUBESIZE < 0)
         CUBESIZE = -CUBESIZE;
     if (CUBESIZE < 2)
@@ -71,17 +73,21 @@ int main(int argc, char **argv)
         in = fopen(".cubically.tmp", "r");
     }
 
+    /* parse Unicode/SBCS file into SBCS string */
     int *source = parse_file(in);
     fclose(in);
 
+    /* parse SBCS string into command structure */
     commands = parse_commands(source);
     free(source);
 
     interp();
 
+    /* debugging info at end of program (dump memory) */
     fprintf(stderr, "\nNotepad: %d\n\n", mem);
     printcube();
 
+    /* remove temporary file if we created it */
     if (flag_arg == 2)
         remove(".cubically.tmp");
 

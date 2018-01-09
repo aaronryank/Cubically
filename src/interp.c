@@ -80,10 +80,10 @@ int interp(void)
 {
     for (pos = 0; CPC; pos++) {
         if (DEBUG) {
-            printf("interpreting %d/%c(",CPC,CPC);
+            fprintf(stderr, "interpreting %d/%c(", CPC, CPC);
             int i;
             for (i = 0; i < commands[pos].argc; i++) {
-                printf("%d",CPA[i]);
+                fprintf(stderr, "%d", CPA[i]);
                 if (i != (commands[pos].argc - 1))
                     putchar(',');
             }
@@ -109,10 +109,10 @@ int execute(int command, int arg)
     if (SOLVEMODE && !solvemode)
         solvemode = -1;
 
-    DEBUG && printf("Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
+    DEBUG && fprintf(stderr, "Command %d=%c, arg %d, depth %d\n", command, command, arg, cur_depth);
 
     if (infuncdef && command != 0x20) { // slight hardcoding but less than the alternative
-        DEBUG && printf("Not interpreting; defining a function\n");
+        DEBUG && fprintf(stderr, "Not interpreting; defining a function\n");
         return 0;
     }
 
@@ -123,13 +123,13 @@ int execute(int command, int arg)
         PRINTMOVES && fprintf(stderr, "%c%d", command, turns);
     }
     else if (command == 'M') {
-        turncube(LEFT,abs(arg),(CUBESIZE-1)/2);
+        turncube(LEFT, abs(arg), (CUBESIZE-1)/2);
     }
     else if (command == 'E') {
-        turncube(DOWN,abs(arg),(CUBESIZE-1)/2);
+        turncube(DOWN, abs(arg), (CUBESIZE-1)/2);
     }
     else if (command == 'S') {
-        turncube(FRONT,abs(arg),(CUBESIZE-1)/2);
+        turncube(FRONT, abs(arg), (CUBESIZE-1)/2);
     }
     else if (command == '+') {
         mem += faceval;
@@ -164,7 +164,7 @@ int execute(int command, int arg)
             input = getchar();
     }
     else if (command == '%') {
-        printf("%d",faceval);
+        printf("%d", faceval);
         fflush(stdout);
     }
     else if (command == '@') {
@@ -178,7 +178,7 @@ int execute(int command, int arg)
             mem = faceval;
     }
     else if (command == '^') {
-        mem = pow(mem,faceval);
+        mem = pow(mem, faceval);
     }
     else if (command == '<') {
         mem = (mem < faceval);
@@ -211,7 +211,7 @@ int execute(int command, int arg)
     else if (command == '(') {
         if (arg == -1) {
             jumps[jumpnum++].pos = pos;
-            DEBUG && fprintf(stderr,"jumps[jumpnum-1].pos = %d\n", pos);
+            DEBUG && fprintf(stderr, "jumps[jumpnum-1].pos = %d\n", pos);
         } else {
             jumps[jumpnum].faces[arg] = 1;
         }
@@ -239,7 +239,7 @@ int execute(int command, int arg)
 
         func_returns[depth++] = pos;
         pos = functions[arg];
-        DEBUG && printf("Jumped into function to %d\n", pos);
+        DEBUG && fprintf(stderr, "Jumped into function to %d\n", pos);
     }
     else if (command == 0x84) {
         functions[++fc] = pos;
@@ -250,7 +250,7 @@ int execute(int command, int arg)
             infuncdef = 0;
         else if (depth) {
             pos = func_returns[--depth];
-            DEBUG && printf("Jumped out of function to %d\n", pos);
+            DEBUG && fprintf(stderr, "Jumped out of function to %d\n", pos);
         }
     }
     else if (command == 's') {
@@ -260,7 +260,7 @@ int execute(int command, int arg)
     if (solvemode == -1) {
         solvemode = _faceval(8) ? 1 : -1;
     } else if (solvemode == 1 && !_faceval(8)) {
-        fputs("Solved!", stderr);
+        puts("Solved!");
         return 1;
     }
 
@@ -334,7 +334,7 @@ int32_t _faceval(int face)
         size_t i, j;
         for (i = 0; i < CUBESIZE; i++)
             for (j = 0; j < CUBESIZE; j++)
-                retval += (int32_t) CUBE(face,i,j);
+                retval += (int32_t) CUBE(face, i, j);
         return retval;
     }
 }
@@ -360,14 +360,14 @@ void cubically_evaluate(void)
     char *buf = malloc(1024);
     memset(buf, 0, 1024);
 
-    if (!fgets(buf,1024,stdin))
+    if (!fgets(buf, 1024, stdin))
         return;
 
     if (buf[strlen(buf)-1] == '\n')
         buf[strlen(buf)-1] = 0;
 
     int *str = parse_string(buf);
-    DEBUG && printf("Read: <%s>\n", (char*) str);
+    DEBUG && fprintf(stderr, "Read: <%s>\n", (char*) str);
     command *cmds = parse_commands(str);
     int l; // number of new commands
     int r; // number of old commands remaining in source
