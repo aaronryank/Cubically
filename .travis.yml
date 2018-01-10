@@ -22,7 +22,9 @@ script:
  - ./cubically fu examples/depth.cb
  - ./cubically fu examples/functions.cb
  - ./cubically fSup examples/solve.cb
- - ./cubically us '(0R)'
+ - ./cubically us '(0R):1!%5'
+ - ./cubically usS 'RRRRRR'
+ - ./cubically fu examples/slightly-useless.cb
  - gcov src/*.c
 
 after_success:
