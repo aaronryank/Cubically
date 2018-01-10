@@ -6,9 +6,9 @@ script:
  - ./cubically fu examples/cat.cb < examples/input.txt
  - ./cubically fu examples/cubifier.cb < examples/input.txt
  - ./cubically fu examples/sum.cb < examples/input-integer.txt
- - ./cubically fu examples/eval.cb < examples/input.txt
+ - ./cubically fu examples/eval.cb <<<R2L2U2D2F2B2
  - ./cubically fu examples/huge.cb
- - ./cubically fu examples/period.cb <<<R2L2
+ - ./cubically fu examples/period.cb <<<RLUD
  - ./cubically fs R2?{haha\ nope}
  - ./cubically fs 'RLUDFBMESXYZ^<>_2|/=2:'
  - ./cubically ThisWontWork || echo 'This is so the build succeeds'
