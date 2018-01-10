@@ -172,18 +172,20 @@ void turncube(int face, int turns, int depth)
     }
 }
 
+int asize, *rotated;
+
 void rotate_face_clockwise(size_t n, int face)
 {
     size_t i, j;
-    int *rotated = malloc(6 * n * n * sizeof(int));
-    memcpy(rotated,cube,6 * n * n * sizeof(int));
+    memcpy(rotated,cube,asize);
     #define ROTATED(x,y,z) rotated[(x*n*n) + (y*n) + z]
 
     for (i = 0; i < n; i++)
         for (j = 0; j < n; j++)
             ROTATED(face,i,j) = CUBE(face,n - j - 1,i);
 
-    memcpy(cube, rotated, 6 * n * n * sizeof(int));
+    memcpy(cube,rotated,asize);
+    //free(rotated);
 }
 
 void rotateface(int face, int clockwise)
