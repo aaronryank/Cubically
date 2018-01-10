@@ -210,3 +210,37 @@ int issolved(void)
                     return 0;
     return 1;
 }
+
+int readcube(FILE *in)
+{
+    if (!in) {
+        fprintf(stderr, "Error opening file for reading cube\n");
+        return 1;
+    }
+
+    int face, line, cubelet, i;
+    for (line = 0; line < CUBESIZE; line++) {
+        for (i = 0; i < CUBESIZE; i++)
+            getc(in);
+        for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
+            CUBE(0,line,cubelet) = getc(in) - '0';
+        getc(in);
+    }
+
+    for (line = 0; line < CUBESIZE; line++) {
+        for (face = 1; face < 5; face++)
+            for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
+                CUBE(face,line,cubelet) = getc(in) - '0';
+        getc(in);
+    }
+
+    for (line = 0; line < CUBESIZE; line++) {
+        for (i = 0; i < CUBESIZE; i++)
+            getc(in);
+        for (cubelet = 0; cubelet < CUBESIZE; cubelet++)
+            CUBE(5,line,cubelet) = getc(in) - '0';
+        getc(in);
+    }
+
+    return 0;
+}

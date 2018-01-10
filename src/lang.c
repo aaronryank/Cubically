@@ -34,7 +34,8 @@ int main(int argc, char **argv)
         if (argc == 2 && strchr(argv[1], 'h'))
             fprintf(stderr, "       S | solve-mode"                       "\n"\
                             "       p | print moves as they are executed" "\n"\
-                            "       d | print debugging information"      "\n");
+                            "       d | print debugging information"      "\n"\
+                            "       r | read a cube from standard input and set the memory cube to it\n");
 
         fprintf(stderr, "\n<size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.\n");
         return 0;
@@ -42,6 +43,7 @@ int main(int argc, char **argv)
 
     /* parse command-line arguments */
     int flag_arg = 0;   enum { _FILE = 1, STRING = 2};
+    int readcubeflag = 0;
     int i, s = strlen(argv[1]);
     for (i = 0; i < s; i++) {
         switch (tolower(argv[1][i])) {
@@ -52,6 +54,7 @@ int main(int argc, char **argv)
           case 'd': DEBUG      = 1; break;
           case 'p': PRINTMOVES = 1; break;
           case 'S': SOLVEMODE  = 1; break;
+          case 'r': readcubeflag = 1; break;
         }
     }
 
@@ -66,6 +69,9 @@ int main(int argc, char **argv)
         CUBESIZE = 3;
 
     initcube();
+
+    if (readcubeflag)
+        readcube(stdin);
 
     FILE *in;
 

@@ -280,6 +280,9 @@ int execute(int command, int arg)
     else if (command == 's') {
         solvemode = _faceval(8) ? 1 : -1;
     }
+    else if (command == 'r') {
+        readcube(stdin);
+    }
 
     if (solvemode == -1) {
         solvemode = _faceval(8) ? 1 : -1;
