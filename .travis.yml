@@ -2,7 +2,7 @@ language: c
 compiler: gcc
 script:
  - make CFLAGS=-coverage
- - make visualizer CFLAGS=-coverage
+ - make visualizer
  - ./cubically fu examples/cat.cb < examples/input.txt
  - ./cubically fu examples/cubifier.cb < examples/input.txt
  - ./cubically fu examples/sum.cb < examples/input-integer.txt
@@ -26,6 +26,7 @@ script:
  - ./cubically usS 'RRRRRR'
  - ./cubically fu examples/slightly-useless.cb
  - ./cubically usr '&' < examples/cube.txt
+ - ./cubically fu examples/input-arg.txt <<<3
  - gcov src/*.c
 
 after_success:

@@ -45,7 +45,7 @@ int call_command(void)
         return execute('f', val);
     }
 
-    int i; 
+    int i;
     int exec; /* number of times the command has been executed.
                  this is needed for commands with superscripts/subscripts,
                  which need individual parsing via this loop but do not
@@ -66,6 +66,11 @@ int call_command(void)
                 cur_depth *= 10;
                 cur_depth += _faceval(numberize(arg));
                 continue;
+            }
+            else if (arg == 0x9A) {
+               int x;
+               if (scanf("%d", &arg) == EOF)
+                  continue;
             }
             else { /* double-struck */
                 arg = _faceval(numberize(arg));
