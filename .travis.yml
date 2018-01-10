@@ -25,6 +25,7 @@ script:
  - ./cubically us '(0R):1!%5'
  - ./cubically usS 'RRRRRR'
  - ./cubically fu examples/slightly-useless.cb
+ - ./cubically usr '&' < examples/cube.txt
  - gcov src/*.c
 
 after_success:
