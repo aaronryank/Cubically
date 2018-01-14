@@ -185,7 +185,6 @@ void rotate_face_clockwise(size_t n, int face)
             ROTATED(face,i,j) = CUBE(face,n - j - 1,i);
 
     memcpy(cube,rotated,asize);
-    //free(rotated);
 }
 
 void rotateface(int face, int clockwise)

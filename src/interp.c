@@ -33,6 +33,13 @@ int call_command(void)
         return execute(CPC, -1);
     }
 
+    if (CPC >= 0xA0 && CPC <= 0xA8) {
+        execute("RLUDFBMES"[CPC - 0xA0], 2);
+    }
+    else if (CPC >= 0xB0 && CPC <= 0xB8) {
+        execute("RLUDFBMES"[CPC - 0xB0], 3);
+    }
+
     /* functions require multiple-digit integers */
     if (CPC == 'f') {
         int i, val;
