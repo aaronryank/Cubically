@@ -23,6 +23,6 @@ As a 3x3x3 memory cube is standard, it will be used throughout the tutorial and 
 
 # How to use
 
-To learn how to use Cubically, check out [the Wiki!](//github.com/aaronryank/Cubically/wiki) It contains up-to-date information about every part of the language. Sometimes.
+To learn how to use Cubically, check out [the documentation!](//cubically.github.io/) It contains up-to-date information about every part of the language. Sometimes.
 
 If you need help on a specific point, or something is unclear, feel free to [open an issue](//github.com/aaronryank/Cubically/issues).
