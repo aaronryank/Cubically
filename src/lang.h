@@ -24,10 +24,11 @@ typedef struct {
   int arg[100];
   int argc;
 } command;
-    
+
 int *parse_file(FILE *);
 int *parse_string(char *);
 command *parse_commands(int *);
+int get_command(int *, int *, int *, int [], int *);
 
 int interp(void);
 void cubically_evaluate(void);

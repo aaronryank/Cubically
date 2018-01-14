@@ -212,11 +212,11 @@ int issolved(void)
     return 1;
 }
 
-int readcube(FILE *in)
+void readcube(FILE *in)
 {
     if (!in) {
         fprintf(stderr, "Error opening file for reading cube\n");
-        return 1;
+        return;
     }
 
     int face, line, cubelet, i;
@@ -242,6 +242,4 @@ int readcube(FILE *in)
             CUBE(5,line,cubelet) = getc(in) - '0';
         getc(in);
     }
-
-    return 0;
 }

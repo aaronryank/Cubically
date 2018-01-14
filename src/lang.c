@@ -92,6 +92,11 @@ int main(int argc, char **argv)
         in = fopen(".cubically.tmp", "r");
     }
 
+    if (!in) {
+        fprintf(stderr, "Could not open input file for reading\n");
+        return 1;
+    }
+
     /* parse Unicode/SBCS file into SBCS string */
     int *source = parse_file(in);
     fclose(in);

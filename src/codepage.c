@@ -35,7 +35,7 @@ int sbcs_convert(wint_t x)
       case 0xB7:   return 0x83;
       case 0x21D2: return 0x84;
       case 0x2192: return 0x85;
-      case 0xB6:   return 0x86; 
+      case 0xB6:   return 0x86;
       case 10:     return 0x20;
       case 0x1E5A: return 0xA0;
       case 0x1E36: return 0xA1;
@@ -55,7 +55,8 @@ int sbcs_convert(wint_t x)
       case 0x1E43: return 0xB6;
       case 0x1EB9: return 0xB7;
       case 0x1E63: return 0xB8;
+      case 0x1D540:return 0x9A;
    }
 
-   return x; 
+   return x;
 }
