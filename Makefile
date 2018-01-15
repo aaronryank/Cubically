@@ -10,8 +10,5 @@ all: $(lang)
 $(lang): $(OBJ)
 	$(CC) $(OBJ) -o $(lang) $(CFLAGS)
 
-visualizer:
-	$(CC) $(CFLAGS) -DVISUALIZER src/rubiks.c src/visualizer.c src/stdin.c -o visualizer
-
 clean:
 	rm -f $(OBJ)
