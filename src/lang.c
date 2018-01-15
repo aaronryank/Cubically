@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 
     /* debugging info at end of program (dump memory) */
     fprintf(stderr, "\nNotepad: %d\n\n", mem);
-    printcube();
+    printcube(stderr);
 
     /* remove temporary file if we created it */
     if (flag_arg == 2)

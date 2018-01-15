@@ -11,12 +11,6 @@
 # define is_a_tty isatty
 #endif
 
-#ifdef VISUALIZER
-# define dbg stdout
-#else
-# define dbg stderr
-#endif
-
 int *cube;
 int CUBESIZE;
 
@@ -49,7 +43,7 @@ char *color(int x)
     }
 }
 
-void printcube(void)
+void printcube(FILE *dbg)
 {
     int face, line, cubelet, i;
     for (line = 0; line < CUBESIZE; line++) {
