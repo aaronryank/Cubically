@@ -2,7 +2,6 @@ language: c
 compiler: gcc
 script:
  - make CFLAGS=-coverage
- - make visualizer
  - ./cubically fu examples/cat.cb < examples/input.txt
  - ./cubically fu examples/cubifier.cb < examples/input.txt
  - ./cubically fu examples/sum.cb < examples/input-integer.txt
