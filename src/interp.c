@@ -171,7 +171,10 @@ int execute(int command, int arg)
         mem += faceval;
     }
     else if (command == '-') {
-        mem -= faceval;
+        if (arg == -1)
+            mem -= input;
+        else
+            mem -= faceval;
     }
     else if (command == '/') {
         if (arg == -1)
@@ -217,28 +220,52 @@ int execute(int command, int arg)
         mem = pow(mem, faceval);
     }
     else if (command == '<') {
-        mem = (mem < faceval);
+        if (arg == -1)
+            mem = (mem < input);
+        else
+            mem = (mem < faceval);
     }
     else if (command == '>') {
-        mem = (mem > faceval);
+        if (arg == -1)
+            mem = (mem > input);
+        else
+            mem = (mem > faceval);
     }
     else if (command == '_') {
-        faceval && (mem %= faceval);
+        if (arg == -1)
+            faceval && (mem %= input);
+        else
+            faceval && (mem %= faceval);
     }
     else if (command == '|') {
-        mem |= faceval;
+        if (arg == -1)
+            mem |= input;
+        else
+            mem |= faceval;
     }
     else if (command == 0x80) {
-        mem ^= faceval;
+        if (arg == -1)
+            mem ^= input;
+        else
+            mem ^= faceval;
     }
     else if (command == 0x81) {
-        mem <<= faceval;
+        if (arg == -1)
+            mem ^= input;
+        else
+            mem <<= faceval;
     }
     else if (command == 0x82) {
-        mem >>= faceval;
+        if (arg == -1)
+            mem >>= input;
+        else
+            mem >>= faceval;
     }
     else if (command == 0x83) {
-        mem &= faceval;
+        if (arg == -1)
+            mem &= input;
+        else
+            mem &= faceval;
     }
     else if (command == '&') {
         if (arg == -1 || faceval)
