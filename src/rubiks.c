@@ -31,6 +31,7 @@ char *color(int x)
 {
     if (is_a_tty(fileno(stderr))) {
         switch (x) {
+          case -1: return "\e[0m";
           case 0: return "\e[0;31m";
           case 1: return "\e[0;34m";
           case 2: return "\e[0;35m";
@@ -68,7 +69,7 @@ void printcube(FILE *dbg)
             fprintf(dbg,"%s%d",color(CUBE(5,line,cubelet)),CUBE(5,line,cubelet));
         fprintf(dbg,"\n");
     }
-    fprintf(dbg,"\n");
+    fprintf(dbg,"%s\n",color(-1));
     fflush(dbg);
 }
 
@@ -80,6 +81,8 @@ void swap(int *a, int *b)
 }
 
 #define depth_offset(x) x ? (x -= depth) : (x += depth)
+
+/* here be dragons */
 
 void turncube(int face, int turns, int depth)
 {
