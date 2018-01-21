@@ -15,9 +15,6 @@ int DEBUG, PRINTMOVES, SOLVEMODE;
 int codepage;
 command *commands;
 
-/* optimizations */
-extern int asize, *rotated;
-
 int main(int argc, char **argv)
 {
     /* we're reading Unicode */
@@ -72,10 +69,6 @@ int main(int argc, char **argv)
         CUBESIZE = 3;
 
     initcube();
-
-    /* optimizations to speed up turns */
-    asize = 6 * CUBESIZE * CUBESIZE * sizeof(int);
-    rotated = malloc(asize);
 
     if (readcubeflag)
         readcube(stdin);

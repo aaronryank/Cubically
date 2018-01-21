@@ -169,8 +169,6 @@ void turncube(int face, int turns, int depth)
     }
 }
 
-int asize, *rotated;
-
 void rotate_face_clockwise(size_t n, int face)
 {
     size_t i, j;
@@ -205,8 +203,6 @@ void rotate_face_counterclockwise(size_t n, int face)
 
 void rotateface(int face, int clockwise)
 {
-    int i;
-
     if (face == BACK)
         clockwise = clockwise + 2 % 4;
 
