@@ -6,12 +6,7 @@ The most recent [version](//github.com/aaronryank/cubically/releases) of Cubical
 
 # Interpreter
 
- - To build the interpreter, type `make`. This will generate the executable `cubically`.
- - To build the visualizer, type `make visualizer`. This will generate the executable `visualizer`.
- - To clean up the object files after building, type `make clean`.
-
-The interpreter is used like so:
-
+To build the interpreter, run `make`. This generates the executable `cubically`, which is the interpreter for Cubically.
     Usage: cubically <flags> <file | string> <size>
     Flags: f | second argument is a file
            s | second argument is a string
@@ -20,6 +15,8 @@ The interpreter is used like so:
     <size> specifies the size of the memory cube. If blank, a 3x3x3 will be assumed.
 
 As a 3x3x3 memory cube is standard, it will be used throughout the tutorial and examples in the [docs](//github.com/aaronryank/Cubically/wiki).
+
+To clean up after building, run `make clean`.
 
 # How to use
 
