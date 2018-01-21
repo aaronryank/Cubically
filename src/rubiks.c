@@ -174,14 +174,17 @@ int asize, *rotated;
 void rotate_face_clockwise(size_t n, int face)
 {
     size_t i, j;
-    memcpy(rotated,cube,asize);
-    #define ROTATED(x,y,z) rotated[(x*n*n) + (y*n) + z]
 
-    for (i = 0; i < n; i++)
-        for (j = 0; j < n; j++)
-            ROTATED(face,i,j) = CUBE(face,n - j - 1,i);
-
-    memcpy(cube,rotated,asize);
+    for (i = 0; i < n / 2; i++) {
+        int last = n - 1 - i;
+        for (j = i; j < last; j++) {
+            int top = CUBE(face,i,j);
+            CUBE(face,i,j) = CUBE(face,last-j,i);
+            CUBE(face,last-j,i) = CUBE(face,last,last-j);
+            CUBE(face,last,last-j) = CUBE(face,j,last);
+            CUBE(face,j,last) = top;
+        }
+    }
 }
 
 void rotateface(int face, int clockwise)
