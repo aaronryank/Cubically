@@ -187,18 +187,33 @@ void rotate_face_clockwise(size_t n, int face)
     }
 }
 
+void rotate_face_counterclockwise(size_t n, int face)
+{
+    size_t i, j;
+
+    for (i = 0; i < n / 2; i++) {
+        int last = n - 1 - i;
+        for (j = i; j < last; j++) {
+            int top = CUBE(face,j,last);
+            CUBE(face,j,last) = CUBE(face,last,last-j);
+            CUBE(face,last,last-j) = CUBE(face,last-j,i);
+            CUBE(face,last-j,i) = CUBE(face,i,j);
+            CUBE(face,i,j) = top;
+        }
+    }
+}
+
 void rotateface(int face, int clockwise)
 {
     int i;
 
-    while (clockwise--)
-    {
-        if (face != BACK)
-            rotate_face_clockwise(CUBESIZE,face);
-        else if (face == BACK)
-            for (i = 0; i < 3; i++)
-                rotate_face_clockwise(CUBESIZE,face);
-    }
+    if (face == BACK)
+        clockwise = clockwise + 2 % 4;
+
+    if (clockwise == 1)
+        rotate_face_clockwise(CUBESIZE,face);
+    else
+        rotate_face_counterclockwise(CUBESIZE,face);
 }
 
 int issolved(void)
