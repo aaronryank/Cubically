@@ -6,7 +6,7 @@ The most recent [version](//github.com/aaronryank/cubically/releases) of Cubical
 
 # Interpreter
 
-To build the interpreter, run `make`. This generates the executable `cubically`, which is the interpreter for Cubically.
+To build the interpreter, run `make`. This generates the executable `cubically`:
 
     Usage: cubically <flags> <file | string> <size>
     Flags: f | second argument is a file
