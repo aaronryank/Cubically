@@ -296,6 +296,9 @@ int execute(int command, int arg)
     else if (command == 0x86) {
         cubically_evaluate();
     }
+    else if (command == 0x87) {
+        printcube(stdout);
+    }
     else if (command == 'f') {
         if (arg == -1 || arg > fc)
             return 0;
