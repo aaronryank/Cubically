@@ -11,7 +11,7 @@ char *solvecube(void)
 {
     if (CUBESIZE != 3) {
         fprintf(stderr, "Error: Can only solve a 3x3xx3 cube.\n");
-        return;
+        return NULL;
     }
 
     char *facelets = malloc(54);
@@ -24,9 +24,15 @@ char *solvecube(void)
         int f3 = i % 3;
         facelets[i] = "ULFRBD"[CUBE(f1,f2,f3)];
     }
+
 #ifdef _WIN32
-    return solution(facelets, 24, 1000, 0, "C:\\tmp");
+    char *s = solution(facelets, 24, 1000, 0, "C:\\tmp");
 #else
-    return solution(facelets, 24, 1000, 0, "/tmp/cubically-cache");
+    char *s = solution(facelets, 24, 1000, 0, "/tmp/cubically-cache");
 #endif
+
+    if (!s)
+        puts("Error: The cube has reached an unsolvable state.");
+
+    return s;
 }
