@@ -17,7 +17,7 @@ int pos;
 int do_else;
 int cur_depth;
 
-struct {
+struct jumpstruct {
     int pos;
     int faces[9];
 } jumps[999];
@@ -294,10 +294,13 @@ int execute(int command, int arg)
             do_skip();
     }
     else if (command == 0x86) {
-        cubically_evaluate();
+        cubically_evaluate(NULL);
     }
     else if (command == 0x87) {
         printcube(stdout);
+    }
+    else if (command == 0x88) {
+        cubically_evaluate(solvecube());
     }
     else if (command == 'f') {
         if (arg == -1 || arg > fc)
@@ -324,6 +327,9 @@ int execute(int command, int arg)
     }
     else if (command == 'r') {
         readcube(stdin);
+    }
+    else if (command == 'p') {
+        PRINTMOVES = !PRINTMOVES;
     }
 
     if (solvemode == -1) {
@@ -427,16 +433,18 @@ void do_skip(void)
     }
 }
 
-void cubically_evaluate(void)
+void cubically_evaluate(char *buf)
 {
-    char *buf = malloc(1024);
-    memset(buf, 0, 1024);
+    if (!buf) {
+        buf = (char *) malloc(1024);
+        memset(buf, 0, 1024);
 
-    if (!fgets(buf, 1024, stdin))
-        return;
+        if (!fgets(buf, 1024, stdin))
+            return;
 
-    if (buf[strlen(buf)-1] == '\n')
-        buf[strlen(buf)-1] = 0;
+        if (buf[strlen(buf)-1] == '\n')
+            buf[strlen(buf)-1] = 0;
+    }
 
     int *str = parse_string(buf);
     DEBUG && fprintf(stderr, "Read: <%s>\n", (char*) str);

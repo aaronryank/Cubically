@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "rubiks.h"
+//using namespace std;
 
 #ifdef _WIN32
 # include <io.h>
@@ -18,7 +19,7 @@ int CUBESIZE;
 
 void initcube(void)
 {
-    cube = malloc(6 * CUBESIZE * CUBESIZE * sizeof(int));
+    cube = (int*) malloc(6 * CUBESIZE * CUBESIZE * sizeof(int));
 
     int face, line, cubelet;
     for (face = 0; face < 6; face++)

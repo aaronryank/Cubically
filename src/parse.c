@@ -25,7 +25,7 @@ int *parse_file(FILE *in)
     int *source;
     int p = 0;
 
-    source = malloc(sizeof(int) * 1024);
+    source = (int *) malloc(sizeof(int) * 1024);
     memset(source,0,1024);
 
     if (!source) {
@@ -35,7 +35,7 @@ int *parse_file(FILE *in)
 
     while ((c = getwc(in)) != WEOF) {
         if (p && !(p % 1024))
-            source = realloc(source, sizeof(int) * (p + 1024));
+            source = (int *) realloc(source, sizeof(int) * (p + 1024));
         if (!iswhitespace(c))
             source[p++] = sbcs_convert(c);
     }
@@ -49,7 +49,7 @@ int *parse_string(char *str)
     int *source;
     int p = 0;
 
-    source = malloc(1024 * sizeof(int));
+    source = (int *) malloc(1024 * sizeof(int));
     memset(source, 0, 1024);
 
     if (!source) {
@@ -59,7 +59,7 @@ int *parse_string(char *str)
 
     while ((c = btowc(*str))) {
         if (p && !(p % 1024))
-            source = realloc(source, sizeof(int) * (p + 1024));
+            source = (int *) realloc(source, sizeof(int) * (p + 1024));
         if (!iswhitespace(c))
             source[p++] = sbcs_convert(c);
         str++;
@@ -72,8 +72,7 @@ command *parse_commands(int *source)
 {
     int cmd = 0;
     int idx = 0, j = 0, i = 0, argc = 0, arg[100] = {0};
-    command *commands = NULL;
-    commands = malloc(1024 * sizeof(command));
+    command *commands = (command *) malloc(1024 * sizeof(command));
     memset(commands, 0, 1024);
 
     if (!commands) {
@@ -90,7 +89,7 @@ command *parse_commands(int *source)
         i++;
 
         if (i && !(i % 1024))
-            commands = realloc(commands, (i + 1024) * sizeof(command));
+            commands = (command *) realloc(commands, (i + 1024) * sizeof(command));
     }
 
     return commands;

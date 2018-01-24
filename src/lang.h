@@ -3,7 +3,7 @@
 #include <wchar.h>
 #include <stdint.h>
 
-enum { CP_UNDEF, CP_UTF8, CP_SBCS } codepages;
+static enum { CP_UNDEF, CP_UTF8, CP_SBCS } codepages;
 
 #define clear_jump(x)  for (i = 0; i < 9; i++)            \
                            jumps[jumpnum+x].faces[i] = 0; \
@@ -31,7 +31,7 @@ command *parse_commands(int *);
 int get_command(int *, int *, int *, int [], int *);
 
 int interp(void);
-void cubically_evaluate(void);
+void cubically_evaluate(char *);
 int rubiksnotation(char);
 
 int sbcs_convert(wint_t);

@@ -12,3 +12,5 @@ extern int CUBESIZE;
 extern void initcube(void), printcube(FILE *), turncube(int, int, int), swap(int*, int*), rotateface(int, int), readcube(FILE *);
 extern char *color(int);
 extern int issolved(void);
+
+extern char *solvecube(void);
