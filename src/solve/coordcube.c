@@ -71,7 +71,7 @@ int check_cached_table(const char* name, void* ptr, int len, const char *cache_d
         // fprintf(stderr, "done.\n");
         res = 0;
     } else {
-        fprintf(stderr, "Cache table %s was not found. Recalculating.\n", fname);
+        //fprintf(stderr, "Cache table %s was not found. Recalculating.\n", fname);
         res = 1;
     }
     free(fname);
