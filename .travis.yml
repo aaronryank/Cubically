@@ -25,7 +25,8 @@ script:
  - ./cubically usS 'RRRRRR'
  - ./cubically fu examples/slightly-useless.cb
  - ./cubically usr '&' < examples/cube.txt
- - ./cubically fu examples/input-arg.cub <<<3
+ - ./cubically fu examples/input-arg.cb <<<3
+ - ./cubically fu examples/solve-1.cb <<<RLLDUBLUUUFUUFFFLUBFDD
  - gcov src/*.c
 
 after_success:
