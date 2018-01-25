@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <wchar.h>
@@ -20,6 +21,8 @@ int main(int argc, char **argv)
     /* we're reading Unicode */
     setlocale(LC_ALL, "C.UTF-8");
     setlocale(LC_CTYPE, "C.UTF-8");
+
+    srand(time(NULL));
 
     CUBESIZE = 3;
 

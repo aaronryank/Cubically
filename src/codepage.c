@@ -38,6 +38,7 @@ int sbcs_convert(wint_t x)
       case 0xB6:   return 0x86;
       case 0x25A0: return 0x87;
       case 0x25A6: return 0x88;
+      case 0x21AC: return 0x89;
       case 10:     return 0x20;
       case 0x1E5A: return 0xA0;
       case 0x1E36: return 0xA1;

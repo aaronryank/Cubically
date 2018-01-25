@@ -331,6 +331,13 @@ int execute(int command, int arg)
     else if (command == 'p') {
         PRINTMOVES = !PRINTMOVES;
     }
+    else if (command == 0x89) {
+        char *s = scramble();
+        int p;
+        for (p = 0; s[p]; p++)
+            turncube(rubiksnotation(s[p]), 1, 0);
+        free(s);
+    }
 
     if (solvemode == -1) {
         solvemode = _faceval(8) ? 1 : -1;

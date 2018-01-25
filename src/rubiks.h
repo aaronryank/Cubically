@@ -14,3 +14,4 @@ extern char *color(int);
 extern int issolved(void);
 
 extern char *solvecube(void);
+extern char *scramble(void);
