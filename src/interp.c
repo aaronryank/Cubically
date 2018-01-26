@@ -156,7 +156,17 @@ int execute(int command, int arg)
         int face  = rubiksnotation(command);
         int turns = abs(arg);
         turncube(face, turns % 4, cur_depth);
-        PRINTMOVES && fprintf(stderr, "%c%d", command, turns);
+        if (PRINTMOVES) {
+            if (PRETTYPRINT) {
+                fprintf(stderr, "%c", command);
+                if (turns == 3)
+                    putc('\'', stderr);
+                else if (turns == 2)
+                    putc('2', stderr);
+            } else {
+                fprintf(stderr, "%c%d", command, turns);
+            }
+       }
     }
     else if (command == 'M') {
         turncube(LEFT, abs(arg), (CUBESIZE-1)/2);
@@ -330,6 +340,10 @@ int execute(int command, int arg)
     }
     else if (command == 'p') {
         PRINTMOVES = !PRINTMOVES;
+    }
+    else if (command == 'P') {
+        PRETTYPRINT = !PRETTYPRINT;
+        PRINTMOVES = PRETTYPRINT;
     }
     else if (command == 0x89) {
         char *s = scramble();

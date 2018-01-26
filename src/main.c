@@ -12,7 +12,7 @@
 #include "lang.h"
 
 /* globals */
-int DEBUG, PRINTMOVES, SOLVEMODE;
+int DEBUG, PRINTMOVES, SOLVEMODE, PRETTYPRINT;
 int codepage;
 command *commands;
 
@@ -58,6 +58,8 @@ int main(int argc, char **argv)
           case 'p': PRINTMOVES = 1; break;
           case 'S': SOLVEMODE  = 1; break;
           case 'r': readcubeflag = 1; break;
+          case 'P': PRINTMOVES = 1;
+                    PRETTYPRINT = 1; break;
         }
     }
 
