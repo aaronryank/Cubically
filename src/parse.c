@@ -6,7 +6,7 @@
 
 #define iswhitespace(c)    (c == L' ' || c == L'\t' || c == '\r')
 #define L_isdigit(c)       (c >= L'0' && c <= L'9')
-#define isintegraldigit(c) (c == L'\'' || (c >= 0 && c <= 0x19) || (c >= 0x90 && c <= 0x9A))
+#define isintegraldigit(c) (c == L'\'' || (c >= 0 && c <= 0x19) || (c >= 0x90 && c <= 0x9A) || (c >= 0xC0 && c <= 0xD9))
 
 int undigit(wint_t c)
 {

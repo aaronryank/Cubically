@@ -11,8 +11,9 @@ static enum { CP_UNDEF, CP_UTF8, CP_SBCS } codepages;
 
 #define faceval _faceval(arg)
 
-#define issubscript(x)   (x >= 0x10 && x <= 0x19)
-#define issuperscript(x) (x >= 0 && x <= 9)
+#define issubscript(x)    (x >= 0x10 && x <= 0x19)
+#define issuperscript(x)  (x >= 0 && x <= 9)
+#define iscircledalpha(x) (x >= 0xC0 && x <= 0xD9)
 
 int execute(int, int);
 int do_jump(void);

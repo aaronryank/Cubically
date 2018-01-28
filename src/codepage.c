@@ -15,6 +15,8 @@ int sbcs_convert(wint_t x)
         return x - 0x2080 + 0x10;
     else if (x >= 0x1D7D8 && x <= 0x1D7E1)
         return x - 0x1D7D8 + 0x90;
+    else if (x >= 0x24D0 && x <= 0x24E9)
+        return x - 0x24D0 + 0xC0;
 
     switch (x) {
       /* superscripts */
@@ -34,11 +36,14 @@ int sbcs_convert(wint_t x)
       case 0xBB:   return 0x82;
       case 0xB7:   return 0x83;
       case 0x21D2: return 0x84;
-      case 0x2192: return 0x85;
       case 0xB6:   return 0x86;
       case 0x25A0: return 0x87;
       case 0x25A6: return 0x88;
       case 0x21AC: return 0x89;
+      case 0x21AB: return 0x8A;
+      case 0x2192: return 0x8B;
+      case 0x2190: return 0x8C;
+      case 0x2194: return 0x8D;
       case 10:     return 0x20;
       case 0x1E5A: return 0xA0;
       case 0x1E36: return 0xA1;

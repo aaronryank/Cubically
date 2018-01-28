@@ -11,8 +11,9 @@
 #include "lang.h"
 
 int32_t mem    = 0;
-int32_t solved = 1;
 int32_t input  = -1;
+int32_t mem2   = 0;
+int32_t variables[26];
 int pos;
 int do_else;
 int cur_depth;
@@ -75,9 +76,15 @@ int call_command(void)
                 continue;
             }
             else if (arg == 0x9A) {
-               int x;
                if (scanf("%d", &arg) == EOF)
                   continue;
+            }
+            else if (arg == 0x8A) {
+                arg = rand() % 10;
+            }
+            else if (iscircledalpha(arg)) {
+                arg -= 0xC0;
+                arg += 'a';
             }
             else { /* double-struck */
                 arg = _faceval(numberize(arg));
@@ -351,6 +358,18 @@ int execute(int command, int arg)
         for (p = 0; s[p]; p++)
             turncube(rubiksnotation(s[p]), 1, 0);
         free(s);
+    }
+    else if (command == 0x8B) {
+        if (islower(arg))
+           variables[arg - 'a'] = mem;
+    }
+    else if (command == 0x8C) {
+        if (islower(arg))
+            mem = variables[arg - 'a'];
+    }
+    else if (command == 0x8D) {
+        if (islower(arg))
+            swap(&mem, &variables[arg - 'a']);
     }
 
     if (solvemode == -1) {
