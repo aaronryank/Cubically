@@ -37,17 +37,18 @@ char *f(char *orig)
                 strpop(s, pos);
                 strpop(s, pos-1);
 
+                char *tmp = malloc(1024);
                 while (digit--) {
-                    char *tmp = malloc(strlen(s) + strlen(lastbrace.since));
+                    tmp = realloc(tmp, strlen(s) + strlen(lastbrace.since));
 
                     strncpy(tmp, s, lastbrace.pos);
                     tmp[lastbrace.pos] = 0;
                     strcat(tmp, lastbrace.since);
                     strcat(tmp, s + lastbrace.pos);
                     strcpy(s, tmp);
-
-                    free(tmp); 
+                    // TODO: enlarge s when necessary
                 }
+                free(tmp);
 
                 break;
             } else {
