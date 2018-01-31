@@ -63,14 +63,20 @@ char *f(char *orig)
 int bracket(FILE *in, FILE *out)
 {
     char *s = malloc(1024);
-    int c, i = 0;
+    int c, i = 0, brackets = 0;
+
     while ((c = getc(in)) != EOF) {
         s[i++] = c;
+
+        brackets += (c == ']');
 
         if (!(i % 1024))
             s = realloc(s, i + 1024);
     }
 
-    fputs(f(s), out);
+    if (brackets)
+        fputs(f(s), out);
+    else
+        fputs(s, out);
     free(s);
 }
