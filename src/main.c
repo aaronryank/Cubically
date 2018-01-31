@@ -84,16 +84,22 @@ int main(int argc, char **argv)
         in = fopen(argv[2], "r");
     }
     else if (flag_arg == STRING) {
-        in = fopen(".cubically.tmp", "w+");
+        in = fopen(".cubically.str", "w+");
         fwrite(argv[2], sizeof(char), strlen(argv[2]), in);
         fclose(in);
-        in = fopen(".cubically.tmp", "r");
+        in = fopen(".cubically.str", "r");
     }
 
     if (!in) {
         fprintf(stderr, "Could not open input file for reading\n");
         return 1;
     }
+
+    FILE *out = fopen(".cubically.tmp", "w+");
+    bracket(in, out);
+    fclose(in);
+    fclose(out);
+    in = fopen(".cubically.tmp", "r");
 
     /* parse Unicode/SBCS file into SBCS string */
     int *source = parse_file(in);

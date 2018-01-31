@@ -25,7 +25,7 @@ int *parse_file(FILE *in)
     int *source;
     int p = 0;
 
-    source = (int *) malloc(sizeof(int) * 1024);
+    source = calloc(1024, sizeof(int));
     memset(source,0,1024);
 
     if (!source) {
@@ -49,7 +49,7 @@ int *parse_string(char *str)
     int *source;
     int p = 0;
 
-    source = (int *) malloc(1024 * sizeof(int));
+    source = calloc(1024, sizeof(int));
     memset(source, 0, 1024);
 
     if (!source) {
