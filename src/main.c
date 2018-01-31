@@ -118,7 +118,7 @@ int main(int argc, char **argv)
     /* remove temporary file if we created it */
     if (flag_arg == 2)
         remove(".cubically.str");
-    //remove(".cubically.tmp");
+    remove(".cubically.tmp");
 
     free(cube);
     return 0;
