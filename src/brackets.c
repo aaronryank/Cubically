@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
+#include <math.h>
+#include <ctype.h>
 
 void strpop(char *s, int idx)
 {
@@ -9,10 +11,10 @@ void strpop(char *s, int idx)
     //strcpy(&s[idx], &s[idx + 1]);
 }
 
-char *f(char *orig)
+char *f(char *orig, int size)
 {
-    char *s = malloc(1024);
-    memset(s, 0, 1024);
+    char *s = malloc(1024 * size);
+    memset(s, 0, 1024 * size);
     strcpy(s, orig);
 
     int pos, len, braces;
@@ -31,23 +33,28 @@ char *f(char *orig)
                 memset(lastbrace.since, 0, 1024);
             } else if (s[pos] == ']') {
                 braces++;
-                int digit = s[pos+1] - '0' - 1;
+                int repeat = 0;
+                while (isdigit(s[pos+1])) {
+                    repeat *= 10;
+                    repeat += s[pos+1] - '0';
+                    strpop(s, pos+1);
+                }
 
                 strpop(s, lastbrace.pos);
-                strpop(s, pos);
+                //strpop(s, pos);
                 strpop(s, pos-1);
 
-                char *tmp = malloc(1024);
-                while (digit--) {
-                    tmp = realloc(tmp, strlen(s) + strlen(lastbrace.since));
+                char *tmp = malloc((strlen(s) + (strlen(lastbrace.since) + 1) * repeat));
+                s = realloc(s, (strlen(s) + strlen(lastbrace.since) + 1) * repeat);
 
+                while (--repeat) {
                     strncpy(tmp, s, lastbrace.pos);
                     tmp[lastbrace.pos] = 0;
                     strcat(tmp, lastbrace.since);
                     strcat(tmp, s + lastbrace.pos);
                     strcpy(s, tmp);
-                    // TODO: enlarge s when necessary
                 }
+
                 free(tmp);
 
                 break;
@@ -74,9 +81,10 @@ int bracket(FILE *in, FILE *out)
         if (!(i % 1024))
             s = realloc(s, i + 1024);
     }
+    s[i] = 0;
 
     if (brackets)
-        fputs(f(s), out);
+        fputs(f(s, i / 1024 + 1), out);
     else
         fputs(s, out);
     free(s);

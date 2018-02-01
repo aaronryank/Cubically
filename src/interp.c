@@ -438,9 +438,11 @@ int do_jump(void)
 
 int32_t _faceval(int face)
 {
-    if (face == 8)
+    if (islower(face))
+        return variables[face];
+    else if (face == 8)
         return !issolved();
-    if (face == 7)
+    else if (face == 7)
         return input;
     else if (face == 6 || face == -1)
         return mem;
