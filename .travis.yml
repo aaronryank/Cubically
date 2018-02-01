@@ -29,6 +29,7 @@ script:
  - ./cubically fu examples/solve-1.cb <<<RLLDUBLUUUFUUFFFLUBFDD
  - ./cubically fu examples/brackets.cb
  - ./cubically fu examples/variables.cb
+ - ./cubically fu examples/scramble.cb
  - gcov src/*.c
 
 after_success:
