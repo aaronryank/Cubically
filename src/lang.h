@@ -22,7 +22,7 @@ void do_skip(void);
 
 typedef struct {
   int command;
-  int arg[100];
+  int arg[200];
   int argc;
 } command;
 
