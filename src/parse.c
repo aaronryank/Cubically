@@ -6,7 +6,7 @@
 
 #define iswhitespace(c)    (c == L' ' || c == L'\t' || c == '\r')
 #define L_isdigit(c)       (c >= L'0' && c <= L'9')
-#define isintegraldigit(c) (c == L'\'' || (c >= 0 && c <= 0x19) || (c >= 0x90 && c <= 0x9A) || (c >= 0xC0 && c <= 0xD9))
+#define isintegraldigit(c) (c == L'\'' || (c >= 0 && c <= 0x9) || (c >= 0x10 && c <= 0x19) || (c >= 0x90 && c <= 0x9A) || (c >= 0xC0 && c <= 0xD9))
 
 int undigit(wint_t c)
 {
@@ -23,7 +23,7 @@ int *parse_file(FILE *in)
 {
     wint_t c;
     int *source;
-    int p = 0;
+    int p = 0, comment = 0;
 
     source = calloc(1024, sizeof(int));
     memset(source,0,1024);
@@ -36,7 +36,13 @@ int *parse_file(FILE *in)
     while ((c = getwc(in)) != WEOF) {
         if (p && !(p % 1024))
             source = (int *) realloc(source, sizeof(int) * (p + 1024));
-        if (!iswhitespace(c))
+
+        if (sbcs_convert(c) == 0xA) {
+            comment = !comment;
+            continue;
+        }
+
+        if (!iswhitespace(c) && !comment)
             source[p++] = sbcs_convert(c);
     }
 
