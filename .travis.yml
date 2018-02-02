@@ -30,6 +30,7 @@ script:
  - ./cubically fu examples/brackets.cb
  - ./cubically fu examples/variables.cb
  - ./cubically fu examples/scramble.cb
+ - ./cubically fu examples/big-and-bad.cb < examples/dump.txt
  - gcov src/*.c
 
 after_success:
