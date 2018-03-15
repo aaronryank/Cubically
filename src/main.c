@@ -5,7 +5,6 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
-#include <errno.h>
 #include <wchar.h>
 #include <locale.h>
 #include "rubiks.h"
