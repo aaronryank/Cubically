@@ -250,7 +250,7 @@ int execute(int command, int arg)
     }
     else if (command == '_') {
         if (arg == -1)
-            faceval && (mem %= input);
+            input && (mem %= input);
         else
             faceval && (mem %= faceval);
     }
